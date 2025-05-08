@@ -5,6 +5,7 @@ import ch.njol.skript.SkriptAPIException;
 import ch.njol.skript.SkriptConfig;
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
+import ch.njol.skript.classes.PatternedParser;
 import ch.njol.skript.classes.Serializer;
 import ch.njol.skript.command.Commands;
 import ch.njol.skript.entity.EntityData;
@@ -53,7 +54,7 @@ public abstract class Classes {
 	private final static HashMap<Class<?>, ClassInfo<?>> exactClassInfos = new HashMap<>();
 	private final static HashMap<Class<?>, ClassInfo<?>> superClassInfos = new HashMap<>();
 	private final static HashMap<String, ClassInfo<?>> classInfosByCodeName = new HashMap<>();
-	private final static Map<String, List<ClassInfo<?>>> registeredPatterns = new HashMap<>();
+	private final static Map<String, List<ClassInfo<?>>> registeredLiteralPatterns = new HashMap<>();
 
 	/**
 	 * @param info info about the class to register
@@ -70,13 +71,13 @@ public abstract class Classes {
 			exactClassInfos.put(info.getC(), info);
 			classInfosByCodeName.put(info.getCodeName(), info);
 			tempClassInfos.add(info);
-			String[] patterns = info.getPatterns();
-			if (patterns != null) {
+			if (info.getParser() instanceof PatternedParser<?> patternedParser) {
+				String[] patterns = patternedParser.getPatterns();
 				for (String pattern : patterns) {
-					if (!registeredPatterns.containsKey(pattern)) {
-						registeredPatterns.put(pattern, new ArrayList<>());
+					if (!registeredLiteralPatterns.containsKey(pattern)) {
+						registeredLiteralPatterns.put(pattern, new ArrayList<>());
 					}
-					registeredPatterns.get(pattern).add(info);
+					registeredLiteralPatterns.get(pattern).add(info);
 				}
 			}
 		} catch (RuntimeException e) {
@@ -234,9 +235,9 @@ public abstract class Classes {
 	 */
 	public static boolean patternHasMultipleInfos(String pattern) {
 		pattern = pattern.toLowerCase(Locale.ENGLISH);
-		if (!registeredPatterns.containsKey(pattern))
+		if (!registeredLiteralPatterns.containsKey(pattern))
 			return false;
-		return registeredPatterns.get(pattern).size() > 1;
+		return registeredLiteralPatterns.get(pattern).size() > 1;
 	}
 
 	/**
@@ -245,7 +246,7 @@ public abstract class Classes {
 	 */
 	public static @Nullable List<ClassInfo<?>> getPatternInfos(String pattern) {
 		pattern = pattern.toLowerCase(Locale.ENGLISH);
-		return registeredPatterns.get(pattern);
+		return registeredLiteralPatterns.get(pattern);
 	}
 
 	/**
@@ -253,7 +254,7 @@ public abstract class Classes {
 	 */
 	public static Map<String, List<ClassInfo<?>>> getAllMultiplePatterns() {
 		Map<String, List<ClassInfo<?>>> filtered = new HashMap<>();
-		registeredPatterns.forEach(((string, list) -> {
+		registeredLiteralPatterns.forEach(((string, list) -> {
 			if (list.size() > 1)
 				filtered.put(string, list);
 		}));

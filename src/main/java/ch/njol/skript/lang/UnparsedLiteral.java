@@ -1,7 +1,9 @@
 package ch.njol.skript.lang;
 
+import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAPIException;
 import ch.njol.skript.classes.Changer.ChangeMode;
+import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleLiteral;
 import ch.njol.skript.log.LogEntry;
@@ -14,6 +16,7 @@ import ch.njol.util.coll.iterator.NonNullIterator;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 
@@ -26,6 +29,7 @@ public class UnparsedLiteral implements Literal<Object> {
 
 	private final String data;
 	private final @Nullable LogEntry error;
+	private final @Nullable List<ClassInfo<?>> possibleInfos;
 	private boolean reparsed = false;
 	private boolean converted = false;
 
@@ -33,9 +37,7 @@ public class UnparsedLiteral implements Literal<Object> {
 	 * @param data non-null, non-empty & trimmed string
 	 */
 	public UnparsedLiteral(String data) {
-		assert data.length() > 0;
-		this.data = data;
-		error = null;
+		this(data, null);
 	}
 
 	/**
@@ -43,10 +45,11 @@ public class UnparsedLiteral implements Literal<Object> {
 	 * @param error Error to log if this literal cannot be parsed
 	 */
 	public UnparsedLiteral(String data, @Nullable LogEntry error) {
-		assert data.length() > 0;
+		assert !data.isEmpty();
 		assert error == null || error.getLevel() == Level.SEVERE;
 		this.data = data;
 		this.error = error;
+		possibleInfos = Classes.getPatternInfos(data);
 	}
 
 	public String getData() {
@@ -205,6 +208,11 @@ public class UnparsedLiteral implements Literal<Object> {
 		throw invalidAccessException();
 	}
 
+	/**
+	 * Reparse this {@link UnparsedLiteral} as a specific {@link Class}.
+	 * @param type The {@link Class} to reparse as.
+	 * @return {@link SimpleLiteral} if successfully reparsed as {@code type}.
+	 */
 	public <T> @Nullable SimpleLiteral<T> reparse(Class<T> type) {
 		T typedObject = Classes.parse(data, type, ParseContext.DEFAULT);
 		if (typedObject != null) {
@@ -229,6 +237,28 @@ public class UnparsedLiteral implements Literal<Object> {
 	 */
 	public boolean wasConverted() {
 		return converted;
+	}
+
+	/**
+	 * Get a {@link List} of all {@link ClassInfo}s this {@link UnparsedLiteral} can be parsed as without conversion.
+	 */
+	public @Nullable List<ClassInfo<?>> getPossibleInfos() {
+		return possibleInfos;
+	}
+
+	/**
+	 * Check if this {@link UnparsedLiteral} has not been successfully reparsed via {@link #reparse(Class)} or converted via
+	 * {@link #getConvertedExpression(ParseContext, Class[])} and if {@link #possibleInfos} contains more than one {@link ClassInfo}.
+	 * If not reparsed or converted and has multiple {@link ClassInfo}s, will produce a {@link Skript#warning(String)}.
+	 * @return {@code True} if a warning was produced.
+	 */
+	public boolean multipleWarning() {
+		if (reparsed || converted || (possibleInfos == null || possibleInfos.size() <= 1))
+			return false;
+		String infoCodeName = possibleInfos.get(0).getName().getSingular();
+		Skript.warning("'" +  data + "' has multiple types. Consider specifying which type to use: '"
+			+ data + " (" + infoCodeName + ")'");
+		return true;
 	}
 
 }

@@ -2586,6 +2586,64 @@ equipment slots:
 	off_hand: off hand slot, off hand
 	body: body slot, body armor slot, body armour slot
 
+# -- Game Rules --
+game rules:
+	announce_advancements: announce advancements
+	command_block_output: command block output
+	disable_player_movement_check: disable player movement check
+	disable_elytra_movement_check: disable elytra movement check
+	do_daylight_cycle: do daylight cycle
+	do_entity_drops: do entity drops
+	do_fire_tick: do fire tick
+	do_limited_crafting: do limited crafting
+	do_mob_loot: do mob loot
+	projectiles_can_break_blocks: projectiles can break blocks
+	do_mob_spawning: do mob spawning
+	do_tile_drops: do tile drops
+	do_weather_cycle: do weather cycle
+	keep_inventory: keep inventory
+	log_admin_commands: log admin commands
+	mob_griefing: mob griefing
+	natural_regeneration: natural regeneration, natural regen
+	reduced_debug_info: reduced debug info
+	send_command_feedback: send command feedback
+	show_death_messages: show death messages
+	spectators_generate_chunks: spectators generate chunks
+	disable_raids: disable raids
+	do_insomnia: do insomnia
+	do_immediate_respawn: do immediate respawn
+	drowning_damage: drowning damage
+	fall_damage: fall damage
+	fire_damage: fire damage
+	freeze_damage: freeze damage
+	do_patrol_spawning: do patrol spawning
+	do_trader_spawning: do trader spawning
+	do_warden_spawning: do warden spawning
+	forgive_dead_players: forgive dead players
+	universal_anger: universal anger
+	block_explosion_drop_decay: block explosion drop decay
+	mob_explosion_drop_decay: mob explosion drop decay
+	tnt_explosion_drop_decay: tnt explosion drop decay
+	water_source_conversion: water source conversion
+	lava_source_conversion: lava source conversion
+	global_sound_events: global sound events
+	do_vines_spread: do vines spread
+	ender_pearls_vanish_on_death: ender pearls vanish on death
+	allow_fire_ticks_away_from_player: allow fire ticks away from player
+	tnt_explodes: tnt explodes
+	random_tick_speed: random tick speed
+	spawn_radius: spawn radius
+	max_entity_cramming: max entity cramming
+	max_command_chain_length: max command chain length
+	max_command_fork_count: max command fork count
+	command_modification_block_limit: command modification block limit
+	players_sleeping_percentage: players sleeping percentage
+	snow_accumulations_height: snow accumulation height
+	players_nether_portal_default_delay: players nether portal default delay
+	players_nether_portal_creative_delay: players nether portal creative delay
+	minecart_max_speed: minecart max speed
+	spawn_chunk_radius: spawn chunk radius
+
 # -- Boolean --
 boolean:
 	true:
