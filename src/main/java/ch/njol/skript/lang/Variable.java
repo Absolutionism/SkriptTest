@@ -1,14 +1,5 @@
 package ch.njol.skript.lang;
 
-import java.lang.reflect.Array;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.regex.Pattern;
-import java.util.NoSuchElementException;
-import java.util.TreeMap;
-import java.util.function.Predicate;
-import java.util.function.Function;
-
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAPIException;
 import ch.njol.skript.SkriptConfig;
@@ -16,10 +7,6 @@ import ch.njol.skript.classes.Changer;
 import ch.njol.skript.classes.Changer.ChangeMode;
 import ch.njol.skript.classes.Changer.ChangerUtils;
 import ch.njol.skript.classes.ClassInfo;
-import ch.njol.skript.variables.VariablesStorage;
-import org.skriptlang.skript.lang.arithmetic.Arithmetics;
-import org.skriptlang.skript.lang.arithmetic.OperationInfo;
-import org.skriptlang.skript.lang.arithmetic.Operator;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.parser.ParserInstance;
 import ch.njol.skript.lang.util.SimpleExpression;

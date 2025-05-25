@@ -2,19 +2,11 @@ package ch.njol.skript.effects;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.Changer.ChangeMode;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Keywords;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.ExprInput;
 import ch.njol.skript.expressions.ExprSortedList;
-import ch.njol.skript.lang.Effect;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.InputSource;
-import ch.njol.skript.lang.SkriptParser;
+import ch.njol.skript.lang.*;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.Variable;
 import ch.njol.skript.lang.parser.ParserInstance;
 import ch.njol.util.Kleenean;
 import ch.njol.util.Pair;
@@ -22,11 +14,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Name("Sort")
 @Description("""
@@ -55,7 +43,7 @@ public class EffSort extends Effect implements InputSource {
 
 
 	private @Nullable Expression<?> mappingExpr;
-	private @UnknownNullability Variable<?> unsortedObjects;
+	private @UnknownNullability NewVariable<?> unsortedObjects;
 	private boolean descendingOrder;
 
 	private final Set<ExprInput<?>> dependentInputs = new HashSet<>();
@@ -65,7 +53,7 @@ public class EffSort extends Effect implements InputSource {
 
 	@Override
 	public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, ParseResult parseResult) {
-		if (expressions[0].isSingle() || !(expressions[0] instanceof Variable<?> variable)) {
+		if (expressions[0].isSingle() || !(expressions[0] instanceof NewVariable<?> variable)) {
 			Skript.error("You can only sort list variables!");
 			return false;
 		}

@@ -108,7 +108,7 @@ public class SecLoop extends LoopSection {
 
 		if (this.getParser().hasExperiment(Feature.QUEUES) // Todo: change this if other iterable things are added
 			&& expression.isSingle()
-			&& (expression instanceof Variable<?> || Iterable.class.isAssignableFrom(expression.getReturnType()))) {
+			&& (expression instanceof NewVariable<?> || Iterable.class.isAssignableFrom(expression.getReturnType()))) {
 			// Some expressions return one thing but are potentially iterable anyway, e.g. queues
 			this.iterableSingle = true;
 		} else if (expression.isSingle()) {
@@ -139,7 +139,7 @@ public class SecLoop extends LoopSection {
 					iter = Collections.singleton(value).iterator();
 				}
 			} else {
-				iter = expression instanceof Variable<?> variable ? variable.variablesIterator(event) :
+				iter = expression instanceof NewVariable<?> variable ? variable.variablesIterator(event) :
 					expression.iterator(event);
 				if (iter != null && iter.hasNext()) {
 					iteratorMap.put(event, iter);

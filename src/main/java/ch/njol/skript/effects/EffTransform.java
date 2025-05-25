@@ -1,20 +1,12 @@
 package ch.njol.skript.effects;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Keywords;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
+import ch.njol.skript.doc.*;
 import ch.njol.skript.expressions.ExprInput;
-import ch.njol.skript.lang.Effect;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.InputSource;
-import ch.njol.skript.lang.SkriptParser;
+import ch.njol.skript.lang.*;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.Variable;
 import ch.njol.skript.lang.parser.ParserInstance;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.util.Kleenean;
 import ch.njol.util.Pair;
 import ch.njol.util.StringUtils;
@@ -22,11 +14,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Name("Transform List")
 @Description({
@@ -60,7 +48,7 @@ public class EffTransform extends Effect implements InputSource {
 	}
 
 	private @UnknownNullability Expression<?> mappingExpr;
-	private @UnknownNullability Variable<?> unmappedObjects;
+	private @UnknownNullability NewVariable<?> unmappedObjects;
 
 	private final Set<ExprInput<?>> dependentInputs = new HashSet<>();
 
@@ -69,11 +57,11 @@ public class EffTransform extends Effect implements InputSource {
 
 	@Override
 	public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, ParseResult parseResult) {
-		if (expressions[0].isSingle() || !(expressions[0] instanceof Variable)) {
+		if (expressions[0].isSingle() || !(expressions[0] instanceof NewVariable)) {
 			Skript.error("You can only transform list variables!");
 			return false;
 		}
-		unmappedObjects = (Variable<?>) expressions[0];
+		unmappedObjects = (NewVariable<?>) expressions[0];
 
 		//noinspection DuplicatedCode
 		if (!parseResult.regexes.isEmpty()) {
@@ -112,7 +100,7 @@ public class EffTransform extends Effect implements InputSource {
 		}
 
 		for (Map.Entry<String, Object> pair : mappedValues.entrySet())
-			Variables.setVariable(varSubName + pair.getKey(), pair.getValue(), event, local);
+			NewVariables.setVariable(varSubName + pair.getKey(), pair.getValue(), event, local);
 	}
 
 	@Override

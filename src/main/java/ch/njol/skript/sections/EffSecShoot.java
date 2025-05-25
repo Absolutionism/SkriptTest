@@ -14,7 +14,7 @@ import ch.njol.skript.lang.Trigger;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Direction;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.util.Kleenean;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -309,7 +309,7 @@ public class EffSecShoot extends EffectSection {
 			}
 			ShootEvent shootEvent = new ShootEvent(entity, shooter);
 			lastSpawned = entity;
-			Variables.withLocalVariables(event, shootEvent, () -> TriggerItem.walk(trigger, shootEvent));
+			NewVariables.withLocalVariables(event, shootEvent, () -> TriggerItem.walk(trigger, shootEvent));
 		};
 	}
 

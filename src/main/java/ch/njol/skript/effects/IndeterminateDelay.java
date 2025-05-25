@@ -1,5 +1,7 @@
 package ch.njol.skript.effects;
 
+import ch.njol.skript.variables.NewVariables;
+import ch.njol.skript.variables.NewVariablesMap;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -7,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.util.Timespan;
-import ch.njol.skript.variables.Variables;
 
 /**
  * @author Peter Güttinger
@@ -29,14 +30,14 @@ public class IndeterminateDelay extends Delay {
 				return null;
 			
 			// Back up local variables
-			Object localVars = Variables.removeLocals(event);
+			NewVariablesMap localVars = NewVariables.removeLocals(event); // CHANGE
 			
 			Bukkit.getScheduler().scheduleSyncDelayedTask(Skript.getInstance(), () -> {
 				Skript.debug(getIndentation() + "... continuing after " + (System.nanoTime() - start) / 1_000_000_000. + "s");
 
 				// Re-set local variables
 				if (localVars != null)
-					Variables.setLocalVariables(event, localVars);
+					NewVariables.setLocalVariables(event, localVars); // CHANGE
 
 				TriggerItem.walk(next, event);
 			}, duration.getAs(Timespan.TimePeriod.TICK));

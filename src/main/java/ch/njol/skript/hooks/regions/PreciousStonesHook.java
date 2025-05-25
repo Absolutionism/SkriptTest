@@ -1,6 +1,6 @@
 package ch.njol.skript.hooks.regions;
 
-import static ch.njol.skript.variables.Variables.yggdrasil;
+import static ch.njol.skript.variables.NewVariables.yggdrasil;
 
 import java.io.IOException;
 import java.io.NotSerializableException;

@@ -7,7 +7,7 @@ import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.ColorRGB;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.block.data.BlockData;
@@ -27,7 +27,7 @@ public class DisplayData extends EntityData<Display> {
 
 	static {
 		EntityData.register(DisplayData.class, "display", Display.class, 0, DisplayType.codeNames);
-		Variables.yggdrasil.registerSingleClass(DisplayType.class, "DisplayType");
+		NewVariables.yggdrasil.registerSingleClass(DisplayType.class, "DisplayType");
 	}
 
 	private enum DisplayType {

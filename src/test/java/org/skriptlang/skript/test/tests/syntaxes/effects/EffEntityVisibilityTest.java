@@ -6,7 +6,7 @@ import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.lang.util.ContextlessEvent;
 import ch.njol.skript.test.runner.SkriptJUnitTest;
 import ch.njol.skript.util.Version;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.easymock.EasyMock;
@@ -44,8 +44,8 @@ public class EffEntityVisibilityTest extends SkriptJUnitTest {
 			Assert.fail("Reveal player effect is null");
 
 		ContextlessEvent event = ContextlessEvent.get();
-		Variables.setVariable("player", testPlayer, event, true);
-		Variables.setVariable("entity", testEntity, event, true);
+		NewVariables.setVariable("player", testPlayer, event, true);
+		NewVariables.setVariable("entity", testEntity, event, true);
 
 		testPlayer.hideEntity(Skript.getInstance(), testEntity);
 		EasyMock.expectLastCall();

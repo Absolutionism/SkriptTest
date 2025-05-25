@@ -1,6 +1,6 @@
 package ch.njol.skript.lang;
 
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.script.Script;
@@ -33,7 +33,7 @@ public class Trigger extends TriggerSection {
 		boolean success = TriggerItem.walk(this, event);
 
 		// Clear local variables
-		Variables.removeLocals(event);
+		NewVariables.removeLocals(event); // CHANGE
 		/*
 		 * Local variables can be used in delayed effects by backing reference
 		 * of VariablesMap up. Basically:

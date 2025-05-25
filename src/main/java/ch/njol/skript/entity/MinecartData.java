@@ -2,6 +2,7 @@ package ch.njol.skript.entity;
 
 import java.util.ArrayList;
 
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.minecart.CommandMinecart;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
@@ -15,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.util.Utils;
-import ch.njol.skript.variables.Variables;
 
 /**
  * @author Peter Güttinger
@@ -60,8 +60,8 @@ public class MinecartData extends EntityData<Minecart> {
 	
 	static {
 		EntityData.register(MinecartData.class, "minecart", Minecart.class, 0, MinecartType.codeNames);
-		
-		Variables.yggdrasil.registerSingleClass(MinecartType.class, "MinecartType");
+
+		NewVariables.yggdrasil.registerSingleClass(MinecartType.class, "MinecartType");
 	}
 	
 	private MinecartType type = MinecartType.ANY;

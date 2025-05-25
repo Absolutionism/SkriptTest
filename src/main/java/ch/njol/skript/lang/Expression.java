@@ -388,7 +388,7 @@ public interface Expression<T> extends SyntaxElement, Debuggable, Loopable<T> {
 		// Slots must be transformed to item stacks when writing to variables
 		// Also, some types must be cloned
 		Object[] newDelta = null;
-		if (changed instanceof Variable) {
+		if (changed instanceof NewVariable) {
 			newDelta = new Object[delta.length];
 			for (int i = 0; i < delta.length; i++) {
 				Object value = delta[i];

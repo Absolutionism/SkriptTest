@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import ch.njol.skript.variables.NewVariables;
 import me.ryanhamshire.GriefPrevention.Claim;
 import me.ryanhamshire.GriefPrevention.DataStore;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
@@ -26,7 +27,6 @@ import org.jetbrains.annotations.Nullable;
 import ch.njol.skript.Skript;
 import ch.njol.skript.hooks.regions.classes.Region;
 import ch.njol.skript.util.AABB;
-import ch.njol.skript.variables.Variables;
 import ch.njol.util.coll.iterator.EmptyIterator;
 import ch.njol.yggdrasil.Fields;
 import ch.njol.yggdrasil.YggdrasilID;
@@ -111,7 +111,7 @@ public class GriefPreventionHook extends RegionsPlugin<GriefPrevention> {
 	}
 	
 	static {
-		Variables.yggdrasil.registerSingleClass(GriefPreventionRegion.class);
+		NewVariables.yggdrasil.registerSingleClass(GriefPreventionRegion.class);
 	}
 	
 	@YggdrasilID("GriefPreventionRegion")

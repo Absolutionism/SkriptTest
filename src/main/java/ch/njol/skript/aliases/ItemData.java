@@ -6,7 +6,7 @@ import ch.njol.skript.bukkitutil.ItemUtils;
 import ch.njol.skript.bukkitutil.block.BlockCompat;
 import ch.njol.skript.bukkitutil.block.BlockValues;
 import ch.njol.skript.localization.Message;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.yggdrasil.Fields;
 import ch.njol.yggdrasil.YggdrasilSerializable.YggdrasilExtendedSerializable;
 import org.bukkit.Bukkit;
@@ -35,8 +35,8 @@ import java.util.Set;
 public class ItemData implements Cloneable, YggdrasilExtendedSerializable {
 	
 	static {
-		Variables.yggdrasil.registerSingleClass(ItemData.class, "NewItemData");
-		Variables.yggdrasil.registerSingleClass(OldItemData.class, "ItemData");
+		NewVariables.yggdrasil.registerSingleClass(ItemData.class, "NewItemData");
+		NewVariables.yggdrasil.registerSingleClass(OldItemData.class, "ItemData");
 	}
 	
 	/**

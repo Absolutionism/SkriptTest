@@ -4,7 +4,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.lang.util.ContextlessEvent;
 import ch.njol.skript.test.runner.SkriptJUnitTest;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.block.data.type.Tripwire;
 import org.bukkit.event.Event;
 import org.junit.Assert;
@@ -26,8 +26,8 @@ public class BlockDataNotCloned6829Test extends SkriptJUnitTest {
 		Event event = ContextlessEvent.get();
 		run("set {_original tripwire} to tripwire[]", event);
 		run("set {_another tripwire} to {_original tripwire}", event);
-		Tripwire originalTripwire = (Tripwire) Objects.requireNonNull(Variables.getVariable("original tripwire", event, true));
-		Tripwire anotherTripwire = (Tripwire) Objects.requireNonNull(Variables.getVariable("another tripwire", event, true));
+		Tripwire originalTripwire = (Tripwire) Objects.requireNonNull(NewVariables.getVariable("original tripwire", event, true));
+		Tripwire anotherTripwire = (Tripwire) Objects.requireNonNull(NewVariables.getVariable("another tripwire", event, true));
 		anotherTripwire.setDisarmed(true);
 		Assert.assertFalse(originalTripwire.isDisarmed());
 	}

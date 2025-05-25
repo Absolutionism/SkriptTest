@@ -14,7 +14,7 @@ import ch.njol.skript.util.BlockUtils;
 import ch.njol.skript.util.Container;
 import ch.njol.skript.util.Container.ContainerType;
 import ch.njol.skript.util.EnchantmentType;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.util.coll.iterator.EmptyIterable;
 import ch.njol.util.coll.iterator.SingleItemIterable;
 import ch.njol.yggdrasil.FieldHandler;
@@ -50,7 +50,7 @@ public class ItemType implements Unit, Iterable<ItemData>, Container<ItemStack>,
 
 	static {
 		// This handles updating ItemType and ItemData variable records
-		Variables.yggdrasil.registerFieldHandler(new FieldHandler() {
+		NewVariables.yggdrasil.registerFieldHandler(new FieldHandler() {
 
 			@Override
 			public boolean missingField(Object o, Field field) throws StreamCorruptedException {

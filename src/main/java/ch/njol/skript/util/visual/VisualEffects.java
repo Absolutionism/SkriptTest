@@ -12,7 +12,7 @@ import ch.njol.skript.util.ColorRGB;
 import ch.njol.skript.util.Direction;
 import ch.njol.skript.util.SkriptColor;
 import ch.njol.skript.util.Timespan;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.util.StringUtils;
 import ch.njol.util.coll.iterator.SingleItemIterator;
 import org.bukkit.*;
@@ -42,9 +42,9 @@ public class VisualEffects {
 	private static VisualEffectType[] visualEffectTypes;
 
 	static {
-		Variables.yggdrasil.registerSingleClass(VisualEffectType.class, "VisualEffect.NewType");
-		Variables.yggdrasil.registerSingleClass(Effect.class, "Bukkit_Effect");
-		Variables.yggdrasil.registerSingleClass(EntityEffect.class, "Bukkit_EntityEffect");
+		NewVariables.yggdrasil.registerSingleClass(VisualEffectType.class, "VisualEffect.NewType");
+		NewVariables.yggdrasil.registerSingleClass(Effect.class, "Bukkit_Effect");
+		NewVariables.yggdrasil.registerSingleClass(EntityEffect.class, "Bukkit_EntityEffect");
 	}
 
 	@Nullable

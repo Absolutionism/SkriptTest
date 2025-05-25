@@ -4,7 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.util.ContextlessEvent;
 import ch.njol.skript.test.runner.SkriptJUnitTest;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -37,7 +37,7 @@ public class MissingCheckIfEntityCanUseSlot7524Test extends SkriptJUnitTest {
 	@Test
 	public void test() {
 		ContextlessEvent event = ContextlessEvent.get();
-		Variables.setVariable("player", player, event, true);
+		NewVariables.setVariable("player", player, event, true);
 
 		EasyMock.expect(player.isValid()).andStubReturn(true);
 		EasyMock.expect(player.getEquipment()).andReturn(equipment);

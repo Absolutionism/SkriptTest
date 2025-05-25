@@ -7,6 +7,7 @@ import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
+import ch.njol.skript.lang.NewVariable;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.Variable;
 import ch.njol.skript.lang.util.SimpleExpression;
@@ -17,7 +18,6 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
 @Name("Indices of List")
 @Description({
@@ -49,7 +49,7 @@ public class ExprIndices extends SimpleExpression<String> {
 	}
 
 	@SuppressWarnings({"null", "NotNullFieldNotInitialized"})
-	private Variable<?> list;
+	private NewVariable<?> list;
 
 	private boolean sort;
 	private boolean descending;
@@ -58,8 +58,8 @@ public class ExprIndices extends SimpleExpression<String> {
 	public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, ParseResult parseResult) {
 		sort = matchedPattern > 1;
 		descending = parseResult.mark == 1;
-		if (exprs[0] instanceof Variable<?> && ((Variable<?>) exprs[0]).isList()) {
-			list = (Variable<?>) exprs[0];
+		if (exprs[0] instanceof NewVariable<?> && ((NewVariable<?>) exprs[0]).isList()) {
+			list = (NewVariable<?>) exprs[0];
 			return true;
 		}
 

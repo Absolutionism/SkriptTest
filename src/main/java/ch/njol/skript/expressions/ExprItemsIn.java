@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import ch.njol.skript.aliases.ItemType;
+import ch.njol.skript.lang.NewVariable;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -65,7 +66,7 @@ public class ExprItemsIn extends SimpleExpression<Slot> {
 			types = (Expression<ItemType>) exprs[0];
 			inventories = (Expression<Inventory>) exprs[1];
 		}
-		if (inventories instanceof Variable && !inventories.isSingle() && parseResult.mark != 1)
+		if (inventories instanceof NewVariable && !inventories.isSingle() && parseResult.mark != 1)
 			Skript.warning("'items in {variable::*}' does not actually represent the items stored in the variable. Use either '{variable::*}' (e.g. 'loop {variable::*}') if the variable contains items, or 'items in inventories {variable::*}' if the variable contains inventories.");
 		return true;
 	}

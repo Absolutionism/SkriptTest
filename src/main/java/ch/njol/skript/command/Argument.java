@@ -1,22 +1,17 @@
 package ch.njol.skript.command;
 
-import java.util.WeakHashMap;
-
-import org.bukkit.event.Event;
-import org.jetbrains.annotations.Nullable;
-
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.ClassInfo;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ParseContext;
-import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.lang.Variable;
-import ch.njol.skript.lang.VariableString;
+import ch.njol.skript.lang.*;
 import ch.njol.skript.lang.util.SimpleLiteral;
 import ch.njol.skript.log.RetainingLogHandler;
 import ch.njol.skript.log.SkriptLogger;
 import ch.njol.skript.util.Utils;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
+import org.bukkit.event.Event;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.WeakHashMap;
 
 /**
  * Represents an argument of a command
@@ -52,7 +47,7 @@ public class Argument<T> {
 	@SuppressWarnings("unchecked")
 	@Nullable
 	public static <T> Argument<T> newInstance(@Nullable final String name, final ClassInfo<T> type, final @Nullable String def, final int index, final boolean single, final boolean forceOptional) {
-		if (name != null && !Variable.isValidVariableName(name, false, false)) {
+		if (name != null && !NewVariable.isValidVariableName(name, false, false)) {
 			Skript.error("An argument's name must be a valid variable name, and cannot be a list variable.");
 			return null;
 		}
@@ -118,10 +113,10 @@ public class Argument<T> {
 		if (name != null) {
 			if (single) {
 				if (o.length > 0)
-					Variables.setVariable(name, o[0], e, true);
+					NewVariables.setVariable(name, o[0], e, true);
 			} else {
 				for (int i = 0; i < o.length; i++)
-					Variables.setVariable(name + "::" + (i + 1), o[i], e, true);
+					NewVariables.setVariable(name + "::" + (i + 1), o[i], e, true);
 			}
 		}
 	}

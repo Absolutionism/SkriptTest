@@ -303,7 +303,7 @@ public class SkriptParser {
 	/**
 	 * Prints errors
 	 */
-	private static <T> @Nullable Variable<T> parseVariable(String expr, Class<? extends T>[] returnTypes) {
+	private static <T> @Nullable NewVariable<T> parseVariable(String expr, Class<? extends T>[] returnTypes) {
 		if (VARIABLE_PATTERN.matcher(expr).matches()) {
 			String variableName = "" + expr.substring(expr.indexOf('{') + 1, expr.lastIndexOf('}'));
 			boolean inExpression = false;
@@ -321,7 +321,7 @@ public class SkriptParser {
 				if (!inExpression && (character == '{' || character == '}'))
 					return null;
 			}
-			return Variable.newInstance(variableName, returnTypes);
+			return NewVariable.newInstance(variableName, returnTypes);
 		}
 		return null;
 	}
@@ -353,7 +353,7 @@ public class SkriptParser {
 			return new SkriptParser(this, "" + expr.substring(1, expr.length() - 1)).parseSingleExpr(allowUnparsedLiteral, error, types);
 		try (ParseLogHandler log = SkriptLogger.startParseLogHandler()) {
 			if (context == ParseContext.DEFAULT || context == ParseContext.EVENT) {
-				Variable<? extends T> parsedVariable = parseVariable(expr, types);
+				NewVariable<? extends T> parsedVariable = parseVariable(expr, types);
 				if (parsedVariable != null) {
 					if ((flags & PARSE_EXPRESSIONS) == 0) {
 						Skript.error("Variables cannot be used here.");
@@ -478,7 +478,7 @@ public class SkriptParser {
 			if (context == ParseContext.DEFAULT || context == ParseContext.EVENT) {
 				// Attempt to parse variable first
 				if (onlySingular || onlyPlural) { // No mixed plurals/singulars possible
-					Variable<?> parsedVariable = parseVariable(expr, nonNullTypes);
+					NewVariable<?> parsedVariable = parseVariable(expr, nonNullTypes);
 					if (parsedVariable != null) { // Parsing succeeded, we have a variable
 						// If variables cannot be used here, it is now allowed
 						if ((flags & PARSE_EXPRESSIONS) == 0) {
@@ -503,7 +503,7 @@ public class SkriptParser {
 						return null;
 					}
 				} else { // Mixed plurals/singulars
-					Variable<?> parsedVariable = parseVariable(expr, types);
+					NewVariable<?> parsedVariable = parseVariable(expr, types);
 					if (parsedVariable != null) { // Parsing succeeded, we have a variable
 						// If variables cannot be used here, it is now allowed
 						if ((flags & PARSE_EXPRESSIONS) == 0) {

@@ -1,14 +1,5 @@
 package ch.njol.skript.effects;
 
-import java.util.Arrays;
-import java.util.logging.Level;
-
-import ch.njol.skript.expressions.ExprParse;
-import ch.njol.skript.lang.*;
-import org.skriptlang.skript.lang.script.ScriptWarning;
-import org.bukkit.event.Event;
-import org.jetbrains.annotations.Nullable;
-
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptConfig;
 import ch.njol.skript.classes.Changer;
@@ -18,6 +9,8 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
+import ch.njol.skript.expressions.ExprParse;
+import ch.njol.skript.lang.*;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.log.CountingLogHandler;
 import ch.njol.skript.log.ErrorQuality;
@@ -26,7 +19,14 @@ import ch.njol.skript.log.SkriptLogger;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Patterns;
 import ch.njol.skript.util.Utils;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.util.Kleenean;
+import org.bukkit.event.Event;
+import org.jetbrains.annotations.Nullable;
+import org.skriptlang.skript.lang.script.ScriptWarning;
+
+import java.util.Arrays;
+import java.util.logging.Level;
 
 /**
  * @author Peter Güttinger
@@ -234,7 +234,7 @@ public class EffChange extends Effect {
 				return false;
 			}
 
-			if (changed instanceof Variable && !changed.isSingle() && mode == ChangeMode.SET) {
+			if (changed instanceof NewVariable && !changed.isSingle() && mode == ChangeMode.SET) {
 				if (ch instanceof ExprParse) {
 					((ExprParse) ch).flatten = false;
 				} else if (ch instanceof ExpressionList) {
@@ -245,7 +245,7 @@ public class EffChange extends Effect {
 				}
 			}
 
-			if (changed instanceof Variable && !((Variable<?>) changed).isLocal() && (mode == ChangeMode.SET || ((Variable<?>) changed).isList() && mode == ChangeMode.ADD)) {
+			if (changed instanceof NewVariable && !((NewVariable<?>) changed).isLocal() && (mode == ChangeMode.SET || ((NewVariable<?>) changed).isList() && mode == ChangeMode.ADD)) {
 				final ClassInfo<?> ci = Classes.getSuperClassInfo(ch.getReturnType());
 				if (ci.getC() != Object.class && ci.getSerializer() == null && ci.getSerializeAs() == null && !SkriptConfig.disableObjectCannotBeSavedWarnings.value()) {
 					if (getParser().isActive() && !getParser().getCurrentScript().suppressesWarning(ScriptWarning.VARIABLE_SAVE)) {
@@ -262,6 +262,7 @@ public class EffChange extends Effect {
 		Object[] delta = changer == null ? null : changer.getArray(event);
 		delta = changer == null ? delta : changer.beforeChange(changed, delta);
 
+		NewVariables.getVariable("a", event, false);
 		if ((delta == null || delta.length == 0) && (mode != ChangeMode.DELETE && mode != ChangeMode.RESET)) {
 			if (mode == ChangeMode.SET && changed.acceptChange(ChangeMode.DELETE) != null)
 				changed.change(event, null, ChangeMode.DELETE);

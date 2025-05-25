@@ -4,7 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.util.ContextlessEvent;
 import ch.njol.skript.test.runner.SkriptJUnitTest;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.entity.Player;
 import org.easymock.EasyMock;
 import org.junit.Assert;
@@ -42,8 +42,8 @@ public class CondIsPressingKeyTest extends SkriptJUnitTest {
 			Assert.fail("Is pressing key condition is null");
 
 		ContextlessEvent event = ContextlessEvent.get();
-		Variables.setVariable("player", testPlayer, event, true);
-		Variables.setVariable("input-keys::1", testInputKeys[0], event, true);
+		NewVariables.setVariable("player", testPlayer, event, true);
+		NewVariables.setVariable("input-keys::1", testInputKeys[0], event, true);
 
 		EasyMock.expect(testPlayer.getCurrentInput()).andReturn(InputHelper.fromKeys(testInputKeys));
 		EasyMock.replay(testPlayer);
@@ -57,14 +57,14 @@ public class CondIsPressingKeyTest extends SkriptJUnitTest {
 		EasyMock.verify(testPlayer);
 
 		EasyMock.resetToNice(testPlayer);
-		Variables.setVariable("input-keys::2", testInputKeys[1], event, true);
+		NewVariables.setVariable("input-keys::2", testInputKeys[1], event, true);
 		EasyMock.expect(testPlayer.getCurrentInput()).andReturn(InputHelper.fromKeys(testInputKeys));
 		EasyMock.replay(testPlayer);
 		assert isPressingKeyCondition.check(event);
 		EasyMock.verify(testPlayer);
 
 		EasyMock.resetToNice(testPlayer);
-		Variables.setVariable("input-keys::3", InputKey.SNEAK, event, true);
+		NewVariables.setVariable("input-keys::3", InputKey.SNEAK, event, true);
 		EasyMock.expect(testPlayer.getCurrentInput()).andReturn(InputHelper.fromKeys(testInputKeys));
 		EasyMock.replay(testPlayer);
 		assert !isPressingKeyCondition.check(event);

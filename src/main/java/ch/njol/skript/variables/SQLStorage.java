@@ -511,7 +511,7 @@ public abstract class SQLStorage extends VariablesStorage {
 						final byte[] value = r.getBytes(i++); // Blob not supported by SQLite
 						lastRowID = r.getLong(i++);
 						if (value == null) {
-							Variables.variableLoaded(name, null, SQLStorage.this);
+							NewVariables.variableLoaded(name, null, SQLStorage.this);
 						} else {
 							final ClassInfo<?> c = Classes.getClassInfoNoError(type);
 							@SuppressWarnings("unused")
@@ -528,7 +528,7 @@ public abstract class SQLStorage extends VariablesStorage {
 								Skript.error("Cannot load the variable {" + name + "} from the database '" + getUserConfigurationName() + "', because it cannot be loaded as " + c.getName().withIndefiniteArticle());
 								continue;
 							}
-							Variables.variableLoaded(name, d, SQLStorage.this);
+							NewVariables.variableLoaded(name, d, SQLStorage.this);
 //					}
 						}
 					}

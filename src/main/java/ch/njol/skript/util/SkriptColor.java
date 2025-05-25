@@ -2,7 +2,7 @@ package ch.njol.skript.util;
 
 import ch.njol.skript.localization.Adjective;
 import ch.njol.skript.localization.Language;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.yggdrasil.Fields;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
@@ -111,7 +111,7 @@ public enum SkriptColor implements Color {
 	
 	@Override
 	public Fields serialize() throws NotSerializableException {
-		return new Fields(this, Variables.yggdrasil);
+		return new Fields(this, NewVariables.yggdrasil);
 	}
 	
 	@Override

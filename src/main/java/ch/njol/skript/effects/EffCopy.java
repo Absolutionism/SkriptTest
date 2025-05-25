@@ -7,13 +7,10 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Keywords;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.lang.Effect;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionList;
+import ch.njol.skript.lang.*;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.Variable;
 import ch.njol.skript.registrations.Classes;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.util.Kleenean;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -43,14 +40,14 @@ public class EffCopy extends Effect {
 
 	private Expression<?> source;
 	private Expression<?> rawDestination;
-	private List<Variable<?>> destinations;
+	private List<NewVariable<?>> destinations;
 
 	@Override
 	public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, ParseResult parseResult) {
 		source = exprs[0];
 		rawDestination = exprs[1];
-		if (exprs[1] instanceof Variable<?>) {
-			destinations = Collections.singletonList((Variable<?>) exprs[1]);
+		if (exprs[1] instanceof NewVariable<?>) {
+			destinations = Collections.singletonList((NewVariable<?>) exprs[1]);
 		} else if (exprs[1] instanceof ExpressionList<?>) {
 			destinations = unwrapExpressionList((ExpressionList<?>) exprs[1]);
 		}
@@ -58,7 +55,7 @@ public class EffCopy extends Effect {
 			Skript.error("You can only copy objects into variables");
 			return false;
 		}
-		for (Variable<?> destination : destinations) {
+		for (NewVariable<?> destination : destinations) {
 			if (!source.isSingle() && destination.isSingle()) {
 				Skript.error("Cannot copy multiple objects into a single variable");
 				return false;
@@ -70,29 +67,29 @@ public class EffCopy extends Effect {
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void execute(Event event) {
-		if (!(source instanceof Variable) || source.isSingle()) {
+		if (!(source instanceof NewVariable) || source.isSingle()) {
 			ChangeMode mode = ChangeMode.SET;
 			Object[] clone = (Object[]) Classes.clone(source.getArray(event));
 			if (clone.length == 0)
 				mode = ChangeMode.DELETE;
-            for (Variable<?> dest : destinations)
+            for (NewVariable<?> dest : destinations)
                 dest.change(event, clone, mode);
             return;
 		}
 
-		Map<String, Object> source = copyMap((Map<String, Object>) ((Variable<?>) this.source).getRaw(event));
+		Map<String, Object> source = copyMap((Map<String, Object>) ((NewVariable<?>) this.source).getRaw(event));
 
 		// If we're copying {_foo::*} we don't want to also copy {_foo}
 		if (source != null)
 			source.remove(null);
 
-		for (Variable<?> destination : destinations) {
+		for (NewVariable<?> destination : destinations) {
 			destination.change(event, null, ChangeMode.DELETE);
 			if (source == null)
 				continue;
 	
 			String target = destination.getName().getSingle(event);
-			target = target.substring(0, target.length() - (Variable.SEPARATOR + "*").length());
+			target = target.substring(0, target.length() - (NewVariable.SEPARATOR + "*").length());
 			set(event, target, source, destination.isLocal());
 		}
 	}
@@ -121,21 +118,21 @@ public class EffCopy extends Effect {
 	@SuppressWarnings("unchecked")
 	private static void set(Event event, String targetName, Map<String, Object> source, boolean local) {
 		source.forEach((key, value) -> {
-			String node = targetName + (key == null ? "" : Variable.SEPARATOR + key);
+			String node = targetName + (key == null ? "" : NewVariable.SEPARATOR + key);
 			if (value instanceof Map) {
 				set(event, node, (Map<String, Object>) value, local);
 				return;
 			}
-			Variables.setVariable(node, value, event, local);
+			NewVariables.setVariable(node, value, event, local);
 		});
 	}
 
-	private static List<Variable<?>> unwrapExpressionList(ExpressionList<?> expressionList) {
+	private static List<NewVariable<?>> unwrapExpressionList(ExpressionList<?> expressionList) {
 		Expression<?>[] expressions = expressionList.getExpressions();
-		List<Variable<?>> destinations = new ArrayList<>();
+		List<NewVariable<?>> destinations = new ArrayList<>();
         for (Expression<?> expression : expressions) {
-            if (expression instanceof Variable<?>) {
-                destinations.add((Variable<?>) expression);
+            if (expression instanceof NewVariable<?>) {
+                destinations.add((NewVariable<?>) expression);
                 continue;
             }
             if (!(expression instanceof ExpressionList<?>))

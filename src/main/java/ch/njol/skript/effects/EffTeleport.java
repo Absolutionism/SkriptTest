@@ -8,7 +8,8 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.sections.EffSecSpawn.SpawnEvent;
 import ch.njol.skript.timings.SkriptTimings;
 import ch.njol.skript.util.Direction;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
+import ch.njol.skript.variables.NewVariablesMap;
 import ch.njol.util.Kleenean;
 import io.papermc.lib.PaperLib;
 import io.papermc.lib.environments.PaperEnvironment;
@@ -134,7 +135,7 @@ public class EffTeleport extends Effect {
 
 		final Location fixed = location;
 		Delay.addDelayedEvent(event);
-		Object localVars = Variables.removeLocals(event);
+		NewVariablesMap localVars = NewVariables.removeLocals(event); // CHANGE
 
 		// This will either fetch the chunk instantly if on Spigot or already loaded or fetch it async if on Paper.
 		PaperLib.getChunkAtAsync(location).thenAccept(chunk -> {
@@ -146,7 +147,7 @@ public class EffTeleport extends Effect {
 
 			// Re-set local variables
 			if (localVars != null)
-				Variables.setLocalVariables(event, localVars);
+				NewVariables.setLocalVariables(event, localVars); // CHANGE
 			
 			// Continue the rest of the trigger if there is one
 			Object timing = null;
@@ -160,7 +161,8 @@ public class EffTeleport extends Effect {
 
 				TriggerItem.walk(next, event);
 			}
-			Variables.removeLocals(event); // Clean up local vars, we may be exiting now
+			NewVariables.removeLocals(event); // Clean up local vars, we may be exiting now
+			// CHANGE
 			SkriptTimings.stop(timing);
 		});
 		return null;

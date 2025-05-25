@@ -1,49 +1,23 @@
 package ch.njol.skript.registrations;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.NotSerializableException;
-import java.io.SequenceInputStream;
-import java.lang.reflect.Array;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.regex.Pattern;
-
-import ch.njol.skript.command.Commands;
-import ch.njol.skript.entity.EntityData;
-import ch.njol.skript.util.Date;
-import ch.njol.skript.util.Utils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
-
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAPIException;
 import ch.njol.skript.SkriptConfig;
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.classes.Serializer;
+import ch.njol.skript.command.Commands;
+import ch.njol.skript.entity.EntityData;
 import ch.njol.skript.lang.DefaultExpression;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.localization.Language;
 import ch.njol.skript.log.ParseLogHandler;
 import ch.njol.skript.log.SkriptLogger;
 import ch.njol.skript.util.StringMode;
+import ch.njol.skript.util.Utils;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.skript.variables.SQLStorage;
 import ch.njol.skript.variables.SerializedVariable;
-import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
 import ch.njol.util.StringUtils;
 import ch.njol.yggdrasil.Tag;
@@ -51,9 +25,20 @@ import ch.njol.yggdrasil.Yggdrasil;
 import ch.njol.yggdrasil.YggdrasilInputStream;
 import ch.njol.yggdrasil.YggdrasilOutputStream;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.converter.Converter;
 import org.skriptlang.skript.lang.converter.ConverterInfo;
 import org.skriptlang.skript.lang.converter.Converters;
+
+import java.io.*;
+import java.lang.reflect.Array;
+import java.nio.charset.Charset;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * @author Peter Güttinger
@@ -112,7 +97,7 @@ public abstract class Classes {
 		for (final ClassInfo<?> ci : getClassInfos()) {
 			final Serializer<?> s = ci.getSerializer();
 			if (s != null)
-				Variables.yggdrasil.registerClassResolver(s);
+				NewVariables.yggdrasil.registerClassResolver(s);
 		}
 
 		EntityData.onRegistrationStop();
@@ -684,9 +669,9 @@ public abstract class Classes {
 	}
 
 	/**
-	 * consists of {@link Yggdrasil#MAGIC_NUMBER} and {@link Variables#YGGDRASIL_VERSION}
+	 * consists of {@link Yggdrasil#MAGIC_NUMBER} and {@link NewVariables#YGGDRASIL_VERSION}
 	 */
-	private final static byte[] YGGDRASIL_START = {(byte) 'Y', (byte) 'g', (byte) 'g', 0, (Variables.YGGDRASIL_VERSION >>> 8) & 0xFF, Variables.YGGDRASIL_VERSION & 0xFF};
+	private final static byte[] YGGDRASIL_START = {(byte) 'Y', (byte) 'g', (byte) 'g', 0, (NewVariables.YGGDRASIL_VERSION >>> 8) & 0xFF, NewVariables.YGGDRASIL_VERSION & 0xFF};
 
 	@SuppressWarnings("null")
 	private final static Charset UTF_8 = Charset.forName("UTF-8");
@@ -695,7 +680,7 @@ public abstract class Classes {
 		assert Enum.class.isAssignableFrom(Kleenean.class) && Tag.getType(Kleenean.class) == Tag.T_ENUM : Tag.getType(Kleenean.class); // TODO why is this check here?
 		final Tag t = Tag.getType(c.getC());
 		assert t.isWrapper() || t == Tag.T_STRING || t == Tag.T_OBJECT || t == Tag.T_ENUM;
-		final byte[] cn = t == Tag.T_OBJECT || t == Tag.T_ENUM ? Variables.yggdrasil.getID(c.getC()).getBytes(UTF_8) : null;
+		final byte[] cn = t == Tag.T_OBJECT || t == Tag.T_ENUM ? NewVariables.yggdrasil.getID(c.getC()).getBytes(UTF_8) : null;
 		final byte[] r = new byte[YGGDRASIL_START.length + 1 + (cn == null ? 0 : 1 + cn.length)];
 		int i = 0;
 		for (; i < YGGDRASIL_START.length; i++)
@@ -742,7 +727,7 @@ public abstract class Classes {
 		
 		try {
 			ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
-			YggdrasilOutputStream yggdrasilOutputStream = Variables.yggdrasil.newOutputStream(byteOutputStream);
+			YggdrasilOutputStream yggdrasilOutputStream = NewVariables.yggdrasil.newOutputStream(byteOutputStream);
 
 			yggdrasilOutputStream.writeObject(object);
 			yggdrasilOutputStream.flush();
@@ -798,7 +783,7 @@ public abstract class Classes {
 		YggdrasilInputStream in = null;
 		try {
 			value = new SequenceInputStream(new ByteArrayInputStream(getYggdrasilStart(type)), value);
-			in = Variables.yggdrasil.newInputStream(value);
+			in = NewVariables.yggdrasil.newInputStream(value);
 			return in.readObject();
 		} catch (final IOException e) { // i.e. invalid save
 			if (Skript.testing())

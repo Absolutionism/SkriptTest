@@ -4,7 +4,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.lang.util.ContextlessEvent;
 import ch.njol.skript.test.runner.SkriptJUnitTest;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -36,8 +36,8 @@ public class ExprLastDeathLocationTest extends SkriptJUnitTest {
 		Location location = new Location(Bukkit.getWorld("world"), 0, 0, 0);
 
 		ContextlessEvent event = ContextlessEvent.get();
-		Variables.setVariable("player", player, event, true);
-		Variables.setVariable("location", location, event, true);
+		NewVariables.setVariable("player", player, event, true);
+		NewVariables.setVariable("location", location, event, true);
 
 		player.setLastDeathLocation(locationMatcher(location));
 		EasyMock.expectLastCall();

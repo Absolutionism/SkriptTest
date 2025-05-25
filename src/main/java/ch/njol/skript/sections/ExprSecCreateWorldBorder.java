@@ -13,7 +13,7 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.Trigger;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.registrations.EventValues;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.skript.doc.Example;
 import ch.njol.util.Kleenean;
 import org.bukkit.Bukkit;
@@ -76,7 +76,7 @@ public class ExprSecCreateWorldBorder extends SectionExpression<WorldBorder> {
 		if (trigger == null) 
 			return new WorldBorder[] {worldBorder};
 		CreateWorldborderEvent worldborderEvent = new CreateWorldborderEvent(worldBorder);
-		Variables.withLocalVariables(event, worldborderEvent, () -> TriggerItem.walk(trigger, worldborderEvent));
+		NewVariables.withLocalVariables(event, worldborderEvent, () -> TriggerItem.walk(trigger, worldborderEvent));
 		return new WorldBorder[] {worldborderEvent.getWorldBorder()};
 	}
 

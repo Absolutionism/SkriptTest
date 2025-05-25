@@ -11,7 +11,7 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Direction;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.util.Kleenean;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
@@ -71,7 +71,7 @@ public class ExprSecCreateLootContext extends SectionExpression<LootContext> {
 		LootContextWrapper wrapper = new LootContextWrapper(loc);
 		if (trigger != null) {
 			LootContextCreateEvent contextEvent = new LootContextCreateEvent(wrapper);
-			Variables.withLocalVariables(event, contextEvent, () ->
+			NewVariables.withLocalVariables(event, contextEvent, () ->
 				TriggerItem.walk(trigger, contextEvent)
 			);
 		}

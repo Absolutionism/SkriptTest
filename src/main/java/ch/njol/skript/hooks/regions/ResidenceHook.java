@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -24,7 +25,6 @@ import com.google.common.base.Objects;
 
 import ch.njol.skript.hooks.regions.WorldGuardHook.WorldGuardRegion;
 import ch.njol.skript.hooks.regions.classes.Region;
-import ch.njol.skript.variables.Variables;
 import ch.njol.yggdrasil.Fields;
 import ch.njol.yggdrasil.YggdrasilID;
 
@@ -87,7 +87,7 @@ public class ResidenceHook extends RegionsPlugin<Residence> {
 	}
 	
 	static {
-		Variables.yggdrasil.registerSingleClass(ResidenceRegion.class);
+		NewVariables.yggdrasil.registerSingleClass(ResidenceRegion.class);
 	}
 	
 	@YggdrasilID("ResidenceRegion")

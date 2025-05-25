@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import ch.njol.skript.lang.NewVariable;
+import ch.njol.skript.variables.NewVariables;
 import com.google.common.collect.Queues;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
@@ -33,11 +35,9 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.Variable;
 import ch.njol.skript.log.ParseLogHandler;
 import ch.njol.skript.log.SkriptLogger;
 import ch.njol.skript.registrations.Classes;
-import ch.njol.skript.variables.Variables;
 import ch.njol.util.NonNullPair;
 import ch.njol.util.StringUtils;
 import ch.njol.util.coll.CollectionUtils;
@@ -170,7 +170,7 @@ public class StructVariables extends Structure {
 				);
 			}
 
-			if (name.startsWith(Variable.LOCAL_VARIABLE_TOKEN)) {
+			if (name.startsWith(NewVariable.LOCAL_VARIABLE_TOKEN)) {
 				Skript.error("'" + name + "' cannot be a local variable in default variables structure");
 				continue;
 			}
@@ -247,9 +247,9 @@ public class StructVariables extends Structure {
 		}
 		for (NonNullPair<String, Object> pair : data.getVariables()) {
 			String name = pair.getKey();
-			if (Variables.getVariable(name, null, false) != null)
+			if (NewVariables.getVariable(name, null, false) != null)
 				continue;
-			Variables.setVariable(name, pair.getValue(), null, false);
+			NewVariables.setVariable(name, pair.getValue(), null, false);
 		}
 		data.loaded = true;
 		return true;
@@ -264,7 +264,7 @@ public class StructVariables extends Structure {
 		for (NonNullPair<String, Object> pair : data.getVariables()) {
 			String name = pair.getKey();
 			if (name.contains("<") && name.contains(">")) // probably a template made by us
-				Variables.setVariable(pair.getKey(), null, null, false);
+				NewVariables.setVariable(pair.getKey(), null, null, false);
 		}
 		script.removeData(DefaultVariables.class);
 	}

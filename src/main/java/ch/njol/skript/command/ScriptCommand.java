@@ -23,7 +23,7 @@ import ch.njol.skript.util.Timespan;
 import ch.njol.skript.util.Utils;
 import ch.njol.skript.util.chat.BungeeConverter;
 import ch.njol.skript.util.chat.MessageComponent;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.util.StringUtils;
 import com.google.common.base.Preconditions;
 import org.bukkit.Bukkit;
@@ -513,7 +513,7 @@ public class ScriptCommand implements TabExecutor {
 		} else {
 			String name = getStorageVariableName(event);
 			assert name != null;
-			Object variable = Variables.getVariable(name, null, false);
+			Object variable = NewVariables.getVariable(name, null, false);
 			if (!(variable instanceof Date)) {
 				Skript.warning("Variable {" + name + "} was not a date! You may be using this variable elsewhere. " +
 						"This warning is letting you know that this variable is now overridden for the command storage.");
@@ -528,7 +528,7 @@ public class ScriptCommand implements TabExecutor {
 			// Using a variable
 			String name = getStorageVariableName(event);
 			assert name != null;
-			Variables.setVariable(name, date, null, false);
+			NewVariables.setVariable(name, date, null, false);
 		} else {
 			// Use the map
 			if (date == null)

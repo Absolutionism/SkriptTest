@@ -11,7 +11,7 @@ import ch.njol.skript.localization.Message;
 import ch.njol.skript.log.RetainingLogHandler;
 import ch.njol.skript.log.SkriptLogger;
 import ch.njol.skript.util.SkriptColor;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import com.google.common.base.Preconditions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,18 +28,13 @@ import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.help.HelpMap;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.plugin.SimplePluginManager;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.script.Script;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.regex.Pattern;
@@ -189,7 +184,7 @@ public abstract class Commands {
 						if (SkriptConfig.logEffectCommands.value() && !(sender instanceof ConsoleCommandSender))
 							Skript.info(sender.getName() + " issued effect command: " + SkriptColor.replaceColorChar(command));
 						TriggerItem.walk(effect, effectCommand);
-						Variables.removeLocals(effectCommand);
+						NewVariables.removeLocals(effectCommand); // CHANGE
 					} else {
 						sender.sendMessage(ChatColor.RED + "your effect command '" + SkriptColor.replaceColorChar(command) + "' was cancelled.");
 					}

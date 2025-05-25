@@ -2,7 +2,7 @@ package ch.njol.skript.entity;
 
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.util.coll.CollectionUtils;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Villager.Profession;
@@ -22,7 +22,7 @@ public class VillagerData extends EntityData<Villager> {
 	private static final List<Profession> professions;
 
 	static {
-		Variables.yggdrasil.registerSingleClass(Profession.class, "Villager.Profession");
+		NewVariables.yggdrasil.registerSingleClass(Profession.class, "Villager.Profession");
 
 		EntityData.register(VillagerData.class, "villager", Villager.class, 0,
 			"villager", "normal", "armorer", "butcher", "cartographer", "cleric", "farmer", "fisherman",

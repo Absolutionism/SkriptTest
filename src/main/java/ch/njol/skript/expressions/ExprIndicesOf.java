@@ -1,22 +1,18 @@
 package ch.njol.skript.expressions;
 
-import ch.njol.skript.lang.SyntaxStringBuilder;
-import ch.njol.skript.lang.Variable;
-import ch.njol.skript.util.LiteralUtils;
-import ch.njol.util.Pair;
-import org.bukkit.event.Event;
-import org.jetbrains.annotations.Nullable;
-
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
+import ch.njol.skript.lang.*;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
+import ch.njol.skript.util.LiteralUtils;
 import ch.njol.util.Kleenean;
+import ch.njol.util.Pair;
+import org.bukkit.event.Event;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -89,7 +85,7 @@ public class ExprIndicesOf extends SimpleExpression<Object> {
 			return false;
 		}
 
-		if (!(exprs[1] instanceof Variable<?>) && matchedPattern == 2) {
+		if (!(exprs[1] instanceof NewVariable<?>) && matchedPattern == 2) {
 			Skript.error("'" + exprs[1] + "' is not a list variable. "
 				+ "You can only get the indices of a list variable.");
 			return false;
@@ -125,9 +121,9 @@ public class ExprIndicesOf extends SimpleExpression<Object> {
 			return getListPositions(objects, value, event);
 		}
 
-		assert objects instanceof Variable<?>;
+		assert objects instanceof NewVariable<?>;
 
-		return getVariableIndices((Variable<?>) objects, value, event);
+		return getVariableIndices((NewVariable<?>) objects, value, event);
 	}
 
 	private Long[] getStringPositions(String haystack, String needle) {
@@ -177,7 +173,7 @@ public class ExprIndicesOf extends SimpleExpression<Object> {
 		return positions.toArray(Long[]::new);
 	}
 
-	private String[] getVariableIndices(Variable<?> variable, Object value, Event event) {
+	private String[] getVariableIndices(NewVariable<?> variable, Object value, Event event) {
 		Iterator<Pair<String, Object>> iterator = variable.variablesIterator(event);
 		if (iterator == null)
 			return new String[0];

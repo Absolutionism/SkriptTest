@@ -5,7 +5,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.lang.util.ContextlessEvent;
 import ch.njol.skript.test.runner.SkriptJUnitTest;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.easymock.EasyMock;
@@ -32,7 +32,7 @@ public class ExprPlainAliasTest extends SkriptJUnitTest {
 			Assert.fail("Plain item effect is null");
 
 		ContextlessEvent event = ContextlessEvent.get();
-		Variables.setVariable("item", itemType, event, true);
+		NewVariables.setVariable("item", itemType, event, true);
 
 		EasyMock.expect(itemType.getMaterial()).andReturn(Material.STONE).atLeastOnce();
 		EasyMock.replay(itemType);

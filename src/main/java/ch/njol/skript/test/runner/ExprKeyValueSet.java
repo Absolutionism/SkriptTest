@@ -25,12 +25,12 @@ public class ExprKeyValueSet extends SimpleExpression<Object> implements KeyProv
 
 	private static final Map<String, String> testSet = Map.of("hello", "there", "foo", "bar", "a", "b");
 
-	private Variable<?> variable;
+	private NewVariable<?> variable;
 	@Override
 	public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, SkriptParser.ParseResult parseResult) {
 		if (matchedPattern == 0) {
 			Expression<?>  expression = expressions[0];
-			if (!(expression instanceof Variable<?> variable) || !variable.isList()) {
+			if (!(expression instanceof NewVariable<?> variable) || !variable.isList()) {
 				Skript.error("The expression '" + expression + "' is not a list variable.");
 				return false;
 			}

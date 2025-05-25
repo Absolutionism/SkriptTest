@@ -8,7 +8,7 @@ import ch.njol.skript.lang.SyntaxElementInfo;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.lang.util.ContextlessEvent;
 import ch.njol.skript.test.runner.SkriptJUnitTest;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.block.Block;
 import org.easymock.EasyMock;
 import org.junit.Assert;
@@ -45,8 +45,8 @@ public class EffApplyBoneMealTest {
 
 		int countOfBonemealToApply = 5;
 		ContextlessEvent event = ContextlessEvent.get();
-		Variables.setVariable("block", getMockBlock(), event, true);
-		Variables.setVariable("times", countOfBonemealToApply, event, true);
+		NewVariables.setVariable("block", getMockBlock(), event, true);
+		NewVariables.setVariable("times", countOfBonemealToApply, event, true);
 
 		EasyMock.expect(stubTestBlock.applyBoneMeal(EasyMock.notNull())).andReturn(true).times(1);
 		EasyMock.replay(stubTestBlock);

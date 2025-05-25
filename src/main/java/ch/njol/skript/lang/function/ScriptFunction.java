@@ -6,7 +6,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ReturnHandler;
 import ch.njol.skript.lang.Trigger;
 import ch.njol.skript.lang.util.SimpleEvent;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -48,10 +48,10 @@ public class ScriptFunction<T> extends Function<T> implements ReturnHandler<T> {
 			Parameter<?> parameter = parameters[i];
 			Object[] val = params[i];
 			if (parameter.single && val.length > 0) {
-				Variables.setVariable(parameter.name, val[0], event, true);
+				NewVariables.setVariable(parameter.name, val[0], event, true);
 			} else {
 				for (int j = 0; j < val.length; j++) {
-					Variables.setVariable(parameter.name + "::" + (j + 1), val[j], event, true);
+					NewVariables.setVariable(parameter.name + "::" + (j + 1), val[j], event, true);
 				}
 			}
 		}

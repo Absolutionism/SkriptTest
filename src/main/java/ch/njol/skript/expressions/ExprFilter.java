@@ -6,12 +6,8 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.lang.Condition;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
-import ch.njol.skript.lang.InputSource;
+import ch.njol.skript.lang.*;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.Variable;
 import ch.njol.skript.lang.parser.ParserInstance;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.LiteralUtils;
@@ -24,12 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.skriptlang.skript.lang.converter.Converters;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.stream.StreamSupport;
 
 @Name("Filter")
@@ -79,8 +70,8 @@ public class ExprFilter extends SimpleExpression<Object> implements InputSource 
 
 	@Override
 	public @NotNull Iterator<?> iterator(Event event) {
-		if (unfilteredObjects instanceof Variable<?>) {
-			Iterator<Pair<String, Object>> variableIterator = ((Variable<?>) unfilteredObjects).variablesIterator(event);
+		if (unfilteredObjects instanceof NewVariable<?>) {
+			Iterator<Pair<String, Object>> variableIterator = ((NewVariable<?>) unfilteredObjects).variablesIterator(event);
 			return StreamSupport.stream(Spliterators.spliteratorUnknownSize(variableIterator, Spliterator.ORDERED), false)
 				.filter(pair -> {
 					currentValue = pair.getValue();
@@ -153,7 +144,7 @@ public class ExprFilter extends SimpleExpression<Object> implements InputSource 
 
 	@Override
 	public boolean hasIndices() {
-		return unfilteredObjects instanceof Variable<?>;
+		return unfilteredObjects instanceof NewVariable<?>;
 	}
 
 	@Override

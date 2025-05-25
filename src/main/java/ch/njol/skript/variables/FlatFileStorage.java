@@ -2,6 +2,7 @@ package ch.njol.skript.variables;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.config.SectionNode;
+import ch.njol.skript.lang.NewVariable;
 import ch.njol.skript.lang.Variable;
 import ch.njol.skript.log.SkriptLogger;
 import ch.njol.skript.registrations.Classes;
@@ -183,7 +184,7 @@ public class FlatFileStorage extends VariablesStorage {
 				}
 
 				if (split[1].equals("null")) {
-					Variables.variableLoaded(split[0], null, this);
+					NewVariables.variableLoaded(split[0], null, this);
 				} else {
 					Object deserializedValue;
 					if (update2_1) {
@@ -208,7 +209,7 @@ public class FlatFileStorage extends VariablesStorage {
 						deserializedValue = Utils.replaceChatStyles((String) deserializedValue);
 					}
 
-					Variables.variableLoaded(split[0], deserializedValue, this);
+					NewVariables.variableLoaded(split[0], deserializedValue, this);
 				}
 			}
 		} catch (IOException e) {
@@ -379,7 +380,7 @@ public class FlatFileStorage extends VariablesStorage {
 
 		try {
 			// Acquire read lock
-			Variables.getReadLock().lock();
+			NewVariables.getReadLock().lock(); // CHANGE
 
 			synchronized (connectionLock) {
 				try {
@@ -415,7 +416,7 @@ public class FlatFileStorage extends VariablesStorage {
 						pw.println("#");
 						pw.println("# version: " + Skript.getVersion());
 						pw.println();
-						save(pw, "", Variables.getVariables());
+						save(pw, "", NewVariables.getVariables()); // CHANGED
 						pw.println();
 						pw.flush();
 						pw.close();
@@ -433,13 +434,13 @@ public class FlatFileStorage extends VariablesStorage {
 				}
 			}
 		} finally {
-			Variables.getReadLock().unlock();
-			boolean gotWriteLock = Variables.variablesLock.writeLock().tryLock();
+			NewVariables.getReadLock().unlock(); // CHANGE
+			boolean gotWriteLock = NewVariables.variablesLock.writeLock().tryLock();
 			if (gotWriteLock) { // Only process queue now if it doesn't require us to wait
 				try {
-					Variables.processChangeQueue();
+					NewVariables.processChangeQueue();
 				} finally {
-					Variables.variablesLock.writeLock().unlock();
+					NewVariables.variablesLock.writeLock().unlock();
 				}
 			}
 		}
@@ -466,14 +467,14 @@ public class FlatFileStorage extends VariablesStorage {
 
 			if (childNode instanceof TreeMap) {
 				// TreeMap found, recurse
-				save(pw, parent + childKey + Variable.SEPARATOR, (TreeMap<String, Object>) childNode);
+				save(pw, parent + childKey + NewVariable.SEPARATOR, (TreeMap<String, Object>) childNode);
 			} else {
 				// Remove variable separator if needed
-				String name = childKey == null ? parent.substring(0, parent.length() - Variable.SEPARATOR.length()) : parent + childKey;
+				String name = childKey == null ? parent.substring(0, parent.length() - NewVariable.SEPARATOR.length()) : parent + childKey;
 
 				try {
 					// Loop over storages to make sure this variable is ours to store
-					for (VariablesStorage storage : Variables.STORAGES) {
+					for (VariablesStorage storage : NewVariables.STORAGES) {
 						if (storage.accept(name)) {
 							if (storage == this) {
 								// Serialize the value
@@ -492,6 +493,12 @@ public class FlatFileStorage extends VariablesStorage {
 					Skript.exception(ex, "Error saving variable named " + name);
 				}
 			}
+		}
+	}
+
+	private void save(PrintWriter printWriter, String parent, NewVariablesMap variablesMap) {
+		for (Entry<String, NewVariable<?>> entry : variablesMap.getVariables().entrySet()) {
+			// TODO
 		}
 	}
 

@@ -9,7 +9,7 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.ContextlessEvent;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.ClassInfoReference;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -44,7 +44,7 @@ public class ClassInfoReferenceTest {
 		Assert.assertTrue(reference.isPlural().isTrue());
 
 		Event event = ContextlessEvent.get();
-		Variables.setVariable("classinfo", Classes.getExactClassInfo(Block.class), event, true);
+		NewVariables.setVariable("classinfo", Classes.getExactClassInfo(Block.class), event, true);
 		reference = parseAndWrap("{_classinfo}").getSingle(event);
 		Assert.assertEquals(Block.class, reference.getClassInfo().getC());
 		Assert.assertTrue(reference.isPlural().isUnknown());
@@ -70,8 +70,8 @@ public class ClassInfoReferenceTest {
 		childExpressions = referenceList.getExpressions();
 
 		event = ContextlessEvent.get();
-		Variables.setVariable("block", Classes.getExactClassInfo(Block.class), event, true);
-		Variables.setVariable("player", Classes.getExactClassInfo(Player.class), event, true);
+		NewVariables.setVariable("block", Classes.getExactClassInfo(Block.class), event, true);
+		NewVariables.setVariable("player", Classes.getExactClassInfo(Player.class), event, true);
 		firstReference = childExpressions[0].getSingle(event);
 		Assert.assertEquals(Block.class, firstReference.getClassInfo().getC());
 		Assert.assertTrue(firstReference.isPlural().isUnknown());

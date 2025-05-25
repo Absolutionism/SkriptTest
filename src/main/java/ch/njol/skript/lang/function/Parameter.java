@@ -3,10 +3,7 @@ package ch.njol.skript.lang.function;
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptConfig;
 import ch.njol.skript.classes.ClassInfo;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ParseContext;
-import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.lang.Variable;
+import ch.njol.skript.lang.*;
 import ch.njol.skript.log.RetainingLogHandler;
 import ch.njol.skript.log.SkriptLogger;
 import ch.njol.skript.registrations.Classes;
@@ -67,7 +64,7 @@ public final class Parameter<T> {
 	}
 
 	public static <T> @Nullable Parameter<T> newInstance(String name, ClassInfo<T> type, boolean single, @Nullable String def) {
-		if (!Variable.isValidVariableName(name, true, false)) {
+		if (!NewVariable.isValidVariableName(name, true, false)) {
 			Skript.error("A parameter's name must be a valid variable name.");
 			// ... because it will be made available as local variable
 			return null;

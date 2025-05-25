@@ -4,7 +4,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.lang.util.ContextlessEvent;
 import ch.njol.skript.test.runner.SkriptJUnitTest;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.entity.Player;
 import org.easymock.EasyMock;
 import org.junit.Assert;
@@ -37,8 +37,8 @@ public class EffFeedTest extends SkriptJUnitTest {
 		int amountToFeed = 1;
 		int maxFoodLevel = 20;
 		ContextlessEvent event = ContextlessEvent.get();
-		Variables.setVariable("player", getMockPlayer(), event, true);
-		Variables.setVariable("amount", amountToFeed, event, true);
+		NewVariables.setVariable("player", getMockPlayer(), event, true);
+		NewVariables.setVariable("amount", amountToFeed, event, true);
 
 		easyMockPlayer.setFoodLevel(EasyMock.eq(maxFoodLevel));
 		EasyMock.expectLastCall();

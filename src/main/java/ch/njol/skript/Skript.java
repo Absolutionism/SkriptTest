@@ -38,7 +38,7 @@ import ch.njol.skript.util.Date;
 import ch.njol.skript.util.*;
 import ch.njol.skript.util.chat.BungeeConverter;
 import ch.njol.skript.util.chat.ChatMessages;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.util.Closeable;
 import ch.njol.util.Kleenean;
 import ch.njol.util.StringUtils;
@@ -665,7 +665,7 @@ public final class Skript extends JavaPlugin implements Listener {
 				});
 
 				try (CountingLogHandler c = new CountingLogHandler(SkriptLogger.SEVERE).start()) {
-					if (!Variables.load())
+					if (!NewVariables.load()) // CHANGED
 						if (c.getCount() == 0)
 							error("(no information available)");
 				} finally {
@@ -674,7 +674,7 @@ public final class Skript extends JavaPlugin implements Listener {
 
 				long vld = System.currentTimeMillis() - vls;
 				if (logNormal())
-					info("Loaded " + Variables.numVariables() + " variables in " + ((vld / 100) / 10.) + " seconds");
+					info("Loaded " + NewVariables.numVariables() + " variables in " + ((vld / 100) / 10.) + " seconds");
 
 				// Skript initialization done
 				debug("Early init done");

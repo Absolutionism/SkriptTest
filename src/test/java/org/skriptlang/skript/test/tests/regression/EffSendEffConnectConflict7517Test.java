@@ -4,7 +4,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.lang.util.ContextlessEvent;
 import ch.njol.skript.test.runner.SkriptJUnitTest;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.easymock.Capture;
@@ -31,8 +31,8 @@ public class EffSendEffConnectConflict7517Test extends SkriptJUnitTest {
 	@Test
 	public void test() {
 		Event event = ContextlessEvent.get();
-		Variables.setVariable("sender", sender, event, true);
-		Variables.setVariable("message", MESSAGE, event, true);
+		NewVariables.setVariable("sender", sender, event, true);
+		NewVariables.setVariable("message", MESSAGE, event, true);
 
 		Capture<String> messageCapture = EasyMock.newCapture();
 		sender.sendMessage(EasyMock.capture(messageCapture));

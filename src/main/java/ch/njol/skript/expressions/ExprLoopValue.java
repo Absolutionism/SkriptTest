@@ -1,6 +1,7 @@
 package ch.njol.skript.expressions;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.lang.NewVariable;
 import org.skriptlang.skript.lang.converter.Converter;
 import org.skriptlang.skript.lang.converter.ConverterInfo;
 import ch.njol.skript.doc.Description;
@@ -136,9 +137,9 @@ public class ExprLoopValue extends SimpleExpression<Object> {
 			Skript.error("The expression '" + loop.getExpression().toString() + "' does not allow the usage of 'next loop-" + s + "'.");
 			return false;
 		}
-		if (loop.getLoopedExpression() instanceof Variable) {
+		if (loop.getLoopedExpression() instanceof NewVariable) {
 			isVariableLoop = true;
-			if (((Variable<?>) loop.getLoopedExpression()).isIndexLoop(s))
+			if (((NewVariable<?>) loop.getLoopedExpression()).isIndexLoop(s))
 				isIndex = true;
 		}
 		this.loop = loop;

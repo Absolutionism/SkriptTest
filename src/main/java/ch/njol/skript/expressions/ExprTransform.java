@@ -2,17 +2,9 @@ package ch.njol.skript.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.ClassInfo;
-import ch.njol.skript.doc.Description;
-import ch.njol.skript.doc.Examples;
-import ch.njol.skript.doc.Keywords;
-import ch.njol.skript.doc.Name;
-import ch.njol.skript.doc.Since;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
-import ch.njol.skript.lang.InputSource;
-import ch.njol.skript.lang.SkriptParser;
+import ch.njol.skript.doc.*;
+import ch.njol.skript.lang.*;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.Variable;
 import ch.njol.skript.lang.parser.ParserInstance;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.registrations.Classes;
@@ -27,12 +19,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.skriptlang.skript.lang.converter.Converters;
 
 import java.lang.reflect.Array;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.stream.StreamSupport;
 
 @Name("Transformed List")
@@ -89,7 +76,7 @@ public class ExprTransform extends SimpleExpression<Object> implements InputSour
 
 	@Override
 	public @NotNull Iterator<?> iterator(Event event) {
-		if (unmappedObjects instanceof Variable<?> variable) {
+		if (unmappedObjects instanceof NewVariable<?> variable) {
 			Iterator<Pair<String, Object>> variableIterator = variable.variablesIterator(event);
 			return StreamSupport.stream(Spliterators.spliteratorUnknownSize(variableIterator, Spliterator.ORDERED), false)
 				.flatMap(pair -> {
@@ -156,7 +143,7 @@ public class ExprTransform extends SimpleExpression<Object> implements InputSour
 
 	@Override
 	public boolean hasIndices() {
-		return unmappedObjects instanceof Variable<?>;
+		return unmappedObjects instanceof NewVariable<?>;
 	}
 
 	@Override

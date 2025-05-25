@@ -11,7 +11,7 @@ import ch.njol.skript.lang.Trigger;
 import ch.njol.skript.lang.TriggerItem;
 import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.util.Direction;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.util.Kleenean;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -124,7 +124,7 @@ public class EffSecSpawn extends EffectSection {
 			consumer = entity -> {
 				lastSpawned = entity;
 				SpawnEvent spawnEvent = new SpawnEvent(entity);
-				Variables.withLocalVariables(event, spawnEvent, () -> TriggerItem.walk(trigger, spawnEvent));
+				NewVariables.withLocalVariables(event, spawnEvent, () -> TriggerItem.walk(trigger, spawnEvent));
 			};
 		} else {
 			consumer = null;

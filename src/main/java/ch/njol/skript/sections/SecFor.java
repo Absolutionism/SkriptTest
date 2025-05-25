@@ -8,6 +8,7 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
+import ch.njol.skript.lang.NewVariable;
 import org.skriptlang.skript.lang.experiment.ExperimentalSyntax;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
@@ -88,11 +89,11 @@ public class SecFor extends SecLoop implements ExperimentalSyntax {
 		}
 		//</editor-fold>
 		//<editor-fold desc="Check our input expressions are safe/correct" defaultstate="collapsed">
-		if (keyStore != null && !(keyStore instanceof Variable)) {
+		if (keyStore != null && !(keyStore instanceof NewVariable)) {
 			Skript.error("The 'key' input for a for-loop must be a variable to store the value.");
 			return false;
 		}
-		if (!(valueStore instanceof Variable || valueStore == null)) {
+		if (!(valueStore instanceof NewVariable || valueStore == null)) {
 			Skript.error("The 'value' input for a for-loop must be a variable to store the value.");
 			return false;
 		}
@@ -109,7 +110,7 @@ public class SecFor extends SecLoop implements ExperimentalSyntax {
 		}
 		if (this.getParser().hasExperiment(Feature.QUEUES) // Todo: change this if other iterable things are added
 			&& expression.isSingle()
-			&& (expression instanceof Variable<?> || Iterable.class.isAssignableFrom(expression.getReturnType()))) {
+			&& (expression instanceof NewVariable<?> || Iterable.class.isAssignableFrom(expression.getReturnType()))) {
 			// Some expressions return one thing but are potentially iterable anyway, e.g. queues
 			super.iterableSingle = true;
 		} else if (expression.isSingle()) {

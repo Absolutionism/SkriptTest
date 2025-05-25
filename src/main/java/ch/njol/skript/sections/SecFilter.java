@@ -10,15 +10,10 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.ExprInput;
-import ch.njol.skript.lang.Condition;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.InputSource;
-import ch.njol.skript.lang.Section;
+import ch.njol.skript.lang.*;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.TriggerItem;
-import ch.njol.skript.lang.Variable;
 import ch.njol.skript.lang.parser.ParserInstance;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.util.Kleenean;
 import ch.njol.util.Pair;
 import ch.njol.util.StringUtils;
@@ -26,13 +21,7 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.stream.StreamSupport;
 
 @Name("Filter")
@@ -62,7 +51,7 @@ public class SecFilter extends Section implements InputSource {
 	}
 
 
-	private @UnknownNullability Variable<?> unfilteredObjects;
+	private @UnknownNullability NewVariable<?> unfilteredObjects;
 	private final List<Condition> conditions = new ArrayList<>();
 	private boolean isAny;
 
@@ -72,11 +61,11 @@ public class SecFilter extends Section implements InputSource {
 
 	@Override
 	public boolean init(Expression<?>[] expressions, int matchedPattern, Kleenean isDelayed, ParseResult parseResult, SectionNode sectionNode, List<TriggerItem> triggerItems) {
-		if (expressions[0].isSingle() || !(expressions[0] instanceof Variable)) {
+		if (expressions[0].isSingle() || !(expressions[0] instanceof NewVariable)) {
 			Skript.error("You can only filter list variables!");
 			return false;
 		}
-		unfilteredObjects = (Variable<?>) expressions[0];
+		unfilteredObjects = (NewVariable<?>) expressions[0];
 		isAny = parseResult.hasTag("any");
 
 		// Code pulled from SecConditional
@@ -131,7 +120,7 @@ public class SecFilter extends Section implements InputSource {
 		List<Pair<String, Object>> toKeep = new ArrayList<>();
 		List<String> toRemove = new ArrayList<>();
 
-		var variableIterator = Variables.getVariableIterator(varName, local, event);
+		var variableIterator = NewVariables.getVariableIterator(varName, local, event);
 		var stream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(variableIterator, Spliterator.ORDERED), false);
 		if (isAny) {
 			stream.forEach(pair -> {
@@ -158,12 +147,12 @@ public class SecFilter extends Section implements InputSource {
 		// optimize by either removing or clearing + adding depending on which is fewer operations
 		// for instances where only a handful of values are removed from a large list, this can be a 400% speedup
 		if (toKeep.size() < initialSize / 2) {
-			Variables.deleteVariable(varName, event, local);
+			NewVariables.deleteVariable(varName, event, local);
 			for (Pair<String, Object> pair : toKeep)
-				Variables.setVariable(varSubName + pair.getKey(), pair.getValue(), event, local);
+				NewVariables.setVariable(varSubName + pair.getKey(), pair.getValue(), event, local);
 		} else {
 			for (String index : toRemove)
-				Variables.setVariable(varSubName + index, null, event, local);
+				NewVariables.setVariable(varSubName + index, null, event, local);
 		}
 		return getNext();
 	}

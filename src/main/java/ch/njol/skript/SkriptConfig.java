@@ -22,7 +22,7 @@ import ch.njol.skript.util.Version;
 import ch.njol.skript.util.chat.ChatMessages;
 import ch.njol.skript.util.chat.LinkParseMode;
 import ch.njol.skript.variables.FlatFileStorage;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import co.aikar.timings.Timings;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.Nullable;
@@ -261,7 +261,7 @@ public class SkriptConfig {
 			});
 
 	public static final Option<Boolean> caseInsensitiveVariables = new Option<>("case-insensitive variables", true)
-			.setter(t -> Variables.caseInsensitiveVariables = t);
+			.setter(t -> NewVariables.caseInsensitiveVariables = t);
 
 	public static final Option<Boolean> caseInsensitiveCommands = new Option<>("case-insensitive commands", false)
 		.optional(true);

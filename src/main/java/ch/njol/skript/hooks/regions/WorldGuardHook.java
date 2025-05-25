@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.UUID;
 
+import ch.njol.skript.variables.NewVariables;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -22,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 import ch.njol.skript.Skript;
 import ch.njol.skript.hooks.regions.classes.Region;
 import ch.njol.skript.util.AABB;
-import ch.njol.skript.variables.Variables;
 import ch.njol.yggdrasil.Fields;
 import ch.njol.yggdrasil.YggdrasilID;
 
@@ -64,7 +64,7 @@ public class WorldGuardHook extends RegionsPlugin<WorldGuardPlugin> {
 	}
 	
 	static {
-		Variables.yggdrasil.registerSingleClass(WorldGuardRegion.class);
+		NewVariables.yggdrasil.registerSingleClass(WorldGuardRegion.class);
 	}
 	
 	@YggdrasilID("WorldGuardRegion")

@@ -3,7 +3,7 @@ package ch.njol.skript.bukkitutil.block;
 import ch.njol.skript.Skript;
 import ch.njol.skript.aliases.MatchQuality;
 import ch.njol.skript.bukkitutil.ItemUtils;
-import ch.njol.skript.variables.Variables;
+import ch.njol.skript.variables.NewVariables;
 import ch.njol.yggdrasil.Fields;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -35,7 +35,7 @@ public class NewBlockCompat implements BlockCompat {
 	private static class NewBlockValues extends BlockValues {
 
 		static {
-			Variables.yggdrasil.registerSingleClass(NewBlockValues.class, "NewBlockValues");
+			NewVariables.yggdrasil.registerSingleClass(NewBlockValues.class, "NewBlockValues");
 		}
 
 		Material type;
