@@ -288,6 +288,8 @@ tasks.register('JUnit') {
 	dependsOn JUnitJava17, JUnitJava21
 }
 
+createTestTask('MC-1.21.4', 'Starts a 1.21.4 server', environments + 'java21/paper-1.21.4.json', 21, 0, Modifiers.DEV_MODE, Modifiers.DEBUG)
+
 // Build flavor configurations
 task githubResources(type: ProcessResources) {
 	from 'src/main/resources', {
