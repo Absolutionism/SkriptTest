@@ -1080,27 +1080,63 @@ public final class Skript extends JavaPlugin implements Listener {
 	}
 
 	/**
-	 * @return Whether this server is running Minecraft <tt>major.minor</tt> or higher
+	 * @return Whether this server is running Minecraft {@code major.minor} or higher
 	 */
-	public static boolean isRunningMinecraft(final int major, final int minor) {
+	public static boolean isRunningMinecraft(int major, int minor) {
 		if (minecraftVersion.compareTo(UNKNOWN_VERSION) == 0) { // Make sure minecraftVersion is properly assigned.
 			updateMinecraftVersion();
 		}
 		return minecraftVersion.compareTo(major, minor) >= 0;
 	}
 
-	public static boolean isRunningMinecraft(final int major, final int minor, final int revision) {
+	/**
+	 * @return Whether this server is running Minecraft {@code major.minor.revision} or higher
+	 */
+	public static boolean isRunningMinecraft(int major, int minor, int revision) {
 		if (minecraftVersion.compareTo(UNKNOWN_VERSION) == 0) {
 			updateMinecraftVersion();
 		}
 		return minecraftVersion.compareTo(major, minor, revision) >= 0;
 	}
 
-	public static boolean isRunningMinecraft(final Version v) {
+	/**
+	 * @return Whether this server is running Minecraft {@code version} or higher
+	 */
+	public static boolean isRunningMinecraft(Version version) {
 		if (minecraftVersion.compareTo(UNKNOWN_VERSION) == 0) {
 			updateMinecraftVersion();
 		}
-		return minecraftVersion.compareTo(v) >= 0;
+		return minecraftVersion.compareTo(version) >= 0;
+	}
+
+	/**
+	 * @return Whether this server is running exact Minecraft {@code major.minor}
+	 */
+	public static boolean isRunningExactMinecraft(int major, int minor) {
+		if (minecraftVersion.compareTo(UNKNOWN_VERSION) == 0) {
+			updateMinecraftVersion();
+		}
+		return minecraftVersion.compareTo(major, minor) == 0;
+	}
+
+	/**
+	 * @return Whether this server is running exact Minecraft {@code major.minor.revision}
+	 */
+	public static boolean isRunningExactMinecraft(int major, int minor, int revision) {
+		if (minecraftVersion.compareTo(UNKNOWN_VERSION) == 0) {
+			updateMinecraftVersion();
+		}
+		return minecraftVersion.compareTo(major, minor, revision) == 0;
+	}
+
+	/**
+	 * @return Whether this server is running exact Minecraft {@code version}
+	 */
+	public static boolean isRunningExactMinecraft(Version version) {
+		if (minecraftVersion.compareTo(UNKNOWN_VERSION) == 0) {
+			updateMinecraftVersion();
+		}
+		return minecraftVersion.compareTo(version) == 0;
 	}
 
 	/**

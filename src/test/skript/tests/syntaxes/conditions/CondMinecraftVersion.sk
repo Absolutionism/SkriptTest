@@ -1,0 +1,8 @@
+test "running minecraft 1.21 or higher" when running minecraft "1.21.0":
+	assert running minecraft "1.21" with "Should only be ran on minecraft versions 1.21 or higher"
+
+test "running minecraft 1.20.6 or lower" when running below minecraft "1.21.0":
+	assert running below minecraft "1.21" with "Should only be ran on minecraft versions 1.20.6 or lower"
+
+test "running exactly minecraft 1.21.7" when running exactly minecraft "1.21.7":
+	assert running exactly minecraft "1.21.7" with "Should only be ran on minecraft version 1.21.7"
