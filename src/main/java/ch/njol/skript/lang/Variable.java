@@ -59,7 +59,7 @@ public class Variable<T> implements Expression<T>, KeyReceiverExpression<T>, Key
 	/**
 	 * The name of this variable, excluding the local variable token, but including the list variable token '::*'.
 	 */
-	private final VariableString name;
+	private final NewVariableString name;
 
 	private final Class<T> superType;
 	private final Class<? extends T>[] types;
@@ -72,7 +72,7 @@ public class Variable<T> implements Expression<T>, KeyReceiverExpression<T>, Key
 	private final Map<Event, String[]> cache = new WeakHashMap<>();
 
 	@SuppressWarnings("unchecked")
-	private Variable(VariableString name, Class<? extends T>[] types, boolean local, boolean ephemeral, boolean list, @Nullable Variable<?> source) {
+	private Variable(NewVariableString name, Class<? extends T>[] types, boolean local, boolean ephemeral, boolean list, @Nullable Variable<?> source) {
 		assert types.length > 0;
 
 		assert name.isSimple() || name.getMode() == StringMode.VARIABLE_NAME;
@@ -170,7 +170,7 @@ public class Variable<T> implements Expression<T>, KeyReceiverExpression<T>, Key
 		name = name.trim();
 		if (!isValidVariableName(name, true, true))
 			return null;
-		VariableString variableString = VariableString.newInstance(
+		NewVariableString variableString = NewVariableString.newInstance(
 			name.startsWith(LOCAL_VARIABLE_TOKEN) ? name.substring(LOCAL_VARIABLE_TOKEN.length()).trim() : name, StringMode.VARIABLE_NAME);
 		if (variableString == null)
 			return null;
@@ -805,7 +805,7 @@ public class Variable<T> implements Expression<T>, KeyReceiverExpression<T>, Key
 		return SimpleExpression.check(getAll(event), checker, false, getAnd());
 	}
 
-	public VariableString getName() {
+	public NewVariableString getName() {
 		return name;
 	}
 

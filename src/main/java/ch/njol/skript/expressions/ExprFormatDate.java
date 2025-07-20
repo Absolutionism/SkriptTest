@@ -9,13 +9,13 @@ import ch.njol.skript.expressions.base.PropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.Literal;
+import ch.njol.skript.lang.NewVariableString;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.VariableString;
+import ch.njol.skript.lang.simplification.SimplifiedLiteral;
 import ch.njol.skript.util.Date;
 import ch.njol.util.Kleenean;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
-import ch.njol.skript.lang.simplification.SimplifiedLiteral;
 
 import java.text.SimpleDateFormat;
 
@@ -50,11 +50,11 @@ public class ExprFormatDate extends PropertyExpression<Date, String> {
 		setExpr((Expression<? extends Date>) exprs[0]);
 		customFormat = (Expression<String>) exprs[1];
 
-		boolean isSimpleString = customFormat instanceof VariableString && ((VariableString) customFormat).isSimple();
+		boolean isSimpleString = customFormat instanceof NewVariableString && ((NewVariableString) customFormat).isSimple();
 		if (customFormat instanceof Literal || isSimpleString) {
 			String customFormatValue;
 			if (isSimpleString) {
-				customFormatValue = ((VariableString) customFormat).toString(null);
+				customFormatValue = ((NewVariableString) customFormat).toString(null);
 			} else {
 				customFormatValue = ((Literal<String>) customFormat).getSingle();
 			}

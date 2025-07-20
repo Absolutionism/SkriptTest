@@ -9,8 +9,8 @@ import ch.njol.skript.expressions.ExprColoured;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionList;
+import ch.njol.skript.lang.NewVariableString;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.VariableString;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.LiteralUtils;
 import ch.njol.skript.util.SkriptColor;
@@ -29,7 +29,9 @@ import org.bukkit.event.Event;
 import org.bukkit.event.server.BroadcastMessageEvent;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Name("Broadcast")
@@ -80,7 +82,7 @@ public class EffBroadcast extends Effect {
 		}
 
 		for (Expression<?> message : getMessages()) {
-			if (message instanceof VariableString variableString) {
+			if (message instanceof NewVariableString variableString) {
 				// get both unformatted and components with single evaluation: https://github.com/SkriptLang/Skript/issues/7718
 				StringBuilder unformattedString = new StringBuilder();
 				List<MessageComponent> messageComponents = variableString.getMessageComponents(event, unformattedString);
@@ -143,7 +145,7 @@ public class EffBroadcast extends Effect {
 	 * @return the raw string
 	 */
 	private static @Nullable String getRawString(Event event, Expression<? extends String> string) {
-		if (string instanceof VariableString variableString)
+		if (string instanceof NewVariableString variableString)
 			return variableString.toUnformattedString(event);
 		String rawString = string.getSingle(event);
 		if (rawString == null)

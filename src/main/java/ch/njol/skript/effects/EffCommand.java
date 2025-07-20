@@ -1,11 +1,5 @@
 package ch.njol.skript.effects;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.jetbrains.annotations.Nullable;
-
 import ch.njol.skript.Skript;
 import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
@@ -13,11 +7,16 @@ import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.NewVariableString;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.VariableString;
 import ch.njol.skript.util.StringMode;
 import ch.njol.skript.util.Utils;
 import ch.njol.util.Kleenean;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.jetbrains.annotations.Nullable;
 
 @Name("Command")
 @Description({
@@ -62,7 +61,7 @@ public class EffCommand extends Effect {
 			Skript.error("The commandsenders expression cannot be omitted when using the bungeecord option");
 			return false;
 		}
-		commands = VariableString.setStringMode(commands, StringMode.COMMAND);
+		commands = NewVariableString.setStringMode(commands, StringMode.COMMAND);
 		return true;
 	}
 

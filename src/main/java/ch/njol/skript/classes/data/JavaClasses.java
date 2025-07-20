@@ -6,8 +6,8 @@ import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.classes.Serializer;
 import ch.njol.skript.expressions.base.EventValueExpression;
+import ch.njol.skript.lang.NewVariableString;
 import ch.njol.skript.lang.ParseContext;
-import ch.njol.skript.lang.VariableString;
 import ch.njol.skript.lang.util.SimpleLiteral;
 import ch.njol.skript.localization.Message;
 import ch.njol.skript.localization.RegexMessage;
@@ -246,7 +246,7 @@ public class JavaClasses {
 								return s;
 							case SCRIPT:
 							case EVENT:
-								if (VariableString.isQuotedCorrectly(s, true))
+								if (NewVariableString.isQuotedCorrectly(s, true))
 									return Utils.replaceChatStyles("" + s.substring(1, s.length() - 1).replace("\"\"", "\""));
 								return null;
 							case COMMAND:

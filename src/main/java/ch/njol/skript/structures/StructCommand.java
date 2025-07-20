@@ -16,17 +16,10 @@ import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Literal;
+import ch.njol.skript.lang.NewVariableString;
 import ch.njol.skript.lang.ParseContext;
-import org.skriptlang.skript.lang.script.Script;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.VariableString;
-import org.skriptlang.skript.lang.entry.EntryContainer;
-import org.skriptlang.skript.lang.entry.KeyValueEntryData;
-import org.skriptlang.skript.lang.structure.Structure;
-import org.skriptlang.skript.lang.entry.EntryValidator;
-import org.skriptlang.skript.lang.entry.util.LiteralEntryData;
-import org.skriptlang.skript.lang.entry.util.VariableStringEntryData;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.StringMode;
 import ch.njol.skript.util.Timespan;
@@ -36,6 +29,13 @@ import ch.njol.util.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
+import org.skriptlang.skript.lang.entry.EntryContainer;
+import org.skriptlang.skript.lang.entry.EntryValidator;
+import org.skriptlang.skript.lang.entry.KeyValueEntryData;
+import org.skriptlang.skript.lang.entry.util.LiteralEntryData;
+import org.skriptlang.skript.lang.entry.util.VariableStringEntryData;
+import org.skriptlang.skript.lang.script.Script;
+import org.skriptlang.skript.lang.structure.Structure;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -247,7 +247,7 @@ public class StructCommand extends Structure {
 		});
 		desc = Commands.unescape(desc).trim();
 
-		VariableString usageMessage = entryContainer.getOptional("usage", VariableString.class, false);
+		NewVariableString usageMessage = entryContainer.getOptional("usage", NewVariableString.class, false);
 		String defaultUsageMessage = Commands.m_correct_usage + " " + desc;
 		CommandUsage usage = new CommandUsage(usageMessage, defaultUsageMessage);
 
@@ -255,7 +255,7 @@ public class StructCommand extends Structure {
 		String prefix = entryContainer.getOptional("prefix", String.class, false);
 
 		String permission = entryContainer.get("permission", String.class, true);
-		VariableString permissionMessage = entryContainer.getOptional("permission message", VariableString.class, false);
+		NewVariableString permissionMessage = entryContainer.getOptional("permission message", NewVariableString.class, false);
 		if (permissionMessage != null && permission.isEmpty())
 			Skript.warning("command /" + command + " has a permission message set, but not a permission");
 
@@ -263,7 +263,7 @@ public class StructCommand extends Structure {
 		int executableBy = entryContainer.get("executable by", Integer.class, true);
 
 		Timespan cooldown = entryContainer.getOptional("cooldown", Timespan.class, false);
-		VariableString cooldownMessage = entryContainer.getOptional("cooldown message", VariableString.class, false);
+		NewVariableString cooldownMessage = entryContainer.getOptional("cooldown message", NewVariableString.class, false);
 		if (cooldownMessage != null && cooldown == null)
 			Skript.warning("command /" + command + " has a cooldown message set, but not a cooldown");
 		String cooldownBypass = entryContainer.getOptional("cooldown bypass", String.class, false);
@@ -272,7 +272,7 @@ public class StructCommand extends Structure {
 		} else if (cooldownBypass.isEmpty() && cooldown == null) {
 			Skript.warning("command /" + command + " has a cooldown bypass set, but not a cooldown");
 		}
-		VariableString cooldownStorage = entryContainer.getOptional("cooldown storage", VariableString.class, false);
+		NewVariableString cooldownStorage = entryContainer.getOptional("cooldown storage", NewVariableString.class, false);
 		if (cooldownStorage != null && cooldown == null)
 			Skript.warning("command /" + command + " has a cooldown storage set, but not a cooldown");
 

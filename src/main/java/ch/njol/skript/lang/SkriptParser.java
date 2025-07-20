@@ -383,8 +383,8 @@ public class SkriptParser {
 			Skript.error("Pretty quotes are not allowed, change to regular quotes (\")");
 			return null;
 		}
-		if (expr.startsWith("\"") && expr.length() != 1 && nextQuote(expr, 1) == expr.length() - 1) {
-			return VariableString.newInstance("" + expr.substring(1, expr.length() - 1));
+		if (NewVariableString.matchesAnyType(expr)) {
+			return NewVariableString.newInstance(expr);
 		} else {
 			var iterator = new CheckedIterator<>(Skript.instance().syntaxRegistry().syntaxes(SyntaxRegistry.EXPRESSION).iterator(), info -> {
 				if (info == null || info.returnType() == Object.class)
@@ -712,12 +712,12 @@ public class SkriptParser {
 			}
 			if (allowUnparsedLiteral && containsObjectClass)
 				return getUnparsedLiteral(log, error);
-			if (expr.startsWith("\"") && expr.endsWith("\"") && expr.length() > 1) {
+			if (NewVariableString.matchesAnyType(expr)) {
 				for (ClassInfo<?> aClass : exprInfo.classes) {
 					if (!aClass.getC().isAssignableFrom(String.class))
 						continue;
-					VariableString string = VariableString.newInstance(expr.substring(1, expr.length() - 1));
-					if (string instanceof LiteralString)
+					NewVariableString string = NewVariableString.newInstance(expr);
+					if (string instanceof NewLiteralString)
 						return string;
 					break;
 				}
@@ -1317,11 +1317,15 @@ public class SkriptParser {
 		int length = string.length();
 		for (int i = start; i < length; i++) {
 			char character = string.charAt(i);
-			if (character == '"' && !inExpression) {
-				if (i == length - 1 || string.charAt(i + 1) != '"')
+			if (!inExpression) {
+				if (character == '\\') {
+					i++;
+					continue;
+				}
+				if (character == '"' && (i == length - 1 || string.charAt(i + 1) != '"'))
 					return i;
-				i++;
-			} else if (character == '%') {
+			}
+			if (character == '%') {
 				inExpression = !inExpression;
 			}
 		}
@@ -1411,7 +1415,7 @@ public class SkriptParser {
 				index = nextQuote(expr, startIndex + 1);
 				return index < 0 ? -1 : index + 1;
 			case '{':
-				index = VariableString.nextVariableBracket(expr, startIndex + 1);
+				index = NewVariableString.nextVariableBracket(expr, startIndex + 1);
 				return index < 0 ? -1 : index + 1;
 			case '(':
 				for (index = startIndex + 1; index >= 0 && index < exprLength; index = next(expr, index, context)) {
@@ -1471,7 +1475,7 @@ public class SkriptParser {
 						return -1;
 					break;
 				case '{':
-					startIndex = VariableString.nextVariableBracket(haystack, startIndex + 1);
+					startIndex = NewVariableString.nextVariableBracket(haystack, startIndex + 1);
 					if (startIndex < 0)
 						return -1;
 					break;

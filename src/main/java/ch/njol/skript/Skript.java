@@ -570,6 +570,7 @@ public final class Skript extends JavaPlugin implements Listener {
 		new DefaultConverters();
 		new DefaultFunctions();
 		new DefaultOperations();
+		new NewVariableStringTypes();
 
 		ChatMessages.registerListeners();
 

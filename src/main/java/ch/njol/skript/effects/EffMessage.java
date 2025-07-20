@@ -1,13 +1,17 @@
 package ch.njol.skript.effects;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.doc.*;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.RequiredPlugins;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.ExprColoured;
 import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionList;
+import ch.njol.skript.lang.NewVariableString;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.VariableString;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.LiteralUtils;
 import ch.njol.skript.util.chat.BungeeConverter;
@@ -22,7 +26,6 @@ import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.UUID;
 
 @Name("Message")
 @Description({"Sends a message to the given player. Only styles written",
@@ -85,16 +88,16 @@ public class EffMessage extends Effect {
 			List<MessageComponent> messageComponents = null;
 
 			for (CommandSender receiver : commandSenders) {
-				if (receiver instanceof Player && message instanceof VariableString) {
+				if (receiver instanceof Player && message instanceof NewVariableString) {
 					if (messageComponents == null)
-						messageComponents = ((VariableString) message).getMessageComponents(e);
+						messageComponents = ((NewVariableString) message).getMessageComponents(e);
 				} else {
 					if (messageArray == null)
 						messageArray = message.getArray(e);
 				}
 
 				if (receiver instanceof Player) { // Can use JSON formatting
-					if (message instanceof VariableString) { // Process formatting that is safe
+					if (message instanceof NewVariableString) { // Process formatting that is safe
 						sendMessage((Player) receiver, sender,
 							BungeeConverter.convert(messageComponents)
 						);

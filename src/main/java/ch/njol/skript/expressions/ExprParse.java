@@ -10,10 +10,10 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.Literal;
+import ch.njol.skript.lang.NewVariableString;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.VariableString;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.localization.Language;
 import ch.njol.skript.log.LogEntry;
@@ -87,7 +87,7 @@ public class ExprParse extends SimpleExpression<Object> {
 		if (exprs[1] == null) {
 			String pattern = ChatColor.translateAlternateColorCodes('&', parseResult.regexes.get(0).group());
 
-			if (!VariableString.isQuotedCorrectly(pattern, false)) {
+			if (!NewVariableString.isQuotedCorrectly(pattern, false)) {
 				Skript.error("Invalid amount and/or placement of double quotes in '" + pattern + "'");
 				return false;
 			}

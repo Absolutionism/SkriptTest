@@ -141,7 +141,7 @@ public abstract class Node implements AnyNamed, Validated, NodeNavigator {
 			// check for things that can be escaped by doubling
 			if (c == '%' || c == '"' || c == '#') {
 				// skip if doubled (only skip ## outside of strings)
-				if ((c != '#' || state != SplitLineState.STRING) && i + 1 < length && line.charAt(i + 1) == c) {
+				if ((c != '#' || state != SplitLineState.STRING) && (i + 1 < length && line.charAt(i + 1) == c) || (i > 0 && line.charAt(i - 1) == '\\')) {
 					if (c == '#') { // remove duplicate #
 						finalLine.deleteCharAt(i - numRemoved);
 						numRemoved++;
@@ -294,7 +294,7 @@ public abstract class Node implements AnyNamed, Validated, NodeNavigator {
 					continue;
 				}
 				// skip if doubled (not #s)
-				if (i + 1 < length && input.charAt(i + 1) == c) {
+				if ((i + 1 < length && input.charAt(i + 1) == c) || (i > 0 && input.charAt(i - 1) == '\\')) {
 					i++;
 					continue;
 				}

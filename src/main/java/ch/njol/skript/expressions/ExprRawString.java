@@ -8,8 +8,8 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionList;
 import ch.njol.skript.lang.ExpressionType;
+import ch.njol.skript.lang.NewVariableString;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
-import ch.njol.skript.lang.VariableString;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.SkriptColor;
 import ch.njol.util.Kleenean;
@@ -58,8 +58,8 @@ public class ExprRawString extends SimpleExpression<String> {
 	protected String[] get(Event event) {
 		List<String> strings = new ArrayList<>();
 		for (Expression<? extends String> message : messages) {
-			if (message instanceof VariableString) {
-				strings.add(((VariableString) message).toUnformattedString(event));
+			if (message instanceof NewVariableString) {
+				strings.add(((NewVariableString) message).toUnformattedString(event));
 				continue;
 			}
 			for (String string : message.getArray(event)) {

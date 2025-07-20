@@ -6,10 +6,10 @@ import ch.njol.skript.SkriptConfig;
 import ch.njol.skript.command.Commands.CommandAliasHelpTopic;
 import ch.njol.skript.config.SectionNode;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.NewVariableString;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.Trigger;
 import ch.njol.skript.lang.Variable;
-import ch.njol.skript.lang.VariableString;
 import ch.njol.skript.lang.parser.ParserInstance;
 import ch.njol.skript.lang.util.SimpleEvent;
 import ch.njol.skript.lang.util.SimpleLiteral;
@@ -50,18 +50,8 @@ import org.skriptlang.skript.lang.script.Script;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
 
 /**
  * This class is used for user-defined commands.
@@ -77,7 +67,7 @@ public class ScriptCommand implements TabExecutor {
 	private final List<String> aliases;
 	private List<String> activeAliases;
 	private String permission;
-	private final VariableString permissionMessage;
+	private final NewVariableString permissionMessage;
 	private final String description;
 	private final String prefix;
 	@Nullable
@@ -119,9 +109,9 @@ public class ScriptCommand implements TabExecutor {
 	public ScriptCommand(
 		Script script, String name, String pattern, List<Argument<?>> arguments,
 		String description, @Nullable String prefix, String usage, List<String> aliases,
-		String permission, @Nullable VariableString permissionMessage, @Nullable Timespan cooldown,
-		@Nullable VariableString cooldownMessage, String cooldownBypass,
-		@Nullable VariableString cooldownStorage, int executableBy, SectionNode node
+		String permission, @Nullable NewVariableString permissionMessage, @Nullable Timespan cooldown,
+		@Nullable NewVariableString cooldownMessage, String cooldownBypass,
+		@Nullable NewVariableString cooldownStorage, int executableBy, SectionNode node
 	) {
 		this(script, name, pattern, arguments, description, prefix, new CommandUsage(null, usage),
 				aliases, permission, permissionMessage, cooldown, cooldownMessage, cooldownBypass,
@@ -146,9 +136,9 @@ public class ScriptCommand implements TabExecutor {
 	public ScriptCommand(
 		Script script, String name, String pattern, List<Argument<?>> arguments,
 		String description, @Nullable String prefix, CommandUsage usage, List<String> aliases,
-		String permission, @Nullable VariableString permissionMessage, @Nullable Timespan cooldown,
-		@Nullable VariableString cooldownMessage, String cooldownBypass,
-		@Nullable VariableString cooldownStorage, int executableBy, SectionNode node
+		String permission, @Nullable NewVariableString permissionMessage, @Nullable Timespan cooldown,
+		@Nullable NewVariableString cooldownMessage, String cooldownBypass,
+		@Nullable NewVariableString cooldownStorage, int executableBy, SectionNode node
 	) {
 		Preconditions.checkNotNull(name);
 		Preconditions.checkNotNull(pattern);
@@ -161,7 +151,7 @@ public class ScriptCommand implements TabExecutor {
 		label = "" + name.toLowerCase(Locale.ENGLISH);
 		this.permission = permission;
 		if (permissionMessage == null) {
-			VariableString defaultMsg = VariableString.newInstance(Language.get("commands.no permission message"));
+			NewVariableString defaultMsg = NewVariableString.newInstance(Language.get("commands.no permission message"));
 			assert defaultMsg != null;
 			this.permissionMessage = defaultMsg;
 		} else {

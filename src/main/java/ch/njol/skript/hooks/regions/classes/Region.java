@@ -5,10 +5,9 @@ import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.classes.YggdrasilSerializer;
 import ch.njol.skript.hooks.regions.RegionsPlugin;
+import ch.njol.skript.lang.NewVariableString;
 import ch.njol.skript.lang.ParseContext;
-import ch.njol.skript.lang.VariableString;
 import ch.njol.skript.registrations.Classes;
-import org.skriptlang.skript.lang.converter.Converters;
 import ch.njol.yggdrasil.YggdrasilSerializable.YggdrasilExtendedSerializable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,6 +15,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.Nullable;
+import org.skriptlang.skript.lang.converter.Converters;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -56,9 +56,9 @@ public abstract class Region implements YggdrasilExtendedSerializable {
 								assert false;
 								return null;
 						}
-						if (!VariableString.isQuotedCorrectly(s, quoted))
+						if (!NewVariableString.isQuotedCorrectly(s, quoted))
 							return null;
-						s = VariableString.unquote(s, quoted);
+						s = NewVariableString.unquote(s, quoted);
 						return Region.parse(s, true);
 					}
 					
