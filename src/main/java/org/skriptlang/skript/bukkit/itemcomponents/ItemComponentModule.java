@@ -7,6 +7,7 @@ import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
 import org.skriptlang.skript.addon.AddonModule;
 import org.skriptlang.skript.addon.SkriptAddon;
+import org.skriptlang.skript.bukkit.itemcomponents.consumable.ConsumableModule;
 import org.skriptlang.skript.bukkit.itemcomponents.equippable.EquippableModule;
 import org.skriptlang.skript.bukkit.itemcomponents.tool.ToolModule;
 
@@ -51,7 +52,8 @@ public class ItemComponentModule implements AddonModule {
 	public void load(SkriptAddon addon) {
 		addon.loadModules(
 			new EquippableModule(),
-			new ToolModule()
+			new ToolModule(),
+			new ConsumableModule()
 		);
 
 		try {
