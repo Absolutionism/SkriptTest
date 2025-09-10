@@ -21,7 +21,8 @@ public enum Feature implements Experiment {
 	EQUIPPABLE_COMPONENTS("equippable components", LifeCycle.EXPERIMENTAL, "equippable components"),
 	TOOL_COMPONENTS("tool components", LifeCycle.EXPERIMENTAL, "tool components"),
 	CONSUMABLE_COMPONENTS("consumable components", LifeCycle.EXPERIMENTAL, "consumable components"),
-	CONSUME_EFFECTS("consume effects", LifeCycle.EXPERIMENTAL, "consume effects")
+	CONSUME_EFFECTS("consume effects", LifeCycle.EXPERIMENTAL, "consume effects"),
+	BLOCKING_COMPONENTS("blocking components", LifeCycle.EXPERIMENTAL, "blocking components"),
 	;
 
 	private final String codeName;
