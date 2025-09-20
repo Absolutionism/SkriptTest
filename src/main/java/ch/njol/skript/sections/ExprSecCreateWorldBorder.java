@@ -3,24 +3,26 @@ package ch.njol.skript.sections;
 import ch.njol.skript.Skript;
 import ch.njol.skript.config.SectionNode;
 import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Example;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SectionExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
+import ch.njol.skript.lang.SectionEvent;
+import ch.njol.skript.lang.SectionValueExpression;
+import ch.njol.skript.lang.SectionValueExpression.SimpleSectionValueExpression;
+import ch.njol.skript.lang.SectionValueProvider;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.Trigger;
 import ch.njol.skript.lang.TriggerItem;
+import ch.njol.skript.lang.parser.DefaultValueData;
 import ch.njol.skript.lang.util.SectionUtils;
-import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.variables.Variables;
-import ch.njol.skript.doc.Example;
 import ch.njol.util.Kleenean;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldBorder;
 import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -46,21 +48,27 @@ import java.util.List;
 			set worldborder warning distance of event-worldborder to 5
 	""")
 @Since("2.11")
-public class ExprSecCreateWorldBorder extends SectionExpression<WorldBorder> {
+public class ExprSecCreateWorldBorder extends SectionExpression<WorldBorder> implements SectionValueProvider {
 
 	static {
 		Skript.registerExpression(ExprSecCreateWorldBorder.class, WorldBorder.class, ExpressionType.SIMPLE, "a [virtual] world[ ]border");
-		EventValues.registerEventValue(CreateWorldborderEvent.class, WorldBorder.class, CreateWorldborderEvent::getWorldBorder);
 	}
 
 	private Trigger trigger = null;
+	private SectionValueExpression<ExprSecCreateWorldBorder ,WorldBorder> sectionValue = null;
 
 	@Override
 	public boolean init(Expression<?>[] expressions, int pattern, Kleenean delayed, ParseResult result, @Nullable SectionNode node, @Nullable List<TriggerItem> triggerItems) {
 		if (node != null) {
-			//noinspection unchecked
-			trigger = SectionUtils.loadLinkedCode("create worldborder", (beforeLoading, afterLoading)
-					-> loadCode(node, "create worldborder", beforeLoading, afterLoading, CreateWorldborderEvent.class));
+			sectionValue = new SimpleSectionValueExpression<>(this, WorldBorder.class);
+			trigger = SectionUtils.loadLinkedCode("create worldborder", (beforeLoading, afterLoading) ->
+				loadCode(node, "create worldborder", () -> {
+					beforeLoading.run();
+					getParser().getData(DefaultValueData.class).addDefaultValue(WorldBorder.class, sectionValue);
+				}, () -> {
+					afterLoading.run();
+					getParser().getData(DefaultValueData.class).removeDefaultValue(WorldBorder.class);
+				}, SectionEvent.class));
 			return trigger != null;
 		}
 		return true;
@@ -69,11 +77,13 @@ public class ExprSecCreateWorldBorder extends SectionExpression<WorldBorder> {
 	@Override
 	protected WorldBorder @Nullable [] get(Event event) {
 		WorldBorder worldBorder = Bukkit.createWorldBorder();
-		if (trigger == null) 
-			return new WorldBorder[] {worldBorder};
-		CreateWorldborderEvent worldborderEvent = new CreateWorldborderEvent(worldBorder);
-		Variables.withLocalVariables(event, worldborderEvent, () -> TriggerItem.walk(trigger, worldborderEvent));
-		return new WorldBorder[] {worldborderEvent.getWorldBorder()};
+		if (trigger != null) {
+			SectionEvent<?> sectionEvent = new SectionEvent<>(this);
+			sectionValue.set(worldBorder);
+			Variables.withLocalVariables(event, sectionEvent, () -> TriggerItem.walk(trigger, sectionEvent));
+		}
+
+		return new WorldBorder[] {worldBorder};
 	}
 
 	@Override
@@ -87,26 +97,13 @@ public class ExprSecCreateWorldBorder extends SectionExpression<WorldBorder> {
 	}
 
 	@Override
-	public String toString(@Nullable Event event, boolean debug) {
-		return "a virtual worldborder";
+	public Expression<?> getSectionValue() {
+		return sectionValue;
 	}
 
-	public static class CreateWorldborderEvent extends Event {
-		private final WorldBorder worldborder;
-
-		public CreateWorldborderEvent(WorldBorder worldborder) {
-			this.worldborder = worldborder;
-		}
-
-		public WorldBorder getWorldBorder() {
-			return worldborder;
-		}
-
-		@Override
-		public @NotNull HandlerList getHandlers() {
-			throw new IllegalStateException();
-		}
-
+	@Override
+	public String toString(@Nullable Event event, boolean debug) {
+		return "a virtual worldborder";
 	}
 
 }

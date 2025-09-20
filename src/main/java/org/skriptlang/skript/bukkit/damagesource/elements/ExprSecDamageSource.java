@@ -10,11 +10,15 @@ import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.SectionExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
+import ch.njol.skript.lang.SectionEvent;
+import ch.njol.skript.lang.SectionValueExpression;
+import ch.njol.skript.lang.SectionValueExpression.BlankSectionValueExpression;
+import ch.njol.skript.lang.SectionValueProvider;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.Trigger;
 import ch.njol.skript.lang.TriggerItem;
+import ch.njol.skript.lang.parser.DefaultValueData;
 import ch.njol.skript.lang.util.SectionUtils;
-import ch.njol.skript.registrations.EventValues;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
 import org.bukkit.Location;
@@ -22,13 +26,10 @@ import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.bukkit.damagesource.DamageSourceExperimentSyntax;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Name("Damage Source")
 @Description({
@@ -52,14 +53,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Since("2.12")
 @RequiredPlugins("Minecraft 1.20.4+")
 @SuppressWarnings("UnstableApiUsage")
-public class ExprSecDamageSource extends SectionExpression<DamageSource> implements DamageSourceExperimentSyntax {
+public class ExprSecDamageSource extends SectionExpression<DamageSource> implements DamageSourceExperimentSyntax, SectionValueProvider {
 
-	static class DamageSourceSectionEvent extends Event {
+	static class DamageSourceSectionEvent extends SectionEvent<ExprSecDamageSource> {
 
 		public DamageType damageType = DamageType.GENERIC;
 		public @Nullable Entity causingEntity = null;
 		public @Nullable Entity directEntity = null;
 		public @Nullable Location damageLocation = null;
+
+		public DamageSourceSectionEvent(ExprSecDamageSource exprSec) {
+			super(exprSec);
+		}
 
 		public DamageSource buildDamageSource() {
 			DamageSource.Builder builder = DamageSource.builder(damageType);
@@ -71,23 +76,16 @@ public class ExprSecDamageSource extends SectionExpression<DamageSource> impleme
 				builder = builder.withDirectEntity(directEntity);
 			return builder.build();
 		}
-
-		public DamageSourceSectionEvent() {}
-
-		@Override
-		public @NotNull HandlerList getHandlers() {
-			throw new IllegalStateException();
-		}
 	}
 
 	static {
 		Skript.registerExpression(ExprSecDamageSource.class, DamageSource.class, ExpressionType.COMBINED,
 			"[a] custom damage source [(with|using) [the|a] [damage type [of]] %-damagetype%]");
-		EventValues.registerEventValue(DamageSourceSectionEvent.class, DamageSource.class, DamageSourceSectionEvent::buildDamageSource);
 	}
 
 	private @Nullable Expression<DamageType> damageType;
 	private Trigger trigger = null;
+	private SectionValueExpression<ExprSecDamageSource, DamageSource> sectionValue = null;
 
 	@Override
 	public boolean init(Expression<?>[] exprs, int pattern, Kleenean delayed, ParseResult result, @Nullable SectionNode node, @Nullable List<TriggerItem> triggerItems) {
@@ -105,9 +103,15 @@ public class ExprSecDamageSource extends SectionExpression<DamageSource> impleme
 		}
 
 		if (node != null) {
-			AtomicBoolean isDelayed = new AtomicBoolean(false);
-			trigger = SectionUtils.loadLinkedCode("custom damage source", (beforeLoading, afterLoading)
-					-> loadCode(node, "custom damage source", beforeLoading, afterLoading, DamageSourceSectionEvent.class));
+			sectionValue = new BlankSectionValueExpression<>(this, DamageSource.class);
+			trigger = SectionUtils.loadLinkedCode("custom damage source", (beforeLoading, afterLoading) ->
+				loadCode(node, "custom damage source", () -> {
+					beforeLoading.run();
+					getParser().getData(DefaultValueData.class).addDefaultValue(DamageSource.class, sectionValue);
+				}, () -> {
+					afterLoading.run();
+					getParser().getData(DefaultValueData.class).removeDefaultValue(DamageSource.class);
+				}, DamageSourceSectionEvent.class));
 			return trigger != null;
 		}
 		return true;
@@ -115,7 +119,7 @@ public class ExprSecDamageSource extends SectionExpression<DamageSource> impleme
 
 	@Override
 	protected DamageSource @Nullable [] get(Event event) {
-		DamageSourceSectionEvent sectionEvent = new DamageSourceSectionEvent();
+		DamageSourceSectionEvent sectionEvent = new DamageSourceSectionEvent(this);
 		if (damageType != null) {
 			DamageType damageType = this.damageType.getSingle(event);
 			if (damageType != null) {
@@ -140,6 +144,11 @@ public class ExprSecDamageSource extends SectionExpression<DamageSource> impleme
 	@Override
 	public Class<DamageSource> getReturnType() {
 		return DamageSource.class;
+	}
+
+	@Override
+	public Expression<?> getSectionValue() {
+		return sectionValue;
 	}
 
 	@Override

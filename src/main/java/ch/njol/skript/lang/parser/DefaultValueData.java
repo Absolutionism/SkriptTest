@@ -2,11 +2,15 @@ package ch.njol.skript.lang.parser;
 
 import ch.njol.skript.lang.DefaultExpression;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 /**
  * A Parser Data that stores custom default values that should be given preference over event-values and other
@@ -66,6 +70,16 @@ public class DefaultValueData extends ParserInstance.Data {
 		} else {
 			throw new IllegalStateException("No default value for " + type.getName() + " to remove. Imbalanced add/remove?");
 		}
+	}
+
+	/**
+	 * @return All {@link Class}es that currently have a value.
+	 */
+	public @Unmodifiable List<Class<?>> getDefaultValueClasses() {
+		return defaults.entrySet().stream()
+			.filter(entry -> entry.getValue().isEmpty())
+			.map(Entry::getKey)
+			.collect(Collectors.toUnmodifiableList());
 	}
 
 }

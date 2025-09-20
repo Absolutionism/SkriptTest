@@ -4,7 +4,7 @@ import ch.njol.skript.doc.Description;
 import ch.njol.skript.doc.Examples;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.expressions.base.EventValueExpression;
+import ch.njol.skript.expressions.ExprSectionExpression;
 import org.bukkit.loot.LootContext;
 
 @Name("Loot Context")
@@ -14,7 +14,7 @@ import org.bukkit.loot.LootContext;
 		"\tbroadcast loot context"
 })
 @Since("2.10")
-public class ExprLootContext extends EventValueExpression<LootContext> {
+public class ExprLootContext extends ExprSectionExpression<LootContext> {
 
 	static {
 		register(ExprLootContext.class, LootContext.class, "loot[ ]context");
@@ -22,11 +22,6 @@ public class ExprLootContext extends EventValueExpression<LootContext> {
 
 	public ExprLootContext() {
 		super(LootContext.class);
-	}
-
-	@Override
-	public String toString() {
-		return "the loot context";
 	}
 
 }

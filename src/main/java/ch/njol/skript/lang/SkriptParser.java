@@ -15,7 +15,6 @@ import ch.njol.skript.lang.function.ExprFunctionCall;
 import ch.njol.skript.lang.function.FunctionReference;
 import ch.njol.skript.lang.function.FunctionRegistry;
 import ch.njol.skript.lang.function.Functions;
-import ch.njol.skript.lang.function.Signature;
 import ch.njol.skript.lang.parser.DefaultValueData;
 import ch.njol.skript.lang.parser.ParseStackOverflowException;
 import ch.njol.skript.lang.parser.ParserInstance;
@@ -49,7 +48,6 @@ import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.lang.converter.Converters;
 import org.skriptlang.skript.lang.experiment.ExperimentSet;
 import org.skriptlang.skript.lang.experiment.ExperimentalSyntax;
-import org.skriptlang.skript.lang.script.Script;
 import org.skriptlang.skript.lang.script.ScriptWarning;
 import org.skriptlang.skript.registration.SyntaxInfo;
 import org.skriptlang.skript.registration.SyntaxRegistry;
@@ -65,7 +63,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
@@ -356,8 +353,17 @@ public final class SkriptParser {
 	 */
 	private static @NotNull DefaultExpression<?> getDefaultExpression(ExprInfo exprInfo, String pattern) {
 		DefaultValueData data = getParser().getData(DefaultValueData.class);
+		List<Class<?>> dataClasses = data.getDefaultValueClasses();
 		ClassInfo<?> classInfo = exprInfo.classes[0];
 		DefaultExpression<?> expr = data.getDefaultValue(classInfo.getC());
+		if (expr == null && !dataClasses.isEmpty()) {
+			for (Class<?> dataClass : dataClasses) {
+				if (classInfo.getC().isAssignableFrom(dataClass)) {
+					expr = data.getDefaultValue(dataClass);
+					break;
+				}
+			}
+		}
 		if (expr == null)
 			expr = classInfo.getDefaultExpression();
 
@@ -383,12 +389,21 @@ public final class SkriptParser {
 			return new ArrayList<>(List.of(getDefaultExpression(exprInfo, pattern)));
 
 		DefaultValueData data = getParser().getData(DefaultValueData.class);
+		List<Class<?>> dataClasses = data.getDefaultValueClasses();
 
 		EnumMap<DefaultExpressionError, List<String>> failed = new EnumMap<>(DefaultExpressionError.class);
 		List<DefaultExpression<?>> passed = new ArrayList<>();
 		for (int i = 0; i < exprInfo.classes.length; i++) {
 			ClassInfo<?> classInfo = exprInfo.classes[i];
 			DefaultExpression<?> expr = data.getDefaultValue(classInfo.getC());
+			if (expr == null && !dataClasses.isEmpty()) {
+				for (Class<?> dataClass : dataClasses) {
+					if (classInfo.getC().isAssignableFrom(dataClass)) {
+						expr = data.getDefaultValue(dataClass);
+						break;
+					}
+				}
+			}
 			if (expr == null)
 				expr = classInfo.getDefaultExpression();
 
