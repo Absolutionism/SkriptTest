@@ -1,11 +1,11 @@
 package org.skriptlang.skript.registration;
 
-import ch.njol.skript.lang.SyntaxElement;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
+import org.skriptlang.skript.lang.context.SyntaxElement;
 import org.skriptlang.skript.util.ClassUtils;
 import org.skriptlang.skript.util.Priority;
 
@@ -110,7 +110,7 @@ class SyntaxInfoImpl<T extends SyntaxElement> implements SyntaxInfo<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	static class BuilderImpl<B extends Builder<B, E>, E extends SyntaxElement> implements Builder<B, E> {
+	static class BuilderImpl<B extends Builder<B, E>, E extends org.skriptlang.skript.lang.context.SyntaxElement> implements Builder<B, E> {
 
 		/**
 		 * A default origin that describes the class of a syntax.

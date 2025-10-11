@@ -15,7 +15,7 @@ final class DefaultSyntaxInfosImpl {
 	/**
 	 * {@inheritDoc}
 	 */
-	static class ExpressionImpl<E extends ch.njol.skript.lang.Expression<R>, R>
+	static class ExpressionImpl<E extends org.skriptlang.skript.lang.context.Expression<R>, R>
 		extends SyntaxInfoImpl<E> implements DefaultSyntaxInfos.Expression<E, R> {
 
 		private final Class<R> returnType;
@@ -70,7 +70,7 @@ final class DefaultSyntaxInfosImpl {
 		/**
 		 * {@inheritDoc}
 		 */
-		static final class BuilderImpl<B extends Expression.Builder<B, E, R>, E extends ch.njol.skript.lang.Expression<R>, R>
+		static final class BuilderImpl<B extends Expression.Builder<B, E, R>, E extends org.skriptlang.skript.lang.context.Expression<R>, R>
 			extends SyntaxInfoImpl.BuilderImpl<B, E>
 			implements Expression.Builder<B, E, R> {
 

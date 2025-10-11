@@ -5,6 +5,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Unmodifiable;
 import org.skriptlang.skript.bukkit.registration.BukkitSyntaxInfos;
+import org.skriptlang.skript.lang.context.ExpressionInfo;
+import org.skriptlang.skript.lang.context.SyntaxElement;
 import org.skriptlang.skript.registration.SyntaxInfo;
 import org.skriptlang.skript.lang.structure.StructureInfo;
 
@@ -19,16 +21,16 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @param <E> the syntax element this info is for
+ * @param <Element> the syntax element this info is for
  */
-public class SyntaxElementInfo<E extends SyntaxElement> implements SyntaxInfo<E> {
+public class SyntaxElementInfo<Element extends SyntaxElement> implements SyntaxInfo<Element> {
 
 	// todo: 2.9 make all fields private
-	public final Class<E> elementClass;
+	public final Class<Element> elementClass;
 	public final String[] patterns;
 	public final String originClassPath;
 
-	public SyntaxElementInfo(String[] patterns, Class<E> elementClass, String originClassPath) throws IllegalArgumentException {
+	public SyntaxElementInfo(String[] patterns, Class<Element> elementClass, String originClassPath) throws IllegalArgumentException {
 		if (Modifier.isAbstract(elementClass.getModifiers()))
 			throw new SkriptAPIException("Class " + elementClass.getName() + " is abstract");
 
@@ -49,7 +51,7 @@ public class SyntaxElementInfo<E extends SyntaxElement> implements SyntaxInfo<E>
 	 * Get the class that represents this element.
 	 * @return The Class of the element
 	 */
-	public Class<E> getElementClass() {
+	public Class<Element> getElementClass() {
 		return elementClass;
 	}
 
@@ -108,7 +110,7 @@ public class SyntaxElementInfo<E extends SyntaxElement> implements SyntaxInfo<E>
 	
 	@Contract("_ -> new")
 	@ApiStatus.Experimental
-	private static <E extends ch.njol.skript.lang.Expression<R>, R> ExpressionInfo<E, R> fromModernExpression(SyntaxInfo.Expression<E, R> info) {
+	private static <E extends org.skriptlang.skript.lang.context.Expression<R>, R> ExpressionInfo<E, R> fromModernExpression(SyntaxInfo.Expression<E, R> info) {
 		return new ExpressionInfo<>(
 				info.patterns().toArray(new String[0]), info.returnType(),
 				info.type(), info.origin().name(), ExpressionType.fromModern(info.priority())
@@ -119,7 +121,7 @@ public class SyntaxElementInfo<E extends SyntaxElement> implements SyntaxInfo<E>
 
 	@Override
 	@ApiStatus.Internal
-	public Builder<? extends Builder<?, E>, E> toBuilder() {
+	public Builder<? extends Builder<?, Element>, Element> toBuilder() {
 		// should not be called for this object
 		throw new UnsupportedOperationException();
 	}
@@ -132,13 +134,13 @@ public class SyntaxElementInfo<E extends SyntaxElement> implements SyntaxInfo<E>
 
 	@Override
 	@ApiStatus.Internal
-	public Class<E> type() {
+	public Class<Element> type() {
 		return getElementClass();
 	}
 
 	@Override
 	@ApiStatus.Internal
-	public E instance() {
+	public Element instance() {
 		try {
 			return type().getDeclaredConstructor().newInstance();
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException |

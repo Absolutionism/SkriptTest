@@ -16,13 +16,13 @@ import org.skriptlang.skript.registration.DefaultSyntaxInfosImpl.StructureImpl;
 public interface DefaultSyntaxInfos {
 
 	/**
-	 * A syntax info to be used for {@link ch.njol.skript.lang.Expression}s.
+	 * A syntax info to be used for {@link org.skriptlang.skript.lang.context.Expression}s.
 	 * It differs from a typical info in that it also has a return type.
 	 * @param <E> The class providing the implementation of the Expression this info represents.
 	 * @param <R> The type of the return type of the Expression.
 	 */
 	@ApiStatus.Experimental
-	interface Expression<E extends ch.njol.skript.lang.Expression<R>, R> extends SyntaxInfo<E> {
+	interface Expression<E extends org.skriptlang.skript.lang.context.Expression<R>, R> extends SyntaxInfo<E> {
 
 		/**
 		 * Constructs a builder for an expression syntax info.
@@ -33,7 +33,7 @@ public interface DefaultSyntaxInfos {
 		 * @param <R> The supertype of all values the Expression may return.
 		 */
 		@Contract("_, _ -> new")
-		static <E extends ch.njol.skript.lang.Expression<R>, R> Builder<? extends Builder<?, E, R>, E, R> builder(
+		static <E extends org.skriptlang.skript.lang.context.Expression<R>, R> Builder<? extends Builder<?, E, R>, E, R> builder(
 			Class<E> expressionClass, Class<R> returnType) {
 			return new ExpressionImpl.BuilderImpl<>(expressionClass, returnType);
 		}
@@ -57,7 +57,7 @@ public interface DefaultSyntaxInfos {
 		 * @param <E> The Expression class providing the implementation of the syntax info being built.
 		 * @param <R> The type of the return type of the Expression.
 		 */
-		interface Builder<B extends Builder<B, E, R>, E extends ch.njol.skript.lang.Expression<R>, R> extends SyntaxInfo.Builder<B, E> {
+		interface Builder<B extends Builder<B, E, R>, E extends org.skriptlang.skript.lang.context.Expression<R>, R> extends SyntaxInfo.Builder<B, E> {
 
 			/**
 			 * {@inheritDoc}

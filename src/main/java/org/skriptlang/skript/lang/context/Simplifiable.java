@@ -1,10 +1,8 @@
-package ch.njol.skript.lang.simplification;
+package org.skriptlang.skript.lang.context;
 
-import ch.njol.skript.lang.Debuggable;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.Literal;
-import ch.njol.skript.lang.SyntaxElement;
-import org.bukkit.event.Event;
+import ch.njol.skript.lang.simplification.SimplifiedLiteral;
+import org.skriptlang.skript.bukkit.lang.Debuggable;
+import org.skriptlang.skript.bukkit.lang.Expression;
 
 /**
  * Represents an object that can be simplified to a simpler {@link SyntaxElement}. For example, a complex math equation
@@ -17,7 +15,7 @@ import org.bukkit.event.Event;
  * tricky bugs.
  * @param <S> the type of the simplified object
  */
-public interface Simplifiable<S extends SyntaxElement> extends org.skriptlang.skript.bukkit.lang.Simplifiable<S> {
+public interface Simplifiable<S extends SyntaxElement> {
 
 	/**
 	 * Simplifies this object. This should be called immediately after init() returns true.

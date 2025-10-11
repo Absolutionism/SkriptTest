@@ -1,9 +1,9 @@
 package org.skriptlang.skript.registration;
 
-import ch.njol.skript.lang.SyntaxElement;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Unmodifiable;
+import org.skriptlang.skript.lang.context.SyntaxElement;
 import org.skriptlang.skript.registration.SyntaxInfoImpl.BuilderImpl;
 import org.skriptlang.skript.util.Priority;
 

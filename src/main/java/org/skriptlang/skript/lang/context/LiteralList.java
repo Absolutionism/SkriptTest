@@ -1,5 +1,6 @@
-package ch.njol.skript.lang;
+package org.skriptlang.skript.lang.context;
 
+import ch.njol.skript.lang.UnparsedLiteral;
 import ch.njol.skript.registrations.Classes;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,15 +42,15 @@ public class LiteralList<Type> extends ExpressionList<Type> implements Literal<T
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <R> @Nullable Literal<? extends R> getConvertedExpression(final Class<R>... to) {
-		Literal<? extends R>[] exprs = new Literal[expressions.length];
+	public <ConvertType> @Nullable Literal<? extends ConvertType> getConvertedExpression(final Class<ConvertType>... to) {
+		Literal<? extends ConvertType>[] exprs = new Literal[expressions.length];
 		Class<?>[] returnTypes = new Class[expressions.length];
 		for (int i = 0; i < exprs.length; i++) {
-			if ((exprs[i] = (Literal<? extends R>) expressions[i].getConvertedExpression(to)) == null)
+			if ((exprs[i] = (Literal<? extends ConvertType>) expressions[i].getConvertedExpression(to)) == null)
 				return null;
 			returnTypes[i] = exprs[i].getReturnType();
 		}
-		return new LiteralList<>(exprs, (Class<R>) Classes.getSuperClassInfo(returnTypes).getC(), returnTypes, and, this);
+		return new LiteralList<>(exprs, (Class<ConvertType>) Classes.getSuperClassInfo(returnTypes).getC(), returnTypes, and, this);
 	}
 
 	@Override

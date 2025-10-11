@@ -8,19 +8,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * Utility class for {@link DefaultExpression}.
+ * Utility class for {@link org.skriptlang.skript.lang.context.DefaultExpression}.
  */
 final class DefaultExpressionUtils {
 
 	/**
 	 * Check if {@code expr} is valid with the settings from {@code exprInfo}.
 	 *
-	 * @param expr The {@link DefaultExpression} to check.
+	 * @param expr The {@link org.skriptlang.skript.lang.context.DefaultExpression} to check.
 	 * @param exprInfo The {@link ExprInfo} to check {@code expr} against its settings.
 	 * @param index The index of the {@link ClassInfo} in {@code exprInfo} used to grab {@code expr}.
 	 * @return {@link DefaultExpressionError} if it's not valid, otherwise {@code null}.
 	 */
-	static @Nullable DefaultExpressionError isValid(DefaultExpression<?> expr, ExprInfo exprInfo, int index) {
+	static @Nullable DefaultExpressionError isValid(org.skriptlang.skript.lang.context.DefaultExpression<?> expr, ExprInfo exprInfo, int index) {
 		if (expr == null) {
 			return DefaultExpressionError.NOT_FOUND;
 		} else if (!(expr instanceof Literal<?>) && (exprInfo.flagMask & SkriptParser.PARSE_EXPRESSIONS) == 0) {
@@ -37,7 +37,7 @@ final class DefaultExpressionUtils {
 
 	enum DefaultExpressionError {
 		/**
-		 * Error type for when a {@link DefaultExpression} can not be found for a {@link Class}.
+		 * Error type for when a {@link org.skriptlang.skript.lang.context.DefaultExpression} can not be found for a {@link Class}.
 		 */
 		NOT_FOUND {
 			@Override
@@ -59,7 +59,7 @@ final class DefaultExpressionUtils {
 		},
 
 		/**
-		 * Error type for when the {@link DefaultExpression} for a {@link Class} is not a {@link Literal}
+		 * Error type for when the {@link org.skriptlang.skript.lang.context.DefaultExpression} for a {@link Class} is not a {@link Literal}
 		 * and the pattern only accepts {@link Literal}s.
 		 */
 		NOT_LITERAL {
@@ -77,7 +77,7 @@ final class DefaultExpressionUtils {
 		},
 
 		/**
-		 * Error type for when the {@link DefaultExpression} for a {@link Class} is a {@link Literal}
+		 * Error type for when the {@link org.skriptlang.skript.lang.context.DefaultExpression} for a {@link Class} is a {@link Literal}
 		 * and the pattern does not accept {@link Literal}s.
 		 */
 		LITERAL {
@@ -95,7 +95,7 @@ final class DefaultExpressionUtils {
 		},
 
 		/**
-		 * Error type for when the {@link DefaultExpression} for a {@link Class} is plural
+		 * Error type for when the {@link org.skriptlang.skript.lang.context.DefaultExpression} for a {@link Class} is plural
 		 * but the pattern only accepts single.
 		 */
 		NOT_SINGLE {
@@ -111,7 +111,7 @@ final class DefaultExpressionUtils {
 		},
 
 		/**
-		 * Error type for when the {@link DefaultExpression} for a {@link Class} does not accept time states
+		 * Error type for when the {@link org.skriptlang.skript.lang.context.DefaultExpression} for a {@link Class} does not accept time states
 		 * but the pattern infers it.
 		 */
 		TIME_STATE {

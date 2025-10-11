@@ -1,4 +1,4 @@
-package ch.njol.skript.lang;
+package org.skriptlang.skript.lang.context;
 
 import ch.njol.skript.classes.Changer.ChangeMode;
 import ch.njol.skript.conditions.CondCompare;
@@ -7,11 +7,17 @@ import ch.njol.skript.registrations.Classes;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import com.google.common.collect.ImmutableSet;
-import org.bukkit.event.Event;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -19,7 +25,7 @@ import java.util.function.Predicate;
 /**
  * A list of expressions.
  */
-public class ExpressionList<Type> extends org.skriptlang.skript.bukkit.lang.ExpressionList<Type> implements Expression<Type> {
+public class ExpressionList<Type> implements Expression<Type> {
 
 	protected final Expression<? extends Type>[] expressions;
 	private final Class<Type> returnType;
@@ -41,10 +47,9 @@ public class ExpressionList<Type> extends org.skriptlang.skript.bukkit.lang.Expr
 		this(expressions, returnType, new Class[]{returnType}, and, source);
 	}
 
-	protected ExpressionList(Expression<? extends Type>[] exprs, Class<Type> returnType, Class<?>[] possibleReturnTypes, boolean and, @Nullable ExpressionList<?> source) {
-		super(exprs, returnType, possibleReturnTypes, and, source);
-		assert exprs != null;
-		this.expressions = exprs;
+	protected ExpressionList(Expression<? extends Type>[] expressions, Class<Type> returnType, Class<?>[] possibleReturnTypes, boolean and, @Nullable ExpressionList<?> source) {
+		assert expressions != null;
+		this.expressions = expressions;
 		this.returnType = returnType;
 		this.possibleReturnTypes = ImmutableSet.copyOf(possibleReturnTypes).toArray(new Class[0]);
 		this.and = and;
@@ -52,7 +57,7 @@ public class ExpressionList<Type> extends org.skriptlang.skript.bukkit.lang.Expr
 			single = false;
 		} else {
 			boolean single = true;
-			for (Expression<?> e : exprs) {
+			for (Expression<?> e : expressions) {
 				if (!e.isSingle()) {
 					single = false;
 					break;
@@ -69,36 +74,36 @@ public class ExpressionList<Type> extends org.skriptlang.skript.bukkit.lang.Expr
 	}
 
 	@Override
-	public @Nullable Type getSingle(Event event) {
+	public @Nullable Type getSingle(TriggerContext context) {
 		if (!single)
 			throw new UnsupportedOperationException();
 		Expression<? extends Type> expression = CollectionUtils.getRandom(expressions);
-		return expression != null ? expression.getSingle(event) : null;
+		return expression != null ? expression.getSingle(context) : null;
 	}
 
 	@Override
-	public Type[] getArray(Event event) {
+	public Type[] getArray(TriggerContext context) {
 		if (and)
-			return getAll(event);
+			return getAll(context);
 		Expression<? extends Type> expression = CollectionUtils.getRandom(expressions);
 		//noinspection unchecked
-		return expression != null ? expression.getArray(event) : (Type[]) Array.newInstance(returnType, 0);
+		return expression != null ? expression.getArray(context) : (Type[]) Array.newInstance(returnType, 0);
 	}
 
 	@Override
-	public Type[] getAll(Event event) {
+	public Type[] getAll(TriggerContext context) {
 		List<Type> values = new ArrayList<>();
 		for (Expression<? extends Type> expr : expressions)
-			values.addAll(Arrays.asList(expr.getAll(event)));
+			values.addAll(Arrays.asList(expr.getAll(context)));
 		//noinspection unchecked
 		return values.toArray((Type[]) Array.newInstance(returnType, values.size()));
 	}
 
 	@Override
-	public @Nullable Iterator<? extends Type> iterator(Event event) {
+	public @Nullable Iterator<? extends Type> iterator(TriggerContext context) {
 		if (!and) {
 			Expression<? extends Type> expression = CollectionUtils.getRandom(expressions);
-			return expression != null ? expression.iterator(event) : null;
+			return expression != null ? expression.iterator(context) : null;
 		}
 		return new Iterator<>() {
 			private int i = 0;
@@ -109,7 +114,7 @@ public class ExpressionList<Type> extends org.skriptlang.skript.bukkit.lang.Expr
 			public boolean hasNext() {
 				Iterator<? extends Type> iterator = current;
 				while (i < expressions.length && (iterator == null || !iterator.hasNext()))
-					current = iterator = expressions[i++].iterator(event);
+					current = iterator = expressions[i++].iterator(context);
 				return iterator != null && iterator.hasNext();
 			}
 
@@ -138,13 +143,13 @@ public class ExpressionList<Type> extends org.skriptlang.skript.bukkit.lang.Expr
 	}
 
 	@Override
-	public boolean check(Event event, Predicate<? super Type> checker, boolean negated) {
-		return CollectionUtils.check(expressions, expr -> expr.check(event, checker) ^ negated, and);
+	public boolean check(TriggerContext context, Predicate<? super Type> checker, boolean negated) {
+		return CollectionUtils.check(expressions, expr -> expr.check(context, checker) ^ negated, and);
 	}
 
 	@Override
-	public boolean check(Event event, Predicate<? super Type> checker) {
-		return check(event, checker, false);
+	public boolean check(TriggerContext context, Predicate<? super Type> checker) {
+		return check(context, checker, false);
 	}
 
 	@Override
@@ -233,28 +238,28 @@ public class ExpressionList<Type> extends org.skriptlang.skript.bukkit.lang.Expr
 	}
 
 	@Override
-	public void change(Event event, Object @Nullable [] delta, ChangeMode mode) throws UnsupportedOperationException {
+	public void change(TriggerContext context, Object @Nullable [] delta, ChangeMode mode) throws UnsupportedOperationException {
 		if (and) {
 			for (Expression<?> expr : expressions) {
-				expr.change(event, delta, mode);
+				expr.change(context, delta, mode);
 			}
 		} else {
 			int i = ThreadLocalRandom.current().nextInt(expressions.length);
-			expressions[i].change(event, delta, mode);
+			expressions[i].change(context, delta, mode);
 		}
 	}
 
 	@Override
-	public <R> void changeInPlace(Event event, Function<Type, R> changeFunction, boolean getAll) {
+	public <R> void changeInPlace(TriggerContext context, Function<Type, R> changeFunction, boolean getAll) {
 		if (and || getAll) {
 			for (Expression<?> expr : expressions) {
 				//noinspection unchecked,rawtypes
-				expr.changeInPlace(event, (Function) changeFunction, getAll);
+				expr.changeInPlace(context, (Function) changeFunction, getAll);
 			}
 		} else {
 			int i = ThreadLocalRandom.current().nextInt(expressions.length);
 			//noinspection unchecked,rawtypes
-			expressions[i].changeInPlace(event, (Function) changeFunction, false);
+			expressions[i].changeInPlace(context, (Function) changeFunction, false);
 		}
 	}
 
@@ -296,7 +301,7 @@ public class ExpressionList<Type> extends org.skriptlang.skript.bukkit.lang.Expr
 	}
 
 	@Override
-	public String toString(@Nullable Event event, boolean debug) {
+	public String toString(@Nullable TriggerContext context, boolean debug) {
 		StringBuilder result = new StringBuilder("(");
 		for (int i = 0; i < expressions.length; i++) {
 			if (i != 0) {
@@ -305,7 +310,7 @@ public class ExpressionList<Type> extends org.skriptlang.skript.bukkit.lang.Expr
 				else
 					result.append(", ");
 			}
-			result.append(expressions[i].toString(event, debug));
+			result.append(expressions[i].toString(context, debug));
 		}
 		result.append(")");
 		if (debug)
@@ -315,7 +320,7 @@ public class ExpressionList<Type> extends org.skriptlang.skript.bukkit.lang.Expr
 
 	@Override
 	public String toString() {
-		return toString((Event) null, false);
+		return toString(null, false);
 	}
 
 	/**
@@ -323,6 +328,38 @@ public class ExpressionList<Type> extends org.skriptlang.skript.bukkit.lang.Expr
 	 */
 	public Expression<? extends Type>[] getExpressions() {
 		return expressions;
+	}
+
+	/**
+	 * Retrieves all expressions, including those nested within any {@code ExpressionList}s.
+	 *
+	 * @return A list of all expressions.
+	 */
+	public List<Expression<? extends Type>> getAllExpressions() {
+		List<Expression<? extends Type>> expressions = new ArrayList<>();
+		for (Expression<? extends Type> expression : this.expressions) {
+			if (expression instanceof ExpressionList<? extends Type> innerList) {
+				expressions.addAll(innerList.getAllExpressions());
+				continue;
+			}
+			expressions.add(expression);
+		}
+		return expressions;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Expression<Type> simplify() {
+		boolean isLiteralList = true;
+		for (int i = 0; i < expressions.length; i++) {
+			expressions[i] = expressions[i].simplify();
+			isLiteralList &= expressions[i] instanceof Literal;
+		}
+		if (isLiteralList) {
+			Literal<? extends Type>[] ls = Arrays.copyOf(expressions, expressions.length, Literal[].class);
+			return new LiteralList<>(ls, returnType, and);
+		}
+		return this;
 	}
 
 }

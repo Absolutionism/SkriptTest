@@ -126,7 +126,7 @@ public final class SkriptParser {
 
 	public static class ParseResult {
 		public @Nullable SkriptPattern source;
-		public Expression<?>[] exprs;
+		public org.skriptlang.skript.lang.context.Expression<?>[] exprs;
 		public List<MatchResult> regexes = new ArrayList<>(1);
 		public String expr;
 		/**
@@ -138,10 +138,10 @@ public final class SkriptParser {
 
 		public ParseResult(SkriptParser parser, String pattern) {
 			expr = parser.expr;
-			exprs = new Expression<?>[countUnescaped(pattern, '%') / 2];
+			exprs = new org.skriptlang.skript.lang.context.Expression<?>[countUnescaped(pattern, '%') / 2];
 		}
 
-		public ParseResult(String expr, Expression<?>[] expressions) {
+		public ParseResult(String expr, org.skriptlang.skript.lang.context.Expression<?>[] expressions) {
 			this.expr = expr;
 			this.exprs = expressions;
 		}
@@ -275,7 +275,7 @@ public final class SkriptParser {
 					boolean success = element.preInit() && element.init(parseResult.exprs, matchedPattern, getParser().getHasDelayBefore(), parseResult);
 					if (success) {
 						// Check if any expressions are 'UnparsedLiterals' and if applicable for multiple info warning.
-						for (Expression<?> expr : parseResult.exprs) {
+						for (org.skriptlang.skript.lang.context.Expression<?> expr : parseResult.exprs) {
 							if (expr instanceof UnparsedLiteral unparsedLiteral && unparsedLiteral.multipleWarning())
 								break;
 						}
@@ -441,7 +441,7 @@ public final class SkriptParser {
 		return null;
 	}
 
-	private static @Nullable Expression<?> parseExpression(Class<?>[] types, String expr) {;
+	private static @Nullable org.skriptlang.skript.lang.context.Expression<?> parseExpression(Class<?>[] types, String expr) {;
 		if (expr.startsWith("“") || expr.startsWith("”") || expr.endsWith("”") || expr.endsWith("“")) {
 			Skript.error("Pretty quotes are not allowed, change to regular quotes (\")");
 			return null;
@@ -460,13 +460,13 @@ public final class SkriptParser {
 				return false;
 			});
 			//noinspection unchecked,rawtypes
-			return (Expression<?>) parse(expr, (Iterator) iterator, null);
+			return (org.skriptlang.skript.lang.context.Expression<?>) parse(expr, (Iterator) iterator, null);
 		}
 	}
 
 
 	@SuppressWarnings({"unchecked"})
-	private <T> @Nullable Expression<? extends T> parseSingleExpr(boolean allowUnparsedLiteral, @Nullable LogEntry error, Class<? extends T>... types) {
+	private <T> @Nullable org.skriptlang.skript.lang.context.Expression<? extends T> parseSingleExpr(boolean allowUnparsedLiteral, @Nullable LogEntry error, Class<? extends T>... types) {
 		assert types.length > 0;
 		assert types.length == 1 || !CollectionUtils.contains(types, Object.class);
 		if (expr.isEmpty())
@@ -503,19 +503,19 @@ public final class SkriptParser {
 			}
 			log.clear();
 			if ((flags & PARSE_EXPRESSIONS) != 0) {
-				Expression<?> parsedExpression = parseExpression(types, expr);
+				org.skriptlang.skript.lang.context.Expression<?> parsedExpression = parseExpression(types, expr);
 				if (parsedExpression != null) { // Expression/VariableString parsing success
 					Class<?> parsedReturnType = parsedExpression.getReturnType();
 					for (Class<? extends T> type : types) {
 						if (type.isAssignableFrom(parsedReturnType)) {
 							log.printLog();
-							return (Expression<? extends T>) parsedExpression;
+							return (org.skriptlang.skript.lang.context.Expression<? extends T>) parsedExpression;
 						}
 					}
 
 					// No directly same type found
 					Class<T>[] objTypes = (Class<T>[]) types; // Java generics... ?
-					Expression<? extends T> convertedExpression = parsedExpression.getConvertedExpression(objTypes);
+					org.skriptlang.skript.lang.context.Expression<? extends T> convertedExpression = parsedExpression.getConvertedExpression(objTypes);
 					if (convertedExpression != null) {
 						log.printLog();
 						return convertedExpression;
@@ -537,7 +537,7 @@ public final class SkriptParser {
 	private static final String INVALID_LSPEC_CHARS = "[^,():/\"'\\[\\]}{]";
 	private static final Pattern LITERAL_SPECIFICATION_PATTERN = Pattern.compile("(?<literal>" + INVALID_LSPEC_CHARS + "+) \\((?<classinfo>[\\w\\p{L} ]+)\\)");
 
-	private @Nullable Expression<?> parseSingleExpr(boolean allowUnparsedLiteral, @Nullable LogEntry error, ExprInfo exprInfo) {
+	private @Nullable org.skriptlang.skript.lang.context.Expression<?> parseSingleExpr(boolean allowUnparsedLiteral, @Nullable LogEntry error, ExprInfo exprInfo) {
 		if (expr.isEmpty()) // Empty expressions return nothing, obviously
 			return null;
 
@@ -667,7 +667,7 @@ public final class SkriptParser {
 			}
 			log.clear();
 			if ((flags & PARSE_EXPRESSIONS) != 0) {
-				Expression<?> parsedExpression = parseExpression(types, expr);
+				org.skriptlang.skript.lang.context.Expression<?> parsedExpression = parseExpression(types, expr);
 				if (parsedExpression != null) { // Expression/VariableString parsing success
 					Class<?> parsedReturnType = parsedExpression.getReturnType();
 					for (int i = 0; i < types.length; i++) {
@@ -703,7 +703,7 @@ public final class SkriptParser {
 					}
 
 					// No directly same type found
-					Expression<?> convertedExpression = parsedExpression.getConvertedExpression((Class<Object>[]) types);
+					org.skriptlang.skript.lang.context.Expression<?> convertedExpression = parsedExpression.getConvertedExpression((Class<Object>[]) types);
 					if (convertedExpression != null) {
 						log.printLog();
 						return convertedExpression;
@@ -735,7 +735,7 @@ public final class SkriptParser {
 	 * @param <T> The type of the literal to parse.<br>
 	 */
 	@SafeVarargs
-	private <T> @Nullable Expression<? extends T> parseAsLiteral(
+	private <T> @Nullable org.skriptlang.skript.lang.context.Expression<? extends T> parseAsLiteral(
 			boolean allowUnparsedLiteral,
 			ParseLogHandler log,
 			@Nullable LogEntry error,
@@ -746,7 +746,7 @@ public final class SkriptParser {
 			if (classInfoMatcher.matches()) {
 				String literalString = classInfoMatcher.group("literal");
 				String unparsedClassInfo = Noun.stripDefiniteArticle(classInfoMatcher.group("classinfo"));
-				Expression<? extends T> result = parseSpecifiedLiteral(literalString, unparsedClassInfo, types);
+				org.skriptlang.skript.lang.context.Expression<? extends T> result = parseSpecifiedLiteral(literalString, unparsedClassInfo, types);
 				if (result != null) {
 					log.printLog();
 					return result;
@@ -759,7 +759,7 @@ public final class SkriptParser {
 				return null;
 			}
 			//noinspection unchecked
-			return (Expression<? extends T>) getUnparsedLiteral(log, error);
+			return (org.skriptlang.skript.lang.context.Expression<? extends T>) getUnparsedLiteral(log, error);
 		}
 		boolean containsObjectClass = false;
 		for (Class<?> type : types) {
@@ -779,7 +779,7 @@ public final class SkriptParser {
 		}
 		if (allowUnparsedLiteral && containsObjectClass)
 			//noinspection unchecked
-			return (Expression<? extends T>) getUnparsedLiteral(log, error);
+			return (org.skriptlang.skript.lang.context.Expression<? extends T>) getUnparsedLiteral(log, error);
 		if (expr.startsWith("\"") && expr.endsWith("\"") && expr.length() > 1) {
 			for (Class<?> type : types) {
 				if (!type.isAssignableFrom(String.class))
@@ -787,7 +787,7 @@ public final class SkriptParser {
 				VariableString string = VariableString.newInstance(expr.substring(1, expr.length() - 1));
 				if (string instanceof LiteralString)
 					//noinspection unchecked
-					return (Expression<? extends T>) string;
+					return (org.skriptlang.skript.lang.context.Expression<? extends T>) string;
 				break;
 			}
 		}
@@ -828,7 +828,7 @@ public final class SkriptParser {
 	 * @return {@link SimpleLiteral} or {@code null} if any checks fail
 	 */
 	@SafeVarargs
-	private <T> @Nullable Expression<? extends T> parseSpecifiedLiteral(
+	private <T> @Nullable org.skriptlang.skript.lang.context.Expression<? extends T> parseSpecifiedLiteral(
 		String literalString,
 		String unparsedClassInfo,
 		Class<? extends T> ... types
@@ -887,7 +887,7 @@ public final class SkriptParser {
 	}
 
 	@SafeVarargs
-	public final <T> @Nullable Expression<? extends T> parseExpression(Class<? extends T>... types) {
+	public final <T> @Nullable org.skriptlang.skript.lang.context.Expression<? extends T> parseExpression(Class<? extends T>... types) {
 		if (expr.isEmpty()) {
 			return null;
 		}
@@ -896,7 +896,7 @@ public final class SkriptParser {
 		assert types.length == 1 || !CollectionUtils.contains(types, Object.class);
 
 		try (ParseLogHandler log = SkriptLogger.startParseLogHandler()) {
-			Expression<? extends T> parsedExpression = parseSingleExpr(true, null, types);
+			org.skriptlang.skript.lang.context.Expression<? extends T> parsedExpression = parseSingleExpr(true, null, types);
 			if (parsedExpression != null) {
 				log.printLog();
 				return parsedExpression;
@@ -907,13 +907,13 @@ public final class SkriptParser {
 		}
 	}
 
-	public @Nullable Expression<?> parseExpression(ExprInfo exprInfo) {
+	public @Nullable org.skriptlang.skript.lang.context.Expression<?> parseExpression(ExprInfo exprInfo) {
 		if (expr.isEmpty()) {
 			return null;
 		}
 
 		try (ParseLogHandler log = SkriptLogger.startParseLogHandler()) {
-			Expression<?> parsedExpression = parseSingleExpr(true, null, exprInfo);
+			org.skriptlang.skript.lang.context.Expression<?> parsedExpression = parseSingleExpr(true, null, exprInfo);
 			if (parsedExpression != null) {
 				log.printLog();
 				return parsedExpression;
@@ -931,20 +931,20 @@ public final class SkriptParser {
 	private record OrderedExprInfo(ExprInfo[] infos) { }
 
 	@SafeVarargs
-	private <T> @Nullable Expression<? extends T> parseExpressionList(ParseLogHandler log, Class<? extends T>... types) {
+	private <T> @Nullable org.skriptlang.skript.lang.context.Expression<? extends T> parseExpressionList(ParseLogHandler log, Class<? extends T>... types) {
 		//noinspection unchecked
-		return (Expression<? extends T>) parseExpressionList_i(log, types);
+		return (org.skriptlang.skript.lang.context.Expression<? extends T>) parseExpressionList_i(log, types);
 	}
 
-	private @Nullable Expression<?> parseExpressionList(ParseLogHandler log, ExprInfo info) {
+	private @Nullable org.skriptlang.skript.lang.context.Expression<?> parseExpressionList(ParseLogHandler log, ExprInfo info) {
 		return parseExpressionList_i(log, info);
 	}
 
-	private @Nullable Expression<?> parseExpressionList(ParseLogHandler log, OrderedExprInfo info) {
+	private @Nullable org.skriptlang.skript.lang.context.Expression<?> parseExpressionList(ParseLogHandler log, OrderedExprInfo info) {
 		return parseExpressionList_i(log, info);
 	}
 
-	private @Nullable Expression<?> parseExpressionList_i(ParseLogHandler log, Object data) {
+	private @Nullable org.skriptlang.skript.lang.context.Expression<?> parseExpressionList_i(ParseLogHandler log, Object data) {
 		OrderedExprInfo orderedExprInfo = data instanceof OrderedExprInfo info ? info : null;
 		ExprInfo exprInfo = data instanceof ExprInfo info ? info : null;
 		Class<?>[] types = orderedExprInfo == null && exprInfo == null ? (Class<?>[]) data : null;
@@ -1004,7 +1004,7 @@ public final class SkriptParser {
 			return null;
 		}
 
-		List<Expression<?>> parsedExpressions = new ArrayList<>();
+		List<org.skriptlang.skript.lang.context.Expression<?>> parsedExpressions = new ArrayList<>();
 		boolean isLiteralList = true;
 		Kleenean and = Kleenean.UNKNOWN;
 		// given "a, b, c" try "a, ab, ac" when starting with "a"
@@ -1020,7 +1020,7 @@ public final class SkriptParser {
 
 				// allow parsing as a list only if subExpr is wrapped with parentheses
 				SkriptParser parser = new SkriptParser(this, subExpr);
-				Expression<?> parsedExpression;
+				org.skriptlang.skript.lang.context.Expression<?> parsedExpression;
 				if (subExpr.startsWith("(") && subExpr.endsWith(")") && next(subExpr, 0, context) == subExpr.length()) {
 					if (orderedExprInfo != null) {
 						int infoIndex = parsedExpressions.size();
@@ -1147,9 +1147,9 @@ public final class SkriptParser {
 			//noinspection unchecked, rawtypes
 			return new LiteralList(literals, superReturnType, returnTypes, !and.isFalse());
 		} else {
-			Expression<?>[] expressions = parsedExpressions.toArray(new Expression[0]);
+			org.skriptlang.skript.lang.context.Expression<?>[] expressions = parsedExpressions.toArray(new org.skriptlang.skript.lang.context.Expression[0]);
 			//noinspection unchecked, rawtypes
-			return new ExpressionList(expressions, superReturnType, returnTypes, !and.isFalse());
+			return new org.skriptlang.skript.lang.context.ExpressionList(expressions, superReturnType, returnTypes, !and.isFalse());
 		}
 	}
 
@@ -1194,7 +1194,7 @@ public final class SkriptParser {
 
 			SkriptParser skriptParser = new SkriptParser(args, flags | PARSE_LITERALS, context)
 				.suppressMissingAndOrWarnings();
-			Expression<?>[] params = args.isEmpty() ? new Expression[0] : null;
+			org.skriptlang.skript.lang.context.Expression<?>[] params = args.isEmpty() ? new org.skriptlang.skript.lang.context.Expression[0] : null;
 
 			String namespace = null;
 			ParserInstance parser = getParser();
@@ -1297,17 +1297,17 @@ public final class SkriptParser {
 		}
 	}
 
-	private Expression<?> @Nullable [] getFunctionArguments(Supplier<Expression<?>> parsing, String args) {
+	private org.skriptlang.skript.lang.context.Expression<?> @Nullable [] getFunctionArguments(Supplier<Expression<?>> parsing, String args) {
 		if (args.isEmpty()) {
-			return new Expression[0];
+			return new org.skriptlang.skript.lang.context.Expression[0];
 		}
 
-		Expression<?> parsedExpression = parsing.get();
+		org.skriptlang.skript.lang.context.Expression<?> parsedExpression = parsing.get();
 		if (parsedExpression == null) {
 			return null;
 		}
 
-		Expression<?>[] params;
+		org.skriptlang.skript.lang.context.Expression<?>[] params;
 		if (parsedExpression instanceof ExpressionList) {
 			if (!parsedExpression.getAnd()) {
 				Skript.error("Function arguments must be separated by commas and optionally an 'and', but not an 'or'."
@@ -1316,7 +1316,7 @@ public final class SkriptParser {
 			}
 			params = ((ExpressionList<?>) parsedExpression).getExpressions();
 		} else {
-			params = new Expression[] {parsedExpression};
+			params = new org.skriptlang.skript.lang.context.Expression[] {parsedExpression};
 		}
 
 		return params;
@@ -1338,10 +1338,11 @@ public final class SkriptParser {
 		List<Argument<?>> arguments = command.getArguments();
 		assert arguments.size() == parseResult.exprs.length;
 		for (int i = 0; i < parseResult.exprs.length; i++) {
-			if (parseResult.exprs[i] == null)
+			if (parseResult.exprs[i] == null) {
 				arguments.get(i).setToDefault(event);
-			else
+			} else {
 				arguments.get(i).set(event, parseResult.exprs[i].getArray(event));
+			}
 		}
 		return true;
 	}
