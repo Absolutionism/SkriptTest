@@ -46,4 +46,8 @@ public class GroupPatternElement extends PatternElement {
 		return patternElement.getAllCombinations(clean);
 	}
 
+	@Override
+	public boolean containsRegex() {
+		return patternElement.containsRegex() || super.containsRegex();
+	}
 }

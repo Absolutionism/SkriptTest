@@ -55,4 +55,8 @@ public class OptionalPatternElement extends PatternElement {
 		return combinations;
 	}
 
+	@Override
+	public boolean containsRegex() {
+		return patternElement.containsRegex() || super.containsRegex();
+	}
 }

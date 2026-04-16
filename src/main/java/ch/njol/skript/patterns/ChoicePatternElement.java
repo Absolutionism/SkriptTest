@@ -70,4 +70,13 @@ public class ChoicePatternElement extends PatternElement {
 		return combinations;
 	}
 
+	@Override
+	public boolean containsRegex() {
+		for (PatternElement patternElement : patternElements) {
+			if (patternElement.containsRegex())
+				return true;
+		}
+		return super.containsRegex();
+	}
+
 }

@@ -68,4 +68,8 @@ public class RegexPatternElement extends PatternElement {
 		return new HashSet<>(Set.of(toString()));
 	}
 
+	@Override
+	public boolean containsRegex() {
+		return true;
+	}
 }

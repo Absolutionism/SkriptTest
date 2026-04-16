@@ -402,7 +402,7 @@ public class PatternConflictsTest extends SkriptJUnitTest {
 	 * Whether the info messages from the process of {@link #testConflicts()} should broadcast
 	 * via {@link Skript#adminBroadcast(String)}.
 	 */
-	public static boolean BROADCAST = false;
+	public static boolean BROADCAST = true;
 
 	private static final Set<Exclusion> EXCLUSIONS = new HashSet<>();
 

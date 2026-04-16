@@ -102,6 +102,15 @@ public abstract class PatternElement {
 		return combinations;
 	}
 
+	public boolean containsRegex() {
+		PatternElement next = this;
+		while ((next = next.originalNext) != null) {
+			if (next.containsRegex())
+				return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Helper method for appropriately combining two strings together.
 	 * @return The resulting string.
