@@ -4,6 +4,7 @@ import ch.njol.skript.Skript;
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
+import ch.njol.skript.util.Utils;
 import ch.njol.util.Kleenean;
 import ch.njol.yggdrasil.Fields;
 import com.google.common.base.Preconditions;
@@ -344,6 +345,28 @@ public class SimpleEntityData extends EntityData<Entity> implements ItemTypeComp
 		}
 		//</editor-fold>
 
+		//<editor-fold desc="Auto Register" defaultstate="collapsed">
+		for (EntityType entityType : EntityType.values()) {
+			Class<? extends Entity> entityClass = entityType.getEntityClass();
+			// EntityData relies on an entity class, so if there isn't one associated, skip
+			if (entityClass == null)
+				continue;
+			// Check SimpleEntity to see if it's been manually registered above.
+			// Can not be done through #isRegistered because SimpleEntityData's are registered after this
+			if (PATTERN_GROUPS.stream().anyMatch(group -> {
+				SimpleEntityDataInfo info = group.data();
+				return info != null && info.entityClass().equals(entityClass);}
+			))
+				continue;
+			// Check if an EntityData class has registered this entity
+			if (isRegistered(entityClass))
+				continue;
+			String name = entityType.getKey().value().replace("_", " ");
+			String[] data = getEntityRegistrationData(name);
+			buildSimple(entityClass, data[0], data[1]);
+		}
+		//</editor-fold>
+
 		//noinspection unchecked
 		GROUPS = new EntityDataPatterns<>(PATTERN_GROUPS.toArray(PatternGroup[]::new));
 
@@ -356,6 +379,43 @@ public class SimpleEntityData extends EntityData<Entity> implements ItemTypeComp
 		);
 	}
 	//</editor-fold>
+
+	/**
+	 * Helper method for grabbing the pattern and codename of {@code name}.
+	 * @param name The name representation of an entity
+	 * @return String[pattern, codename]
+	 */
+	private static String[] getEntityRegistrationData(String name) {
+		String pluralName = Utils.toEnglishPlural(name);
+		String pluralEnding = "";
+		String shared = name;
+		boolean containsAll = true;
+		for (int i = 0; i < name.length(); i++) {
+			String part = name.substring(0, name.length() - i);
+			if (pluralName.contains(part)) {
+				pluralEnding = pluralName.substring(name.length() - i);
+				shared = part;
+				break;
+			}
+			containsAll = false;
+		}
+		String pattern = shared;
+		String codename = shared;
+		String closeBracket = "]";
+		if (!containsAll) {
+			String singularEnding = name.substring(shared.length());
+			pattern += "(" + singularEnding + "|";
+			codename += "¦" + singularEnding;
+			closeBracket = ")";
+		} else {
+			pattern += "[";
+		}
+		pattern += "plural:" + pluralEnding + closeBracket;
+		codename += "¦" + pluralEnding;
+		String a = Utils.a(name).split(" ")[0];
+		codename += " @" + a;
+		return new String[] {codename, pattern};
+	}
 	
 	private transient SimpleEntityDataInfo simpleInfo;
 	

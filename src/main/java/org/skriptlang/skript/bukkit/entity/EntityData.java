@@ -12,7 +12,6 @@ import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.SyntaxElement;
-import ch.njol.skript.lang.util.SimpleLiteral;
 import ch.njol.skript.localization.Noun;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.variables.Variables;
@@ -140,7 +139,6 @@ public abstract class EntityData<E extends Entity>
 				.examples("victim is a cow",
 						"spawn a creeper")
 				.since("1.3")
-				.defaultExpression(new SimpleLiteral<>(new SimpleEntityData(Entity.class), true))
 				.before("entitytype")
 				.supplier(ALL_ENTITY_DATAS::iterator)
 				.parser(new Parser<>() {
@@ -199,6 +197,14 @@ public abstract class EntityData<E extends Entity>
 				ALL_ENTITY_DATAS.add(SkriptParser.parseStatic(info.dataName(), new SingleItemIterator<>(info), null));
 			}
 		});
+	}
+
+	public static boolean isRegistered(Class<? extends Entity> entityClass) {
+		for (EntityDataInfo<?, ?> info : INFOS) {
+			if (info.entityClass().equals(entityClass))
+				return true;
+		}
+		return false;
 	}
 
 	/**

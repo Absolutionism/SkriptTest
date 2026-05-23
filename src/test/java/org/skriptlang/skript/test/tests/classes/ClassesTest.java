@@ -7,7 +7,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.inventory.InventoryType;
 import org.junit.Test;
 
-import org.skriptlang.skript.bukkit.entity.creeper.CreeperData;
+import org.skriptlang.skript.bukkit.entity.data.CreeperData;
 import org.skriptlang.skript.bukkit.entity.EntityType;
 import org.skriptlang.skript.bukkit.entity.data.SimpleEntityData;
 import org.skriptlang.skript.bukkit.entity.data.ThrownPotionData;

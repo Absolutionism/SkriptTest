@@ -1,17 +1,15 @@
 package org.skriptlang.skript.bukkit.entity;
 
-import org.bukkit.entity.Entity;
-import org.jetbrains.annotations.Nullable;
-
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.classes.YggdrasilSerializer;
 import ch.njol.skript.lang.ParseContext;
-import ch.njol.skript.lang.util.SimpleLiteral;
 import ch.njol.skript.localization.Language;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Utils;
 import ch.njol.yggdrasil.YggdrasilSerializable;
+import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Class that represents x amount of an {@link EntityData}
@@ -27,7 +25,6 @@ public class EntityType
 				.usage("&lt;<a href='#number'>number</a>&gt; &lt;entity type&gt;")
 				.examples("spawn 5 creepers behind the player")
 				.since("1.3")
-				.defaultExpression(new SimpleLiteral<>(new EntityType(Entity.class, 1), true))
 				.parser(new Parser<>() {
 					@Override
 					public @Nullable EntityType parse(String string, ParseContext context) {
