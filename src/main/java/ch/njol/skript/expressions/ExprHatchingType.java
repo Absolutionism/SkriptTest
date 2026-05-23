@@ -8,7 +8,6 @@ import ch.njol.skript.doc.Events;
 import ch.njol.skript.doc.Example;
 import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
-import ch.njol.skript.entity.EntityData;
 import ch.njol.skript.lang.EventRestrictedSyntax;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
@@ -20,6 +19,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.jetbrains.annotations.Nullable;
+import org.skriptlang.skript.bukkit.entity.EntityData;
 
 @Name("Hatching Entity Type")
 @Description("The type of the entity that will be hatched in a Player Egg Throw event.")
