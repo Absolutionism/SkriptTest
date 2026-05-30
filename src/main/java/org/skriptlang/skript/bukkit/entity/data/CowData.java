@@ -28,7 +28,7 @@ public class CowData extends EntityData<Cow> {
 	private static @Nullable Method getVariantMethod;
 	private static @Nullable Method setVariantMethod;
 
-	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.of("cow¦s @a",
+	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.single("cow:s @a",
 		"<age> [%-cowvariant%] cow[plural:s]", "baby:[%-cowvariant%] cal(f|plural:ves)");
 
 	public static void register() {

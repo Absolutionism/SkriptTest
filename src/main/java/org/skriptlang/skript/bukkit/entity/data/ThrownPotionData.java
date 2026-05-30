@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 
 public class ThrownPotionData extends EntityData<ThrownPotion> {
 
-	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.of("thrown potion¦s @a",
+	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.single("thrown potion:s @a",
 		"thrown (potion[plural:s]|unknown_plural:%-itemtypes%)");
 
 	public static void register() {

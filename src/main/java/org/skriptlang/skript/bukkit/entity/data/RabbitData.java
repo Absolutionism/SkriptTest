@@ -12,23 +12,23 @@ import org.bukkit.entity.Rabbit.Type;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.bukkit.entity.EntityData;
-import org.skriptlang.skript.bukkit.entity.ItemTypeComparable;
+import org.skriptlang.skript.bukkit.entity.EntityItemTypeComparable;
 
 import java.util.Objects;
 
-public class RabbitData extends EntityData<Rabbit> implements ItemTypeComparable {
+public class RabbitData extends EntityData<Rabbit> implements EntityItemTypeComparable {
 
 	private static final Type[] TYPES = Type.values();
 
 	private static final EntityDataPatterns<Type> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "rabbit¦s @a", getPatterns("")),
-		new PatternGroup<>(1, "white rabbit¦s @a", Type.WHITE, getPatterns("white")),
-		new PatternGroup<>(2, "black rabbit¦s @a", Type.BLACK, getPatterns("black")),
-		new PatternGroup<>(3, "black and white rabbit¦s @a", Type.BLACK_AND_WHITE, getPatterns("black [and] white")),
-		new PatternGroup<>(4, "brown rabbit¦s @a", Type.BROWN, getPatterns("brown")),
-		new PatternGroup<>(5, "gold rabbit¦s @a", Type.GOLD, getPatterns("gold")),
-		new PatternGroup<>(6, "salt and pepper rabbit¦s @a", Type.SALT_AND_PEPPER, getPatterns("salt [and] pepper")),
-		new PatternGroup<>(7, "killer rabbit¦s @a", Type.THE_KILLER_BUNNY, getPatterns("killer"))
+		new PatternGroup<>(0, "rabbit:s @a", getPatterns("")),
+		new PatternGroup<>(1, "white rabbit:s @a", Type.WHITE, getPatterns("white")),
+		new PatternGroup<>(2, "black rabbit:s @a", Type.BLACK, getPatterns("black")),
+		new PatternGroup<>(3, "black and white rabbit:s @a", Type.BLACK_AND_WHITE, getPatterns("black [and] white")),
+		new PatternGroup<>(4, "brown rabbit:s @a", Type.BROWN, getPatterns("brown")),
+		new PatternGroup<>(5, "gold rabbit:s @a", Type.GOLD, getPatterns("gold")),
+		new PatternGroup<>(6, "salt and pepper rabbit:s @a", Type.SALT_AND_PEPPER, getPatterns("salt [and] pepper")),
+		new PatternGroup<>(7, "killer rabbit:s @a", Type.THE_KILLER_BUNNY, getPatterns("killer"))
 	);
 
 	private static String[] getPatterns(String prefix) {

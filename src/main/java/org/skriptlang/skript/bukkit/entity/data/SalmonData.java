@@ -25,17 +25,17 @@ public class SalmonData extends EntityData<Salmon> {
 		if (SUPPORT_SALMON_VARIANTS) {
 			VARIANTS = Salmon.Variant.values();
 			GROUPS = new EntityDataPatterns<>(
-				new PatternGroup<>(0, "salmon¦s @a", "[any] salmon[plural:s]"),
-				new PatternGroup<>(1, "small salmon¦s @a", Variant.SMALL, "small salmon[plural:s]"),
-				new PatternGroup<>(2, "medium salmon¦s @a", Variant.MEDIUM, "medium salmon[plural:s]"),
-				new PatternGroup<>(3, "large salmon¦s @a", Variant.LARGE, "large salmon[plural:s]")
+				new PatternGroup<>(0, "salmon:s @a", "[any] salmon[plural:s]"),
+				new PatternGroup<>(1, "small salmon:s @a", Variant.SMALL, "small salmon[plural:s]"),
+				new PatternGroup<>(2, "medium salmon:s @a", Variant.MEDIUM, "medium salmon[plural:s]"),
+				new PatternGroup<>(3, "large salmon:s @a", Variant.LARGE, "large salmon[plural:s]")
 			);
 
 			Variables.yggdrasil.registerSingleClass(Variant.class, "Salmon.Variant");
 		} else {
 			VARIANTS = null;
 			//noinspection unchecked
-			GROUPS = (EntityDataPatterns<Object>) EntityDataPatterns.of("salmon¦s @a", "salmon[plural:s]");
+			GROUPS = (EntityDataPatterns<Object>) EntityDataPatterns.single("salmon:s @a", "salmon[plural:s]");
 		}
 
 		registerInfo(

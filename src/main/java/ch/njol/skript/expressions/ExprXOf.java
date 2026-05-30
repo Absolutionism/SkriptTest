@@ -95,7 +95,7 @@ public class ExprXOf extends PropertyExpression<Object, Object> {
 				return type;
 			} else if (object instanceof EntityType ogType) {
 				EntityType entityType = ogType.clone();
-				entityType.amount = (int) absAmount;
+				entityType.setAmount((int) absAmount);
 				return entityType;
 			} else if (object instanceof ParticleEffect particleEffect) {
 				ParticleEffect effect = particleEffect.copy();

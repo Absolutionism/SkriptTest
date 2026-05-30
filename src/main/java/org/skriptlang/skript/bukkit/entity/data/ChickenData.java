@@ -22,7 +22,7 @@ public class ChickenData extends EntityData<Chicken> {
 	private static boolean VARIANTS_ENABLED;
 	private static Object[] VARIANTS;
 
-	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.of("chicken¦s @a",
+	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.single("chicken:s @a",
 		"<age> [%-chickenvariant%] chicken[plural:s]", "baby:[%-chickenvariant%] chick[plural:s]");
 
 	public static void register() {

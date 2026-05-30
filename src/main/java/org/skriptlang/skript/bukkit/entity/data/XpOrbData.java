@@ -13,9 +13,7 @@ import java.util.function.Consumer;
 
 public class XpOrbData extends EntityData<ExperienceOrb> {
 
-	private final static String FORMAT = "%2$s-%1$s";
-
-	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.of("experience orb¦s @an",
+	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.single("experience orb:s @an",
 		"([e]xp|experience)( |-)orb[plural:s]");
 
 	public static void register() {
@@ -101,7 +99,7 @@ public class XpOrbData extends EntityData<ExperienceOrb> {
 
 	@Override
 	public String toString(final int flags) {
-		return xp == -1 ? super.toString(flags) : String.format(FORMAT, super.toString(flags), xp);
+		return xp == -1 ? super.toString(flags) : String.format("%2$s-%1$s", super.toString(flags), xp);
 	}
 
 	public int getExperience() {

@@ -20,7 +20,7 @@ public class CatData extends EntityData<Cat> {
 
 	private static Type[] TYPES;
 
-	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.of("cat¦s @a",
+	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.single("cat:s @a",
 		"<age> [%-cattype%] cat[plural:s]", "tamed <age> ocelot[plural:s]", "baby:[%-cattype%] kitten[plural:s]");
 
 	public static void register() {

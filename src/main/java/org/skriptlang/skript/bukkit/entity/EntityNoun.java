@@ -13,8 +13,8 @@ public class EntityNoun {
 
 	private final String original;
 	private int gender = 0;
-	private String singular;
-	private String plural;
+	private final String singular;
+	private final String plural;
 
 	public EntityNoun(String original) {
 		this.original = original;
@@ -81,9 +81,9 @@ public class EntityNoun {
 	}
 
 	/**
-	 * Gets this noun appended with an article.
+	 * Returns the article appropriate for this gender & the provided flags.
 	 * @param flags The flags for determining plurality.
-	 * @return The noun.
+	 * @return The article with a trailing space (as no article is possible in which case the empty string is returned)
 	 * @see Noun#getArticleWithSpace(int, int)
 	 */
 	public String getArticleWithSpace(int flags) {

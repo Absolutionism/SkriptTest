@@ -23,7 +23,7 @@ public class ZombieNautilusData extends EntityData<ZombieNautilus> {
 
 	private static Variant[] VARIANTS;
 
-	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.of("zombie nautilus¦es @a",
+	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.single("zombie nautilus:es @a",
 		"[:tamed] [%-zombienautilusvariant%] (zombie|zombified) nautilus[plural:es]");
 
 	public static void register() {

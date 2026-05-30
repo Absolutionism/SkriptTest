@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @deprecated Use {@link org.skriptlang.skript.bukkit.entity.EntityType} instead.
  */
+@SuppressWarnings("removal")
 @Deprecated(forRemoval = true, since = "INSERT VERSION")
 public abstract class EntityType implements Cloneable, YggdrasilSerializable {
 
@@ -39,20 +40,20 @@ public abstract class EntityType implements Cloneable, YggdrasilSerializable {
 		data = EntityData.fromClass(entityClass);
 		this.amount = amount;
 		if (!(this instanceof org.skriptlang.skript.bukkit.entity.EntityType))
-			this.newEntityType = new org.skriptlang.skript.bukkit.entity.EntityType(entityClass, amount);
+			this.newEntityType = new org.skriptlang.skript.bukkit.entity.EntityType((org.skriptlang.skript.bukkit.entity.EntityData<?>) data, amount);
 	}
 
 	public EntityType(Entity entity) {
 		data = EntityData.fromEntity(entity);
 		if (!(this instanceof org.skriptlang.skript.bukkit.entity.EntityType))
-			this.newEntityType = new org.skriptlang.skript.bukkit.entity.EntityType(entity);
+			this.newEntityType = new org.skriptlang.skript.bukkit.entity.EntityType((org.skriptlang.skript.bukkit.entity.EntityData<?>) data, -1);
 	}
 
 	public EntityType(EntityType other) {
 		amount = other.amount;
 		data = other.data;
 		if (!(this instanceof org.skriptlang.skript.bukkit.entity.EntityType))
-			this.newEntityType = new org.skriptlang.skript.bukkit.entity.EntityType(other.newEntityType);
+			this.newEntityType = new org.skriptlang.skript.bukkit.entity.EntityType((org.skriptlang.skript.bukkit.entity.EntityData<?>) data, amount);
 	}
 
 	public boolean isInstance(Entity entity) {

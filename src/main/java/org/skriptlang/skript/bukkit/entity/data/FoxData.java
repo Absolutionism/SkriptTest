@@ -18,9 +18,9 @@ public class FoxData extends EntityData<Fox> {
 	private static final Type[] TYPES = Type.values();
 
 	private static final EntityDataPatterns<Type> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "fox¦es @a", getPatterns("")),
-		new PatternGroup<>(1, "red fox¦es @a", Type.RED, getPatterns("red")),
-		new PatternGroup<>(2, "snow fox¦es @a", Type.SNOW, getPatterns("snow"))
+		new PatternGroup<>(0, "fox:es @a", getPatterns("")),
+		new PatternGroup<>(1, "red fox:es @a", Type.RED, getPatterns("red")),
+		new PatternGroup<>(2, "snow fox:es @a", Type.SNOW, getPatterns("snow"))
 	);
 
 	private static String[] getPatterns(String prefix) {

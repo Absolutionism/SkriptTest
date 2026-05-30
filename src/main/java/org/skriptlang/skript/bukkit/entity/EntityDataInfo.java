@@ -19,7 +19,7 @@ import java.util.SequencedCollection;
  * @param <Data> The entity data class.
  * @param <E> The entity class that {@code data} uses.
  */
-public interface EntityDataInfo<Data extends EntityData<E>, E extends Entity> extends SyntaxInfo<Data> {
+public sealed interface EntityDataInfo<Data extends EntityData<E>, E extends Entity> extends SyntaxInfo<Data> permits EntityDataInfoImpl {
 
 	/**
 	 * @return The name this info is identified as.
@@ -34,7 +34,9 @@ public interface EntityDataInfo<Data extends EntityData<E>, E extends Entity> ex
 	/**
 	 * @return The default {@link PatternGroup}.
 	 */
-	PatternGroup<?> defaultGroup();
+	default PatternGroup<?> defaultGroup() {
+		return dataPatterns().getPatternGroup(defaultGroupIndex());
+	}
 
 	/**
 	 * @return The index of the default {@link PatternGroup}.

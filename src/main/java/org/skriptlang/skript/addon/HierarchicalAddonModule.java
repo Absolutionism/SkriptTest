@@ -21,7 +21,6 @@ public abstract class HierarchicalAddonModule implements AddonModule {
 
 	private final @Nullable AddonModule parentModule;
 	private final List<AddonModule> loadableChildren = new ArrayList<>();
-	private boolean childrenLoaded = false;
 
 	/**
 	 * Constructs a module with no parent.
@@ -119,7 +118,7 @@ public abstract class HierarchicalAddonModule implements AddonModule {
 	protected abstract void loadSelf(SkriptAddon addon);
 
 	@Override
-	public final void load(SkriptAddon addon) {
+	public void load(SkriptAddon addon) {
 		loadSelf(addon);
 		loadChildren(addon);
 	}
@@ -130,9 +129,6 @@ public abstract class HierarchicalAddonModule implements AddonModule {
 	 * @param addon The addon this module belongs to.
 	 */
 	public final void loadChildren(SkriptAddon addon) {
-		if (childrenLoaded)
-			return;
-		childrenLoaded = true;
 		for (AddonModule child : loadableChildren) {
 			child.load(addon);
 		}

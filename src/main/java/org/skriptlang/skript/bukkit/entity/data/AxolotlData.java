@@ -16,12 +16,12 @@ import java.util.Objects;
 public class AxolotlData extends EntityData<Axolotl> {
 
 	private static final EntityDataPatterns<Variant> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "axolotl¦s @an", getPatterns("")),
-		new PatternGroup<>(1, "lucy axolotl¦s @a", Variant.LUCY, getPatterns("lucy")),
-		new PatternGroup<>(2, "wild axolotl¦s @a", Variant.WILD, getPatterns("wild")),
-		new PatternGroup<>(3, "gold axolotl¦s @a", Variant.GOLD, getPatterns("gold")),
-		new PatternGroup<>(4, "cyan axolotl¦s @a", Variant.CYAN, getPatterns("cyan")),
-		new PatternGroup<>(5, "blue axolotl¦s @a", Variant.BLUE, getPatterns("blue"))
+		new PatternGroup<>(0, "axolotl:s @an", getPatterns("")),
+		new PatternGroup<>(1, "lucy axolotl:s @a", Variant.LUCY, getPatterns("lucy")),
+		new PatternGroup<>(2, "wild axolotl:s @a", Variant.WILD, getPatterns("wild")),
+		new PatternGroup<>(3, "gold axolotl:s @a", Variant.GOLD, getPatterns("gold")),
+		new PatternGroup<>(4, "cyan axolotl:s @a", Variant.CYAN, getPatterns("cyan")),
+		new PatternGroup<>(5, "blue axolotl:s @a", Variant.BLUE, getPatterns("blue"))
 	);
 
 	private static final Variant[] VARIANTS = Variant.values();

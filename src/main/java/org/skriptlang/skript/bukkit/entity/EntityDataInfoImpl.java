@@ -13,10 +13,10 @@ import org.skriptlang.skript.registration.SyntaxInfo;
 import org.skriptlang.skript.util.Priority;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SequencedCollection;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import static org.skriptlang.skript.bukkit.entity.EntityData.AGE_PATTERN;
@@ -33,8 +33,8 @@ final class EntityDataInfoImpl<B extends Builder<B, Data, E>, Data extends Entit
 	private final @Nullable EntityType entityType;
 	private final Class<? extends E> entityClass;
 
-	private final Map<Integer, PatternGroup<?>> matchedPatternToGroup = new ConcurrentHashMap<>();
-	private final Map<Integer, Integer> matchedPatternToGroupPattern = new ConcurrentHashMap<>();
+	private final Map<Integer, PatternGroup<?>> matchedPatternToGroup = new HashMap<>();
+	private final Map<Integer, Integer> matchedPatternToGroupPattern = new HashMap<>();
 
 	private final SyntaxInfo<Data> defaultInfo;
 
@@ -47,8 +47,8 @@ final class EntityDataInfoImpl<B extends Builder<B, Data, E>, Data extends Entit
 		@Nullable EntityType entityType,
 		Class<? extends E> entityClass
 	) {
-		assert entityClass != null && dataPatterns.getPatternGroups().length != 0;
-		assert defaultIndex < dataPatterns.getPatternGroups().length;
+		assert entityClass != null && !dataPatterns.getPatternGroups().isEmpty();
+		assert defaultIndex < dataPatterns.getPatternGroups().size();
 		this.defaultInfo = defaultInfo;
 		this.dataClass = dataClass;
 		this.dataName = dataName;
@@ -100,11 +100,6 @@ final class EntityDataInfoImpl<B extends Builder<B, Data, E>, Data extends Entit
 	@Override
 	public EntityDataPatterns<?> dataPatterns() {
 		return dataPatterns;
-	}
-
-	@Override
-	public PatternGroup<?> defaultGroup() {
-		return dataPatterns.getPatternGroup(defaultIndex);
 	}
 
 	@Override
@@ -191,6 +186,7 @@ final class EntityDataInfoImpl<B extends Builder<B, Data, E>, Data extends Entit
 			this.dataClass = dataClass;
 			this.dataName = dataName;
 			this.defaultBuilder = SyntaxInfo.builder(dataClass)
+				.origin(EntityModule.origin)
 				.addPattern("");
 		}
 

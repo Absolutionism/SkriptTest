@@ -16,15 +16,15 @@ public class BeeData extends EntityData<Bee> {
 	public record BeeState(Kleenean angry, Kleenean nectar) {}
 
 	private static final EntityDataPatterns<BeeState> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "bee¦s @a", new BeeState(Kleenean.UNKNOWN, Kleenean.UNKNOWN), "<age> bee[plural:s]"),
-		new PatternGroup<>(1, "no nectar bee¦s @a", new BeeState(Kleenean.UNKNOWN, Kleenean.FALSE), "<age> bee[plural:s] with(out| no) nectar"),
-		new PatternGroup<>(2, "nectar bee¦s @a", new BeeState(Kleenean.UNKNOWN, Kleenean.TRUE), "<age> bee[plural:s] with nectar"),
-		new PatternGroup<>(3, "happy bee¦s @a", new BeeState(Kleenean.FALSE, Kleenean.UNKNOWN), "<age> happy bee[plural:s]"),
-		new PatternGroup<>(4, "happy nectar bee¦s @a", new BeeState(Kleenean.FALSE, Kleenean.TRUE), "<age> happy bee[plural:s] with nectar"),
-		new PatternGroup<>(5, "happy no nectar bee¦s @a", new BeeState(Kleenean.FALSE, Kleenean.FALSE), "<age> happy bee[plural:s] with(out| no) nectar"),
-		new PatternGroup<>(6, "angry bee¦s @a", new BeeState(Kleenean.TRUE, Kleenean.UNKNOWN), "<age> angry bee[plural:s]"),
-		new PatternGroup<>(7, "angry no nectar bee¦s @a", new BeeState(Kleenean.TRUE, Kleenean.FALSE), "<age> angry bee[plural:s] with(out| no) nectar"),
-		new PatternGroup<>(8, "angry nectar bee¦s @a", new BeeState(Kleenean.TRUE, Kleenean.TRUE), "<age> angry bee[plural:s] with nectar")
+		new PatternGroup<>(0, "bee:s @a", new BeeState(Kleenean.UNKNOWN, Kleenean.UNKNOWN), "<age> bee[plural:s]"),
+		new PatternGroup<>(1, "no nectar bee:s @a", new BeeState(Kleenean.UNKNOWN, Kleenean.FALSE), "<age> bee[plural:s] with(out| no) nectar"),
+		new PatternGroup<>(2, "nectar bee:s @a", new BeeState(Kleenean.UNKNOWN, Kleenean.TRUE), "<age> bee[plural:s] with nectar"),
+		new PatternGroup<>(3, "happy bee:s @a", new BeeState(Kleenean.FALSE, Kleenean.UNKNOWN), "<age> happy bee[plural:s]"),
+		new PatternGroup<>(4, "happy nectar bee:s @a", new BeeState(Kleenean.FALSE, Kleenean.TRUE), "<age> happy bee[plural:s] with nectar"),
+		new PatternGroup<>(5, "happy no nectar bee:s @a", new BeeState(Kleenean.FALSE, Kleenean.FALSE), "<age> happy bee[plural:s] with(out| no) nectar"),
+		new PatternGroup<>(6, "angry bee:s @a", new BeeState(Kleenean.TRUE, Kleenean.UNKNOWN), "<age> angry bee[plural:s]"),
+		new PatternGroup<>(7, "angry no nectar bee:s @a", new BeeState(Kleenean.TRUE, Kleenean.FALSE), "<age> angry bee[plural:s] with(out| no) nectar"),
+		new PatternGroup<>(8, "angry nectar bee:s @a", new BeeState(Kleenean.TRUE, Kleenean.TRUE), "<age> angry bee[plural:s] with nectar")
 	);
 
 	public static void register() {

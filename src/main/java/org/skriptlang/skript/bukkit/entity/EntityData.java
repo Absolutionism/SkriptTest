@@ -84,7 +84,7 @@ public abstract class EntityData<E extends Entity>
 		}
 	}
 
-	public static final String AGE_PATTERN = "(unknown_age:|baby:(baby|young)|adult:(adult|grown(-| )up))";
+	public static final String AGE_PATTERN = "[baby:(baby|young)|adult:(adult|grown(-| )up)]";
 	public static final EntityNoun AGE_BABY = new EntityNoun("baby");
 	public static final EntityNoun AGE_ADULT = new EntityNoun("adult");
 
@@ -186,6 +186,7 @@ public abstract class EntityData<E extends Entity>
 		});
 	}
 
+	//<editor-fold desc="Static Methods" defaultstate="collapsed">
 	public static void onRegistrationStop() {
 		INFOS.forEach(info -> {
 			if (SimpleEntityData.class.equals(info.type())) {
@@ -199,6 +200,11 @@ public abstract class EntityData<E extends Entity>
 		});
 	}
 
+	/**
+	 * Whether the {@code entityClass} is already registered.
+	 * @param entityClass The entity class to check.
+	 * @return {@code true} if registered, otherwise {@code false}.
+	 */
 	public static boolean isRegistered(Class<? extends Entity> entityClass) {
 		for (EntityDataInfo<?, ?> info : INFOS) {
 			if (info.entityClass().equals(entityClass))
@@ -206,6 +212,200 @@ public abstract class EntityData<E extends Entity>
 		}
 		return false;
 	}
+
+	/**
+	 * Retrieves the {@link EntityDataInfo} registered for the given {@code entityDataClass}.
+	 *
+	 * @param entityDataClass The {@link EntityData} class to look up.
+	 * @return The corresponding {@link EntityDataInfo} instance.
+	 * @throws SkriptAPIException if the class has not been registered.
+	 */
+	public static EntityDataInfo<?, ?> getInfo(Class<? extends EntityData<?>> entityDataClass) {
+		for (EntityDataInfo<?, ?> info : INFOS) {
+			if (info.type() == entityDataClass)
+				return info;
+		}
+		throw new SkriptAPIException("Unregistered EntityData class " + entityDataClass.getName());
+	}
+
+	/**
+	 * Retrieves the {@link EntityDataInfo} associated with the given {@code codeName}.
+	 *
+	 * @param dataName The code name used to register the entity data.
+	 * @return The corresponding {@link EntityDataInfo}, or {@code null} if not found.
+	 */
+	public static @Nullable EntityDataInfo<?, ?> getInfo(String dataName) {
+		for (EntityDataInfo<?, ?> info : INFOS) {
+			if (info.dataName().equals(dataName))
+				return info;
+		}
+		return null;
+	}
+
+	/**
+	 * Prints errors.
+	 *
+	 * @param string String with optional indefinite article at the beginning
+	 * @return The parsed entity data
+	 */
+	public static @Nullable EntityData<?> parse(String string) {
+		Iterator<EntityDataInfo<EntityData<?>, ?>> it = new ArrayList<>(INFOS).iterator();
+		return SkriptParser.parseStatic(Noun.stripIndefiniteArticle(string), it, null);
+	}
+
+	/**
+	 * Prints errors.
+	 *
+	 * @param string
+	 * @return The parsed entity data
+	 */
+	public static @Nullable EntityData<?> parseWithoutIndefiniteArticle(String string) {
+		Iterator<EntityDataInfo<EntityData<?>, ?>> it = new ArrayList<>(INFOS).iterator();
+		return SkriptParser.parseStatic(string, it, null);
+	}
+
+	/**
+	 * Gets all entities that match any of the provided {@code types} and is a subclass of {@code type}.
+	 * Providing {@code worlds} only gets entities in those worlds, otherwise gets entities in all worlds.
+	 * @param types The types of entities to retrieve.
+	 * @param type The super type of the entities wanting to retrieve.
+	 * @param worlds The worlds to get from, or null for all worlds.
+	 * @return All entities of this type in the given worlds.
+	 */
+	@SuppressWarnings({"null", "unchecked"})
+	public static <E extends Entity> E[] getAll(EntityData<?>[] types, Class<E> type, World @Nullable [] worlds) {
+		assert types.length > 0;
+		if (type == Player.class) {
+			if (worlds == null)
+				return (E[]) Bukkit.getOnlinePlayers().toArray(new Player[0]);
+			List<Player> list = new ArrayList<>();
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				if (CollectionUtils.contains(worlds, player.getWorld()))
+					list.add(player);
+			}
+			return (E[]) list.toArray(new Player[0]);
+		}
+		List<E> list = new ArrayList<>();
+		if (worlds == null)
+			worlds = Bukkit.getWorlds().toArray(new World[0]);
+		for (World world : worlds) {
+			for (E entity : world.getEntitiesByClass(type)) {
+				for (EntityData<?> entityData : types) {
+					if (entityData.isInstance(entity)) {
+						list.add(entity);
+						break;
+					}
+				}
+			}
+		}
+		return list.toArray((E[]) Array.newInstance(type, list.size()));
+	}
+
+	/**
+	 * Gets all entities that match any of the provided {@code types} and is a subclass of {@code type},
+	 * within the provided {@code chunks}.
+	 * @param types The types of entities to retrieve.
+	 * @param type The super type of the entities wanting to retrieve.
+	 * @param chunks The chunks to get from.
+	 * @return All entities of this type in the given chunks.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <E extends Entity> E[] getAll(EntityData<?>[] types, Class<E> type, Chunk[] chunks) {
+		assert types.length > 0;
+		List<E> list = new ArrayList<>();
+		for (Chunk chunk : chunks) {
+			for (Entity entity : chunk.getEntities()) {
+				for (EntityData<?> entityData : types) {
+					if (entityData.isInstance(entity)) {
+						list.add(((E) entity));
+						break;
+					}
+				}
+			}
+		}
+		return list.toArray((E[]) Array.newInstance(type, list.size()));
+	}
+
+	/**
+	 * Internally resolves and returns an {@link EntityData} instance that best represents either
+	 * a given {@link Entity} instance or its {@link Class}.
+	 * <p>
+	 *     Only one of {@code entityClass} or {@code entity} must be non-null.
+	 *     This method looks through all registered {@link EntityDataInfo}s and selects the closest matching one
+	 *     that successfully initializes from the provided input.
+	 * </p>
+	 *
+	 * @param entityClass The class of the entity to represent, or {@code null} if using an instance.
+	 * @param entity      The entity instance to represent, of {@code null} is using a class.
+	 * @return An appropriate {@link EntityData} representing the input class or entity.
+	 * 			If no registered data matches, a {@link SimpleEntityData} is returned as fallback.
+	 */
+	private static <E extends Entity> EntityData<? super E> getData(@Nullable Class<E> entityClass, @Nullable E entity) {
+		assert entityClass == null ^ entity == null;
+		assert entityClass == null || entityClass.isInterface();
+		EntityDataInfo<?, ?> closestInfo = null;
+		EntityData<E> closestData = null;
+		for (EntityDataInfo<?, ?> info : INFOS) {
+			if (info.entityClass() == Entity.class)
+				continue;
+			if (entity == null ? info.entityClass().isAssignableFrom(entityClass) : info.entityClass().isInstance(entity)) {
+				EntityData<E> entityData = null;
+				try {
+					//noinspection unchecked
+					entityData = (EntityData<E>) info.instance();
+				} catch (Exception ignored) {}
+				if (entityData != null && entityData.init(entityClass, entity)) {
+					if (closestInfo == null || closestInfo.entityClass().isAssignableFrom(info.entityClass())) {
+						closestInfo = info;
+						closestData = entityData;
+					}
+				}
+			}
+		}
+		if (closestInfo == null) {
+			if (entity != null)
+				return new SimpleEntityData(entity);
+			return new SimpleEntityData(entityClass);
+		}
+		return closestData;
+	}
+
+	/**
+	 * Creates an {@link EntityData} that represents the given entity class.
+	 *
+	 * @param entityClass The class of the entity (e.g. {@code Pig.class}).
+	 * @return An {@link EntityData} representing the provided class.
+	 */
+	public static <E extends Entity> EntityData<? super E> fromClass(Class<E> entityClass) {
+		return getData(entityClass, null);
+	}
+
+	/**
+	 * Creates an {@link EntityData} that represents the given entity instance.
+	 *
+	 * @param entity The entity to represent.
+	 * @return An {@link EntityData} representing the provided entity.
+	 */
+	public static <E extends Entity> EntityData<? super E> fromEntity(E entity) {
+		return getData(null, entity);
+	}
+
+	public static String toString(Entity entity) {
+		return fromEntity(entity).getSuperType().toString();
+	}
+
+	public static String toString(Class<? extends Entity> entityClass) {
+		return fromClass(entityClass).getSuperType().toString();
+	}
+
+	public static String toString(Entity entity, int flags) {
+		return fromEntity(entity).getSuperType().toString(flags);
+	}
+
+	public static String toString(Class<? extends Entity> entityClass, int flags) {
+		return fromClass(entityClass).getSuperType().toString(flags);
+	}
+	//</editor-fold>
 
 	/**
 	 * Helper method for getting a newly constructed {@link Builder}.
@@ -287,10 +487,10 @@ public abstract class EntityData<E extends Entity>
 	/**
 	 * Initializes this {@link EntityData}.
 	 * <p>
-	 *     As of Skript 2.13, code names can have multiple patterns registered in the default.lang file.
+	 *     As of Skript 2.13, code names can have multiple patterns.
 	 *     {@code matchedGroup} will be the index of the code name the matched pattern is linked to.
 	 *     		(e.g. {@link PigData} "unsaddled pig" = 0, "pig" = 1, "saddled pig" = 2)
-	 *     {@code matchedPattern} will be the index of the pattern used from the patterns of the code name in the lang file.
+	 *     {@code matchedPattern} will be the index of the pattern used from the patterns of the group.
 	 * </p>
 	 *
 	 * @param exprs An array of {@link Literal} expressions from the matched pattern, in the order they appear.
@@ -462,56 +662,13 @@ public abstract class EntityData<E extends Entity>
 	}
 
 	/**
-	 * Retrieves the {@link EntityDataInfo} registered for the given {@code entityDataClass}.
-	 *
-	 * @param entityDataClass The {@link EntityData} class to look up.
-	 * @return The corresponding {@link EntityDataInfo} instance.
-	 * @throws SkriptAPIException if the class has not been registered.
+	 * Applies common data of this {@link EntityData} to a newly spawned {@link Entity}.
+	 * <p>
+	 *     This is used during entity spawning to set additional data, such as a baby pig.
+	 *     Proceeded by {@link #set(Entity)} for other data determined by each implementation.
+	 * </p>
+	 * @param entity The spawned entity.
 	 */
-	public static EntityDataInfo<?, ?> getInfo(Class<? extends EntityData<?>> entityDataClass) {
-		for (EntityDataInfo<?, ?> info : INFOS) {
-			if (info.type() == entityDataClass)
-				return info;
-		}
-		throw new SkriptAPIException("Unregistered EntityData class " + entityDataClass.getName());
-	}
-
-	/**
-	 * Retrieves the {@link EntityDataInfo} associated with the given {@code codeName}.
-	 *
-	 * @param dataName The code name used to register the entity data.
-	 * @return The corresponding {@link EntityDataInfo}, or {@code null} if not found.
-	 */
-	public static @Nullable EntityDataInfo<?, ?> getInfo(String dataName) {
-		for (EntityDataInfo<?, ?> info : INFOS) {
-			if (info.dataName().equals(dataName))
-				return info;
-		}
-		return null;
-	}
-
-	/**
-	 * Prints errors.
-	 *
-	 * @param string String with optional indefinite article at the beginning
-	 * @return The parsed entity data
-	 */
-	public static @Nullable EntityData<?> parse(String string) {
-		Iterator<EntityDataInfo<EntityData<?>, ?>> it = new ArrayList<>(INFOS).iterator();
-		return SkriptParser.parseStatic(Noun.stripIndefiniteArticle(string), it, null);
-	}
-
-	/**
-	 * Prints errors.
-	 *
-	 * @param string
-	 * @return The parsed entity data
-	 */
-	public static @Nullable EntityData<?> parseWithoutIndefiniteArticle(String string) {
-		Iterator<EntityDataInfo<EntityData<?>, ?>> it = new ArrayList<>(INFOS).iterator();
-		return SkriptParser.parseStatic(string, it, null);
-	}
-
 	private E apply(E entity) {
 		if (baby.isTrue()) {
 			EntityUtils.setBaby(entity);
@@ -585,6 +742,11 @@ public abstract class EntityData<E extends Entity>
 		}
 	}
 
+	/**
+	 * Gets all entities that match this {@link EntityData} via {@link #match(Entity)}, in the provided {@code worlds}.
+	 * @param worlds The {@link World}s to get entities from.
+	 * @return The entities found.
+	 */
 	@SuppressWarnings("unchecked")
 	public E[] getAll(World... worlds) {
 		assert worlds != null && worlds.length > 0 : Arrays.toString(worlds);
@@ -599,137 +761,10 @@ public abstract class EntityData<E extends Entity>
 	}
 
 	/**
-	 * @param types
-	 * @param type
-	 * @param worlds worlds or null for all
-	 * @return All entities of this type in the given worlds
+	 * Whether the provided {@code entity} is an instance of the entity class and matches,
+	 * @param entity The entity to check.
+	 * @return {@code true} if instance and matches, otherwise {@code false}.
 	 */
-	@SuppressWarnings({"null", "unchecked"})
-	public static <E extends Entity> E[] getAll(EntityData<?>[] types, Class<E> type, World @Nullable [] worlds) {
-		assert types.length > 0;
-		if (type == Player.class) {
-			if (worlds == null)
-				return (E[]) Bukkit.getOnlinePlayers().toArray(new Player[0]);
-			List<Player> list = new ArrayList<>();
-			for (Player player : Bukkit.getOnlinePlayers()) {
-				if (CollectionUtils.contains(worlds, player.getWorld()))
-					list.add(player);
-			}
-			return (E[]) list.toArray(new Player[0]);
-		}
-		List<E> list = new ArrayList<>();
-		if (worlds == null)
-			worlds = Bukkit.getWorlds().toArray(new World[0]);
-		for (World world : worlds) {
-			for (E entity : world.getEntitiesByClass(type)) {
-				for (EntityData<?> entityData : types) {
-					if (entityData.isInstance(entity)) {
-						list.add(entity);
-						break;
-					}
-				}
-			}
-		}
-		return list.toArray((E[]) Array.newInstance(type, list.size()));
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <E extends Entity> E[] getAll(EntityData<?>[] types, Class<E> type, Chunk[] chunks) {
-		assert types.length > 0;
-		List<E> list = new ArrayList<>();
-		for (Chunk chunk : chunks) {
-			for (Entity entity : chunk.getEntities()) {
-				for (EntityData<?> entityData : types) {
-					if (entityData.isInstance(entity)) {
-						list.add(((E) entity));
-						break;
-					}
-				}
-			}
-		}
-		return list.toArray((E[]) Array.newInstance(type, list.size()));
-	}
-
-	/**
-	 * Internally resolves and returns an {@link EntityData} instance that best represents either
-	 * a given {@link Entity} instance or its {@link Class}.
-	 * <p>
-	 *     Only one of {@code entityClass} or {@code entity} must be non-null.
-	 *     This method looks through all registered {@link EntityDataInfo}s and selects the closest matching one
-	 *     that successfully initializes from the provided input.
-	 * </p>
-	 *
-	 * @param entityClass The class of the entity to represent, or {@code null} if using an instance.
-	 * @param entity      The entity instance to represent, of {@code null} is using a class.
-	 * @return An appropriate {@link EntityData} representing the input class or entity.
-	 * 			If no registered data matches, a {@link SimpleEntityData} is returned as fallback.
-	 */
-	private static <E extends Entity> EntityData<? super E> getData(@Nullable Class<E> entityClass, @Nullable E entity) {
-		assert entityClass == null ^ entity == null;
-		assert entityClass == null || entityClass.isInterface();
-		EntityDataInfo<?, ?> closestInfo = null;
-		EntityData<E> closestData = null;
-		for (EntityDataInfo<?, ?> info : INFOS) {
-			if (info.entityClass() == Entity.class)
-				continue;
-			if (entity == null ? info.entityClass().isAssignableFrom(entityClass) : info.entityClass().isInstance(entity)) {
-				EntityData<E> entityData = null;
-				try {
-					//noinspection unchecked
-					entityData = (EntityData<E>) info.instance();
-				} catch (Exception ignored) {}
-				if (entityData != null && entityData.init(entityClass, entity)) {
-					if (closestInfo == null || closestInfo.entityClass().isAssignableFrom(info.entityClass())) {
-						closestInfo = info;
-						closestData = entityData;
-					}
-				}
-			}
-		}
-		if (closestInfo == null) {
-			if (entity != null)
-				return new SimpleEntityData(entity);
-			return new SimpleEntityData(entityClass);
-		}
-		return closestData;
-	}
-
-	/**
-	 * Creates an {@link EntityData} that represents the given entity class.
-	 *
-	 * @param entityClass The class of the entity (e.g. {@code Pig.class}).
-	 * @return An {@link EntityData} representing the provided class.
-	 */
-	public static <E extends Entity> EntityData<? super E> fromClass(Class<E> entityClass) {
-		return getData(entityClass, null);
-	}
-
-	/**
-	 * Creates an {@link EntityData} that represents the given entity instance.
-	 *
-	 * @param entity The entity to represent.
-	 * @return An {@link EntityData} representing the provided entity.
-	 */
-	public static <E extends Entity> EntityData<? super E> fromEntity(E entity) {
-		return getData(null, entity);
-	}
-
-	public static String toString(Entity entity) {
-		return fromEntity(entity).getSuperType().toString();
-	}
-
-	public static String toString(Class<? extends Entity> entityClass) {
-		return fromClass(entityClass).getSuperType().toString();
-	}
-
-	public static String toString(Entity entity, int flags) {
-		return fromEntity(entity).getSuperType().toString(flags);
-	}
-
-	public static String toString(Class<? extends Entity> entityClass, int flags) {
-		return fromClass(entityClass).getSuperType().toString(flags);
-	}
-
 	@SuppressWarnings("unchecked")
 	public final boolean isInstance(@Nullable Entity entity) {
 		if (entity == null)
@@ -758,8 +793,8 @@ public abstract class EntityData<E extends Entity>
 	public abstract boolean isSupertypeOf(EntityData<?> entityData);
 
 	@Internal
-	@Deprecated(forRemoval = true, since = "INSERT VERSION")
 	@Override
+	@Deprecated(forRemoval = true, since = "INSERT VERSION")
 	public boolean isSupertypeOf(ch.njol.skript.entity.EntityData<?> entityData) {
 		return isSupertypeOf((EntityData<?>) entityData);
 	}
@@ -864,8 +899,8 @@ public abstract class EntityData<E extends Entity>
 		 * @param patterns The patterns that refer to the entity.
 		 * @return The constructed {@link EntityDataPatterns}.
 		 */
-		public static EntityDataPatterns<?> of(String name, String... patterns) {
-			return of(name, null, patterns);
+		public static EntityDataPatterns<?> single(String name, String... patterns) {
+			return single(name, null, patterns);
 		}
 
 		/**
@@ -876,13 +911,13 @@ public abstract class EntityData<E extends Entity>
 		 * @return The constructed {@link EntityDataPatterns}.
 		 * @param <Data> The type of data correlating to the entity.
 		 */
-		public static <Data> EntityDataPatterns<Data> of(String name, @Nullable Data data, String... patterns) {
+		public static <Data> EntityDataPatterns<Data> single(String name, @Nullable Data data, String... patterns) {
 			return new EntityDataPatterns<>(
 				new PatternGroup<>(0, name, data, patterns)
 			);
 		}
 
-		private final PatternGroup<Data>[] patternGroups;
+		private final SequencedCollection<PatternGroup<Data>> patternGroups;
 		private final Map<Integer, PatternGroup<Data>> groupMap = new HashMap<>();
 		private final Map<Data, PatternGroup<Data>> dataMap = new HashMap<>();
 		private PatternGroup<Data> genericGroup;
@@ -890,7 +925,7 @@ public abstract class EntityData<E extends Entity>
 
 		@SafeVarargs
 		public EntityDataPatterns(PatternGroup<Data>... patternGroups) {
-			this.patternGroups = patternGroups;
+			this.patternGroups = List.of(patternGroups);
 			for (PatternGroup<Data> group : patternGroups) {
 				groupMap.put(group.index(), group);
 				dataMap.put(group.data(), group);
@@ -920,7 +955,7 @@ public abstract class EntityData<E extends Entity>
 		 * Gets the {@link PatternGroup}s provided when constructed.
 		 * @return The {@link PatternGroup}s.
 		 */
-		public PatternGroup<Data>[] getPatternGroups() {
+		public SequencedCollection<PatternGroup<Data>> getPatternGroups() {
 			return patternGroups;
 		}
 
@@ -1001,7 +1036,7 @@ public abstract class EntityData<E extends Entity>
 	}
 
 	/**
-	 * Grouping of data for an entity that is to be parsed and retrievable.
+	 * Grouping of data for an entity that is to be parsed and retrieved.
 	 * @param index The index of the entity/this {@link PatternGroup}.
 	 * @param name The name of the entity.
 	 * @param data The object representing a state of the entity.

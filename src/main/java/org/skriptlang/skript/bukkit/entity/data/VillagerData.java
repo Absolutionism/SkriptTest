@@ -28,22 +28,22 @@ public class VillagerData extends EntityData<Villager> {
 	};
 
 	private static final EntityDataPatterns<Profession> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "villager¦s @a", getPatterns("villager")),
-		new PatternGroup<>(1, "unemployed villager¦s @an", Profession.NONE, getPatterns("(unemployed|jobless|normal) villager")),
-		new PatternGroup<>(2, "armorer¦s @an", Profession.ARMORER, getPatterns("armo[u]rer")),
-		new PatternGroup<>(3, "butcher¦s @a", Profession.BUTCHER, getPatterns("butcher")),
-		new PatternGroup<>(4, "cartographer¦s @a", Profession.CARTOGRAPHER, getPatterns("cartographer")),
-		new PatternGroup<>(5, "cleric¦s @a", Profession.CLERIC, getPatterns("cleric")),
-		new PatternGroup<>(6, "farmer¦s @a", Profession.FARMER, getPatterns("farmer")),
-		new PatternGroup<>(7, "fisherman¦s @a", Profession.FISHERMAN, getPatterns("fisherman")),
-		new PatternGroup<>(8, "fletcher¦s @a", Profession.FLETCHER, getPatterns("fletcher")),
-		new PatternGroup<>(9, "leatherworker¦s @a", Profession.LEATHERWORKER, getPatterns("leatherworker")),
-		new PatternGroup<>(10, "librarian¦s @a", Profession.LIBRARIAN, getPatterns("librarian")),
-		new PatternGroup<>(11, "mason¦s @a", Profession.MASON, getPatterns("mason")),
-		new PatternGroup<>(12, "nitwit¦s @a", Profession.NITWIT, getPatterns("nitwit")),
-		new PatternGroup<>(12, "shepherd¦s @a", Profession.SHEPHERD, getPatterns("shepherd")),
-		new PatternGroup<>(14, "toolsmith¦s @a", Profession.TOOLSMITH, getPatterns("tool[ ](smith|maker)")),
-		new PatternGroup<>(15, "weaponsmith¦s @a", Profession.WEAPONSMITH, getPatterns("weapon[ ]smith"))
+		new PatternGroup<>(0, "villager:s @a", getPatterns("villager")),
+		new PatternGroup<>(1, "unemployed villager:s @an", Profession.NONE, getPatterns("(unemployed|jobless|normal) villager")),
+		new PatternGroup<>(2, "armorer:s @an", Profession.ARMORER, getPatterns("armo[u]rer")),
+		new PatternGroup<>(3, "butcher:s @a", Profession.BUTCHER, getPatterns("butcher")),
+		new PatternGroup<>(4, "cartographer:s @a", Profession.CARTOGRAPHER, getPatterns("cartographer")),
+		new PatternGroup<>(5, "cleric:s @a", Profession.CLERIC, getPatterns("cleric")),
+		new PatternGroup<>(6, "farmer:s @a", Profession.FARMER, getPatterns("farmer")),
+		new PatternGroup<>(7, "fisherman:s @a", Profession.FISHERMAN, getPatterns("fisherman")),
+		new PatternGroup<>(8, "fletcher:s @a", Profession.FLETCHER, getPatterns("fletcher")),
+		new PatternGroup<>(9, "leatherworker:s @a", Profession.LEATHERWORKER, getPatterns("leatherworker")),
+		new PatternGroup<>(10, "librarian:s @a", Profession.LIBRARIAN, getPatterns("librarian")),
+		new PatternGroup<>(11, "mason:s @a", Profession.MASON, getPatterns("mason")),
+		new PatternGroup<>(12, "nitwit:s @a", Profession.NITWIT, getPatterns("nitwit")),
+		new PatternGroup<>(12, "shepherd:s @a", Profession.SHEPHERD, getPatterns("shepherd")),
+		new PatternGroup<>(14, "toolsmith:s @a", Profession.TOOLSMITH, getPatterns("tool[ ](smith|maker)")),
+		new PatternGroup<>(15, "weaponsmith:s @a", Profession.WEAPONSMITH, getPatterns("weapon[ ]smith"))
 	);
 
 	private static String[] getPatterns(String prefix) {

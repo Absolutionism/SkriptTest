@@ -24,17 +24,17 @@ public class WolfData extends EntityData<Wolf> {
 	public record WolfStates(Kleenean angry, Kleenean tamed) {}
 
 	private static final EntityDataPatterns<WolfStates> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "wol¦f¦ves @a", new WolfStates(Kleenean.UNKNOWN, Kleenean.UNKNOWN),
+		new PatternGroup<>(0, "wol:f:ves @a", new WolfStates(Kleenean.UNKNOWN, Kleenean.UNKNOWN),
 			"<age> [%-wolfvariant%] wol(f|plural:ves) [[with collar] colo[u]r[ed] %-color%]"),
-		new PatternGroup<>(1, "wild wol¦f¦ves @a", new WolfStates(Kleenean.UNKNOWN, Kleenean.FALSE),
+		new PatternGroup<>(1, "wild wol:f:ves @a", new WolfStates(Kleenean.UNKNOWN, Kleenean.FALSE),
 			"(wild|untamed) <age> [%-wolfvariant%] wol(f|plural:ves) [[with collar] colo[u]r[ed] %-color%]"),
-		new PatternGroup<>(2, "tamed wol¦f¦ves @a", new WolfStates(Kleenean.UNKNOWN, Kleenean.TRUE),
+		new PatternGroup<>(2, "tamed wol:f:ves @a", new WolfStates(Kleenean.UNKNOWN, Kleenean.TRUE),
 			"<age> [%-wolfvariant%] dog[plural:s] [[with collar] colo[u]r[ed] %-color%]",
 			"tamed <age> [%-wolfvariant%] wol(f|plural:ves) [[with collar] colo[u]r[ed] %-color%]",
 			"baby:[%-wolfvariant%] [wolf] pup[py|plural:pies] [[with collar] colo[u]r[ed] %-color%]"),
-		new PatternGroup<>(3, "angry wol¦f¦ves @an", new WolfStates(Kleenean.TRUE, Kleenean.UNKNOWN),
+		new PatternGroup<>(3, "angry wol:f:ves @an", new WolfStates(Kleenean.TRUE, Kleenean.UNKNOWN),
 			"(angry|aggressive) <age> [%-wolfvariant%] wol(f|plural:ves) [[with collar] colo[u]r[ed] %-color%]"),
-		new PatternGroup<>(4, "peaceful wol¦f¦ves @a", new WolfStates(Kleenean.FALSE, Kleenean.UNKNOWN),
+		new PatternGroup<>(4, "peaceful wol:f:ves @a", new WolfStates(Kleenean.FALSE, Kleenean.UNKNOWN),
 			"(peaceful|neutral|unaggressive) <age> [%-wolfvariant%] wol(f|plural:ves) [[with collar] colo[u]r[ed] %-color%]")
 	);
 

@@ -18,9 +18,9 @@ public class MooshroomData extends EntityData<MushroomCow> {
 	private static final Variant[] VARIANTS = Variant.values();
 
 	private static final EntityDataPatterns<Variant> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "mooshroom¦s @a", getPatterns("")),
-		new PatternGroup<>(1, "red mooshroom¦s @a", Variant.RED, getPatterns("red")),
-		new PatternGroup<>(2, "brown mooshroom¦s @a", Variant.BROWN, getPatterns("brown"))
+		new PatternGroup<>(0, "mooshroom:s @a", getPatterns("")),
+		new PatternGroup<>(1, "red mooshroom:s @a", Variant.RED, getPatterns("red")),
+		new PatternGroup<>(2, "brown mooshroom:s @a", Variant.BROWN, getPatterns("brown"))
 	);
 
 	private static String[] getPatterns(String prefix) {

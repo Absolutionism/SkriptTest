@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class NautilusData extends EntityData<Nautilus> {
 
-	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.of("nautilus¦es @a", "[:tamed] <age> nautilus[plural:es]");
+	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.single("nautilus:es @a", "[:tamed] <age> nautilus[plural:es]");
 
 	public static void register() {
 		registerInfo(

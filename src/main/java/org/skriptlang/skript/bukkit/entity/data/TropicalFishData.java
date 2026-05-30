@@ -20,19 +20,19 @@ public class TropicalFishData extends EntityData<TropicalFish> {
 	private static final Pattern[] FISH_PATTERNS = Pattern.values();
 
 	private static final EntityDataPatterns<Pattern> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "tropical fish¦es @a", getPatterns("")),
-		new PatternGroup<>(1, "betty¦s @a", Pattern.BETTY, getPatterns("betty")),
-		new PatternGroup<>(2, "blockfish¦s @a", Pattern.BLOCKFISH, getPatterns("blockfish")),
-		new PatternGroup<>(3, "brinely¦s @a", Pattern.BRINELY, getPatterns("brinely")),
-		new PatternGroup<>(4, "clayfish¦s @a", Pattern.CLAYFISH, getPatterns("clayfish")),
-		new PatternGroup<>(5, "dasher¦s @a", Pattern.DASHER, getPatterns("dasher")),
-		new PatternGroup<>(6, "flopper¦s @a", Pattern.FLOPPER, getPatterns("flopper")),
-		new PatternGroup<>(7, "glitter¦s @a", Pattern.GLITTER, getPatterns("glitter")),
-		new PatternGroup<>(8, "kob¦s @a", Pattern.KOB, getPatterns("kob")),
-		new PatternGroup<>(9, "snooper¦s @a", Pattern.SNOOPER, getPatterns("snooper")),
-		new PatternGroup<>(10, "spotty¦s @a", Pattern.SPOTTY, getPatterns("spotty")),
-		new PatternGroup<>(11, "stripey¦s @a", Pattern.STRIPEY, getPatterns("stripey")),
-		new PatternGroup<>(12, "sunstreak¦s @a", Pattern.SUNSTREAK, getPatterns("sunstreak"))
+		new PatternGroup<>(0, "tropical fish:es @a", getPatterns("")),
+		new PatternGroup<>(1, "betty:s @a", Pattern.BETTY, getPatterns("betty")),
+		new PatternGroup<>(2, "blockfish:s @a", Pattern.BLOCKFISH, getPatterns("blockfish")),
+		new PatternGroup<>(3, "brinely:s @a", Pattern.BRINELY, getPatterns("brinely")),
+		new PatternGroup<>(4, "clayfish:s @a", Pattern.CLAYFISH, getPatterns("clayfish")),
+		new PatternGroup<>(5, "dasher:s @a", Pattern.DASHER, getPatterns("dasher")),
+		new PatternGroup<>(6, "flopper:s @a", Pattern.FLOPPER, getPatterns("flopper")),
+		new PatternGroup<>(7, "glitter:s @a", Pattern.GLITTER, getPatterns("glitter")),
+		new PatternGroup<>(8, "kob:s @a", Pattern.KOB, getPatterns("kob")),
+		new PatternGroup<>(9, "snooper:s @a", Pattern.SNOOPER, getPatterns("snooper")),
+		new PatternGroup<>(10, "spotty:s @a", Pattern.SPOTTY, getPatterns("spotty")),
+		new PatternGroup<>(11, "stripey:s @a", Pattern.STRIPEY, getPatterns("stripey")),
+		new PatternGroup<>(12, "sunstreak:s @a", Pattern.SUNSTREAK, getPatterns("sunstreak"))
 	);
 
 	private static String[] getPatterns(String prefix) {

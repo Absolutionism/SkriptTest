@@ -12,9 +12,9 @@ import org.skriptlang.skript.bukkit.entity.EntityData;
 public class StriderData extends EntityData<Strider> {
 
 	private static final EntityDataPatterns<Kleenean> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "strider¦s @a", Kleenean.UNKNOWN, getPatterns("")),
-		new PatternGroup<>(1, "warm strider¦s @a", Kleenean.FALSE, getPatterns("warm")),
-		new PatternGroup<>(2, "shivering strider¦s @a, cold strider¦s @a", Kleenean.TRUE, getPatterns("(cold|shivering)"))
+		new PatternGroup<>(0, "strider:s @a", Kleenean.UNKNOWN, getPatterns("")),
+		new PatternGroup<>(1, "warm strider:s @a", Kleenean.FALSE, getPatterns("warm")),
+		new PatternGroup<>(2, "shivering strider:s @a, cold strider:s @a", Kleenean.TRUE, getPatterns("(cold|shivering)"))
 	);
 
 	private static String[] getPatterns(String prefix) {

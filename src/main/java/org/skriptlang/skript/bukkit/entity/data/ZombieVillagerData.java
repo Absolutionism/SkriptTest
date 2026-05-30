@@ -22,22 +22,22 @@ public class ZombieVillagerData extends EntityData<ZombieVillager> {
 	};
 
 	private static final EntityDataPatterns<Profession> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "zombie villager¦s @a", getPatterns("zombie villager")),
-		new PatternGroup<>(1, "unemployed zombie villager¦s @an", Profession.NONE, getPatterns("(unemployed|jobless|normal) zombie villager")),
-		new PatternGroup<>(2, "zombie armorer¦s @an", Profession.ARMORER, getPatterns("zombie armo[u]rer")),
-		new PatternGroup<>(3, "zombie butcher¦s @a", Profession.BUTCHER, getPatterns("zombie butcher")),
-		new PatternGroup<>(4, "zombie cartographer¦s @a", Profession.CARTOGRAPHER, getPatterns("zombie cartographer")),
-		new PatternGroup<>(5, "zombie cleric¦s @a", Profession.CLERIC, getPatterns("zombie cleric")),
-		new PatternGroup<>(6, "zombie farmer¦s @a", Profession.FARMER, getPatterns("zombie farmer")),
-		new PatternGroup<>(7, "zombie fisherman¦s @a", Profession.FISHERMAN, getPatterns("zombie fisherman")),
-		new PatternGroup<>(8, "zombie fletcher¦s @a", Profession.FLETCHER, getPatterns("zombie fletcher")),
-		new PatternGroup<>(9, "zombie leatherworker¦s @a", Profession.LEATHERWORKER, getPatterns("zombie leatherworker")),
-		new PatternGroup<>(10, "zombie librarian¦s @a", Profession.LIBRARIAN, getPatterns("zombie librarian")),
-		new PatternGroup<>(11, "zombie mason¦s @a", Profession.MASON, getPatterns("zombie mason")),
-		new PatternGroup<>(12, "zombie nitwit¦s @a", Profession.NITWIT, getPatterns("zombie nitwit")),
-		new PatternGroup<>(12, "zombie shepherd¦s @a", Profession.SHEPHERD, getPatterns("zombie shepherd")),
-		new PatternGroup<>(14, "zombie toolsmith¦s @a", Profession.TOOLSMITH, getPatterns("zombie tool[ ](smith|maker)")),
-		new PatternGroup<>(15, "zombie weaponsmith¦s @a", Profession.WEAPONSMITH, getPatterns("zombie weapon[ ]smith"))
+		new PatternGroup<>(0, "zombie villager:s @a", getPatterns("zombie villager")),
+		new PatternGroup<>(1, "unemployed zombie villager:s @an", Profession.NONE, getPatterns("(unemployed|jobless|normal) zombie villager")),
+		new PatternGroup<>(2, "zombie armorer:s @an", Profession.ARMORER, getPatterns("zombie armo[u]rer")),
+		new PatternGroup<>(3, "zombie butcher:s @a", Profession.BUTCHER, getPatterns("zombie butcher")),
+		new PatternGroup<>(4, "zombie cartographer:s @a", Profession.CARTOGRAPHER, getPatterns("zombie cartographer")),
+		new PatternGroup<>(5, "zombie cleric:s @a", Profession.CLERIC, getPatterns("zombie cleric")),
+		new PatternGroup<>(6, "zombie farmer:s @a", Profession.FARMER, getPatterns("zombie farmer")),
+		new PatternGroup<>(7, "zombie fisherman:s @a", Profession.FISHERMAN, getPatterns("zombie fisherman")),
+		new PatternGroup<>(8, "zombie fletcher:s @a", Profession.FLETCHER, getPatterns("zombie fletcher")),
+		new PatternGroup<>(9, "zombie leatherworker:s @a", Profession.LEATHERWORKER, getPatterns("zombie leatherworker")),
+		new PatternGroup<>(10, "zombie librarian:s @a", Profession.LIBRARIAN, getPatterns("zombie librarian")),
+		new PatternGroup<>(11, "zombie mason:s @a", Profession.MASON, getPatterns("zombie mason")),
+		new PatternGroup<>(12, "zombie nitwit:s @a", Profession.NITWIT, getPatterns("zombie nitwit")),
+		new PatternGroup<>(12, "zombie shepherd:s @a", Profession.SHEPHERD, getPatterns("zombie shepherd")),
+		new PatternGroup<>(14, "zombie toolsmith:s @a", Profession.TOOLSMITH, getPatterns("zombie tool[ ](smith|maker)")),
+		new PatternGroup<>(15, "zombie weaponsmith:s @a", Profession.WEAPONSMITH, getPatterns("zombie weapon[ ]smith"))
 	);
 
 	private static String[] getPatterns(String prefix) {

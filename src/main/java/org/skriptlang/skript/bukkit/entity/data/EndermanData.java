@@ -20,10 +20,8 @@ import java.util.Arrays;
 
 public class EndermanData extends EntityData<Enderman> {
 
-	private final static String FORMAT = "%1$s holding %2$s";
-
 	private final static EntityDataPatterns<?> GROUP =
-		EntityDataPatterns.of("ender¦man¦men @an", "enderm(a|plural:e)n [(carrying|holding) %-itemtype%]");
+		EntityDataPatterns.single("ender:man:men @an", "enderm(a|plural:e)n [(carrying|holding) %-itemtype%]");
 
 	public static void register() {
 		registerInfo(
@@ -123,7 +121,7 @@ public class EndermanData extends EntityData<Enderman> {
 		ItemType[] hand = this.hand;
 		if (hand == null)
 			return super.toString(flags);
-		return String.format(FORMAT, super.toString(flags), Classes.toString(hand, false));
+		return String.format("%1$s holding %2$s", super.toString(flags), Classes.toString(hand, false));
 	}
 
 	private boolean isSubhand(@Nullable ItemType[] sub) {

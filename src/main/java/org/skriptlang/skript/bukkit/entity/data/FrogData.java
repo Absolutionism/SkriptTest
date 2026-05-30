@@ -20,10 +20,10 @@ public class FrogData extends EntityData<Frog> {
 	private static final Variant[] VARIANTS = new Variant[]{Variant.TEMPERATE, Variant.WARM, Variant.COLD};
 
 	private static final EntityDataPatterns<Variant> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "frog¦s @a", getPatterns("")),
-		new PatternGroup<>(1, "temperate frog¦s @a", Variant.TEMPERATE, getPatterns("temperate")),
-		new PatternGroup<>(2, "warm frog¦s @a", Variant.WARM, getPatterns("warm")),
-		new PatternGroup<>(3, "cold frog¦s @a", Variant.COLD, getPatterns("cold"))
+		new PatternGroup<>(0, "frog:s @a", getPatterns("")),
+		new PatternGroup<>(1, "temperate frog:s @a", Variant.TEMPERATE, getPatterns("temperate")),
+		new PatternGroup<>(2, "warm frog:s @a", Variant.WARM, getPatterns("warm")),
+		new PatternGroup<>(3, "cold frog:s @a", Variant.COLD, getPatterns("cold"))
 	);
 
 	private static String[] getPatterns(String prefix) {

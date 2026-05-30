@@ -21,8 +21,8 @@ public class EntityType
 	static void register() {
 		Classes.registerClass(new ClassInfo<>(EntityType.class, "entitytype")
 				.name("Entity Type with Amount")
-				.description("An <a href='#entitydata'>entity type</a> with an amount, e.g. '2 zombies'. I might remove this type in the future and make a more general 'type' type, i.e. a type that has a number and a type.")
-				.usage("&lt;<a href='#number'>number</a>&gt; &lt;entity type&gt;")
+				.description("An <a href='#entitydata'>entity type</a> with an amount, e.g. '2 zombies'.")
+				.usage("<number> <entity type>")
 				.examples("spawn 5 creepers behind the player")
 				.since("1.3")
 				.parser(new Parser<>() {
@@ -30,84 +30,18 @@ public class EntityType
 					public @Nullable EntityType parse(String string, ParseContext context) {
 						return EntityType.parse(string);
 					}
-					
+
 					@Override
 					public String toString(EntityType entityType, int flags) {
 						return entityType.toString(flags);
 					}
-					
+
 					@Override
 					public String toVariableNameString(EntityType entityType) {
 						return "entitytype:" + entityType.toString();
 					}
                 })
 				.serializer(new YggdrasilSerializer<>()));
-	}
-
-	public int amount = -1;
-
-	public EntityData<?> data;
-	
-	/**
-	 * Only used for deserialisation
-	 */
-	@SuppressWarnings({"unused", "null"})
-	private EntityType() {
-		super();
-		data = null;
-		amount = 1;
-	}
-	
-	public EntityType(EntityData<?> data, int amount) {
-		super();
-		assert data != null;
-		this.data = data;
-		this.amount = amount;
-	}
-	
-	public EntityType(Class<? extends Entity> entityClass, int amount) {
-		super();
-		assert entityClass != null;
-		data = EntityData.fromClass(entityClass);
-		this.amount = amount;
-	}
-	
-	public EntityType(Entity entity) {
-		data = EntityData.fromEntity(entity);
-	}
-	
-	public EntityType(EntityType other) {
-		amount = other.amount;
-		data = other.data;
-	}
-	
-	public boolean isInstance(Entity entity) {
-		return data.isInstance(entity);
-	}
-	
-	@Override
-	public String toString() {
-		if (getAmount() == 1)
-			return data.toString(0);
-		return amount + " " + data.toString(Language.F_PLURAL);
-	}
-	
-	public String toString(int flags) {
-		if (getAmount() == 1)
-			return data.toString(flags);
-		return amount + " " + data.toString(flags | Language.F_PLURAL);
-	}
-	
-	public int getAmount() {
-		return amount == -1 ? 1 : amount;
-	}
-
-	public EntityData<?> getData() {
-		return data;
-	}
-
-	public boolean sameType(EntityType other) {
-		return data.equals(other.data);
 	}
 
 	public static @Nullable EntityType parse(String string) {
@@ -124,7 +58,66 @@ public class EntityType
 			return null;
 		return new EntityType(data, amount);
 	}
-	
+
+	private int amount = -1;
+
+	private EntityData<?> data;
+
+	/**
+	 * Only used for deserialisation
+	 */
+	@SuppressWarnings({"unused", "null"})
+	private EntityType() {
+		super();
+		data = null;
+		amount = 1;
+	}
+
+	public EntityType(EntityData<?> data, int amount) {
+		super();
+		assert data != null;
+		this.data = data;
+		this.amount = amount;
+	}
+
+	private EntityType(EntityType other) {
+		amount = other.amount;
+		data = other.data;
+	}
+
+	public boolean isInstance(Entity entity) {
+		return data.isInstance(entity);
+	}
+
+	@Override
+	public String toString() {
+		if (getAmount() == 1)
+			return data.toString(0);
+		return amount + " " + data.toString(Language.F_PLURAL);
+	}
+
+	public String toString(int flags) {
+		if (getAmount() == 1)
+			return data.toString(flags);
+		return amount + " " + data.toString(flags | Language.F_PLURAL);
+	}
+
+	public int getAmount() {
+		return amount == -1 ? 1 : amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public EntityData<?> getData() {
+		return data;
+	}
+
+	public boolean sameType(EntityType other) {
+		return data.equals(other.data);
+	}
+
 	@Override
 	public EntityType clone() {
 		return new EntityType(this);
@@ -141,17 +134,9 @@ public class EntityType
 	
 	@Override
 	public boolean equals(@Nullable Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
 		if (!(obj instanceof EntityType other))
 			return false;
-		if (amount != other.amount)
-			return false;
-		if (!data.equals(other.data))
-			return false;
-		return true;
+		return amount == other.amount && data.equals(other.data);
 	}
 	
 }

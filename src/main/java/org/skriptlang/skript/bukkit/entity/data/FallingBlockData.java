@@ -25,10 +25,9 @@ import java.util.function.Consumer;
 
 public class FallingBlockData extends EntityData<FallingBlock> {
 
-	private final static String ERROR_MESSAGE = "Falling blocks must be blocks, not items";
 	private final static EntityNoun ADJECTIVE = new EntityNoun("falling");
 
-	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.of("falling block¦s @a",
+	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.single("falling block:s @a",
 		"falling block[plural:s]", "unknown_plural:falling %-itemtype% [block[s]]");
 
 	public static void register() {
@@ -75,7 +74,7 @@ public class FallingBlockData extends EntityData<FallingBlock> {
 				.filter(Objects::nonNull)
 				.toArray(ItemType[]::new);
 			if (types.length == 0) {
-				Skript.error(ERROR_MESSAGE);
+				Skript.error("Falling blocks must be blocks, not items");
 				return false;
 			}
 		}

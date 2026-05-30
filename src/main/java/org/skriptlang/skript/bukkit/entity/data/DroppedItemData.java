@@ -25,7 +25,7 @@ public class DroppedItemData extends EntityData<Item> {
 
 	private final static EntityNoun ADJECTIVE = new EntityNoun("dropped");
 
-	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.of("dropped item¦s @a",
+	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.single("dropped item:s @a",
 		"dropped item[plural:s]", "unknown_plural:dropped %-itemtypes%", "dropped item entit(y|plural:ies)");
 
 	public static void register() {

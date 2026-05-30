@@ -9,13 +9,17 @@ import org.skriptlang.skript.addon.HierarchicalAddonModule;
 import org.skriptlang.skript.addon.SkriptAddon;
 import org.skriptlang.skript.bukkit.entity.data.*;
 import org.skriptlang.skript.bukkit.entity.displays.DisplayModule;
+import org.skriptlang.skript.bukkit.entity.elements.expressions.ExprDeathMessage;
 import org.skriptlang.skript.bukkit.entity.interactions.InteractionModule;
 import org.skriptlang.skript.bukkit.entity.nautilus.NautilusModule;
 import org.skriptlang.skript.bukkit.entity.player.PlayerModule;
+import org.skriptlang.skript.docs.Origin;
 
 import java.util.List;
 
 public class EntityModule extends HierarchicalAddonModule {
+
+	static Origin origin;
 
 	public EntityModule(AddonModule parentModule) {
 		super(parentModule);
@@ -28,6 +32,12 @@ public class EntityModule extends HierarchicalAddonModule {
 			new NautilusModule(this),
 			new PlayerModule(this)
 		);
+	}
+
+	@Override
+	public void load(SkriptAddon addon) {
+		origin = origin(addon);
+		loadSelf(addon);
 	}
 
 	protected void loadSelf(SkriptAddon addon) {
@@ -44,8 +54,11 @@ public class EntityModule extends HierarchicalAddonModule {
 
 		ClassInfo<EntityType> entityTypeClassInfo = Classes.getExactClassInfo(EntityType.class);
 		assert entityTypeClassInfo != null;
-		entityTypeClassInfo.defaultExpression(new SimpleLiteral<>(new EntityType(Entity.class, 1), true));
+		entityTypeClassInfo.defaultExpression(new SimpleLiteral<>(new EntityType(EntityData.fromClass(Entity.class), 1), true));
 
+		register(addon,
+			ExprDeathMessage::register
+		);
 	}
 
 	@Override

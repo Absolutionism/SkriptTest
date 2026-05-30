@@ -21,16 +21,16 @@ public class LlamaData extends EntityData<Llama> {
 	private static final Color[] LLAMA_COLORS = Color.values();
 
 	private static final EntityDataPatterns<LlamaState> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "llama¦s @a", new LlamaState(null, false), getPatterns("")),
-		new PatternGroup<>(1, "creamy llama¦s @a", new LlamaState(Color.CREAMY, false), getPatterns("creamy")),
-		new PatternGroup<>(2, "white llama¦s @a", new LlamaState(Color.WHITE, false), getPatterns("white")),
-		new PatternGroup<>(3, "brown llama¦s @a", new LlamaState(Color.BROWN, false), getPatterns("brown")),
-		new PatternGroup<>(4, "gray llama¦s @a", new LlamaState(Color.GRAY, false), getPatterns("gray")),
-		new PatternGroup<>(5, "trader llama¦s @a", new LlamaState(null, true), getPatterns("trader")),
-		new PatternGroup<>(6, "creamy trader llama¦s @a", new LlamaState(Color.CREAMY, true), getPatterns("creamy trader")),
-		new PatternGroup<>(7, "white trader llama¦s @a", new LlamaState(Color.WHITE, true), getPatterns("white trader")),
-		new PatternGroup<>(8, "brown trader llama¦s @a", new LlamaState(Color.BROWN, true), getPatterns("brown trader")),
-		new PatternGroup<>(9, "gray trader llama¦s @a", new LlamaState(Color.GRAY, true), getPatterns("gray trader"))
+		new PatternGroup<>(0, "llama:s @a", new LlamaState(null, false), getPatterns("")),
+		new PatternGroup<>(1, "creamy llama:s @a", new LlamaState(Color.CREAMY, false), getPatterns("creamy")),
+		new PatternGroup<>(2, "white llama:s @a", new LlamaState(Color.WHITE, false), getPatterns("white")),
+		new PatternGroup<>(3, "brown llama:s @a", new LlamaState(Color.BROWN, false), getPatterns("brown")),
+		new PatternGroup<>(4, "gray llama:s @a", new LlamaState(Color.GRAY, false), getPatterns("gray")),
+		new PatternGroup<>(5, "trader llama:s @a", new LlamaState(null, true), getPatterns("trader")),
+		new PatternGroup<>(6, "creamy trader llama:s @a", new LlamaState(Color.CREAMY, true), getPatterns("creamy trader")),
+		new PatternGroup<>(7, "white trader llama:s @a", new LlamaState(Color.WHITE, true), getPatterns("white trader")),
+		new PatternGroup<>(8, "brown trader llama:s @a", new LlamaState(Color.BROWN, true), getPatterns("brown trader")),
+		new PatternGroup<>(9, "gray trader llama:s @a", new LlamaState(Color.GRAY, true), getPatterns("gray trader"))
 	);
 
 	private static String[] getPatterns(String prefix) {

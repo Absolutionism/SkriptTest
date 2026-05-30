@@ -12,9 +12,9 @@ import org.skriptlang.skript.bukkit.entity.EntityData;
 public class CreeperData extends EntityData<Creeper> {
 
 	private static final EntityDataPatterns<Kleenean> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "creeper¦s @a", Kleenean.UNKNOWN, "creeper[plural:s]"),
-		new PatternGroup<>(1, "powered creeper¦s @a", Kleenean.TRUE, "(powered|charged) creeper[plural:s]"),
-		new PatternGroup<>(2, "unpowered creeper¦s @an", Kleenean.FALSE, "un(powered|charged) creeper[plural:s]")
+		new PatternGroup<>(0, "creeper:s @a", Kleenean.UNKNOWN, "creeper[plural:s]"),
+		new PatternGroup<>(1, "powered creeper:s @a", Kleenean.TRUE, "(powered|charged) creeper[plural:s]"),
+		new PatternGroup<>(2, "unpowered creeper:s @an", Kleenean.FALSE, "un(powered|charged) creeper[plural:s]")
 	);
 
 	public static void register() {

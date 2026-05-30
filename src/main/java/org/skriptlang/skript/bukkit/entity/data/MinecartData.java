@@ -38,14 +38,14 @@ public class MinecartData extends EntityData<Minecart> {
 	private static final MinecartType[] TYPES = MinecartType.values();
 
 	private static final EntityDataPatterns<MinecartType> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0,  "minecart¦s @a", MinecartType.ANY, "[mine]cart[plural:s]"),
-		new PatternGroup<>(1,  "regular minecart¦s @a", MinecartType.NORMAL, "regular [mine]cart[plural:s]"),
-		new PatternGroup<>(2,  "storage minecart¦s @a", MinecartType.STORAGE, "storage [mine]cart[plural:s]", "[mine]cart[plural:s] with chest[s]"),
-		new PatternGroup<>(3,  "powered minecart¦s @a", MinecartType.POWERED, "powered [mine]cart[plural:s]", "[mine]cart[plural:s] with furnace[s]"),
-		new PatternGroup<>(4,  "hopper minecart¦s @a", MinecartType.HOPPER, "hopper [mine]cart[plural:s]", "[mine]cart[plural:s] with hopper[s]"),
-		new PatternGroup<>(5,  "explosive minecart¦s @an", MinecartType.EXPLOSIVE, "explosive [mine]cart[plural:s]", "[mine]cart[plural:s] with TNT[s]"),
-		new PatternGroup<>(6,  "spawner minecart¦s @a", MinecartType.SPAWNER, "[monster|mob] spawner [mine]cart[plural:s]", "[mine]cart[plural:s] with [monster|mob] spawner[s]"),
-		new PatternGroup<>(7,  "command minecart¦s @a", MinecartType.COMMAND, "command [block] [mine]cart[plural:s]", "[mine]cart[plural:s] with command block[s]")
+		new PatternGroup<>(0,  "minecart:s @a", MinecartType.ANY, "[mine]cart[plural:s]"),
+		new PatternGroup<>(1,  "regular minecart:s @a", MinecartType.NORMAL, "regular [mine]cart[plural:s]"),
+		new PatternGroup<>(2,  "storage minecart:s @a", MinecartType.STORAGE, "storage [mine]cart[plural:s]", "[mine]cart[plural:s] with chest[s]"),
+		new PatternGroup<>(3,  "powered minecart:s @a", MinecartType.POWERED, "powered [mine]cart[plural:s]", "[mine]cart[plural:s] with furnace[s]"),
+		new PatternGroup<>(4,  "hopper minecart:s @a", MinecartType.HOPPER, "hopper [mine]cart[plural:s]", "[mine]cart[plural:s] with hopper[s]"),
+		new PatternGroup<>(5,  "explosive minecart:s @an", MinecartType.EXPLOSIVE, "explosive [mine]cart[plural:s]", "[mine]cart[plural:s] with TNT[s]"),
+		new PatternGroup<>(6,  "spawner minecart:s @a", MinecartType.SPAWNER, "[monster|mob] spawner [mine]cart[plural:s]", "[mine]cart[plural:s] with [monster|mob] spawner[s]"),
+		new PatternGroup<>(7,  "command minecart:s @a", MinecartType.COMMAND, "command [block] [mine]cart[plural:s]", "[mine]cart[plural:s] with command block[s]")
 	);
 
 	public static void register() {

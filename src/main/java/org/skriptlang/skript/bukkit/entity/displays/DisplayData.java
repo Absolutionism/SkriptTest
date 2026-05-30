@@ -26,14 +26,14 @@ public class DisplayData extends EntityData<Display> {
 	public static final Color DEFAULT_BACKGROUND_COLOR = ColorRGB.fromRGBA(0, 0, 0, 64).asBukkitColor();
 
 	private static final EntityDataPatterns<DisplayType> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "display¦s @a", DisplayType.ANY, "display[plural:s]", "display entit(y|plural:ies)"),
-		new PatternGroup<>(1, "block display¦s @a", DisplayType.BLOCK, "block display[plural:s] [of %-blockdata/itemtype%]",
+		new PatternGroup<>(0, "display:s @a", DisplayType.ANY, "display[plural:s]", "display entit(y|plural:ies)"),
+		new PatternGroup<>(1, "block display:s @a", DisplayType.BLOCK, "block display[plural:s] [of %-blockdata/itemtype%]",
 			"block display entit(y|plural:ies) [of %-blockdata/itemtype%]", "%-blockdata/itemtype% block display[plural:s]",
 			"%-blockdata/itemtype% block display entit(y|plural:ies)"),
-		new PatternGroup<>(2, "item display¦s @an", DisplayType.ITEM, "item display[plural:s] [of %-itemtype%]",
+		new PatternGroup<>(2, "item display:s @an", DisplayType.ITEM, "item display[plural:s] [of %-itemtype%]",
 			"item display entit(y|plural:ies) [of %-itemtype%]", "%-itemtype% item display[plural:s]",
 			"%-itemtype% item display entit(y|plural:ies)"),
-		new PatternGroup<>(3, "text display¦s @a", DisplayType.TEXT, "text display[plural:s]",
+		new PatternGroup<>(3, "text display:s @a", DisplayType.TEXT, "text display[plural:s]",
 			"text display entit(y|plural:ies)")
 	);
 

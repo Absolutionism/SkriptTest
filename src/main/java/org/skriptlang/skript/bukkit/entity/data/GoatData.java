@@ -12,9 +12,9 @@ import org.skriptlang.skript.bukkit.entity.EntityData;
 public class GoatData extends EntityData<Goat> {
 
 	private static final EntityDataPatterns<Kleenean> GROUPS = new EntityDataPatterns<>(
-		new PatternGroup<>(0, "goat¦s @a", Kleenean.UNKNOWN, getPatterns("")),
-		new PatternGroup<>(1, "screaming goat¦s @a", Kleenean.TRUE, getPatterns("screaming")),
-		new PatternGroup<>(2, "quiet goat¦s @a", Kleenean.FALSE, getPatterns("quiet"))
+		new PatternGroup<>(0, "goat:s @a", Kleenean.UNKNOWN, getPatterns("")),
+		new PatternGroup<>(1, "screaming goat:s @a", Kleenean.TRUE, getPatterns("screaming")),
+		new PatternGroup<>(2, "quiet goat:s @a", Kleenean.FALSE, getPatterns("quiet"))
 	);
 
 	private static String[] getPatterns(String prefix) {

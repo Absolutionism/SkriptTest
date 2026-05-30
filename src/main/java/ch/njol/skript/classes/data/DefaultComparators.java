@@ -11,7 +11,6 @@ import ch.njol.skript.util.slot.EquipmentSlot;
 import ch.njol.skript.util.slot.Slot;
 import ch.njol.skript.util.slot.SlotWithIndex;
 import ch.njol.util.StringUtils;
-import ch.njol.util.coll.CollectionUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -32,7 +31,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.skriptlang.skript.bukkit.entity.EntityData;
-import org.skriptlang.skript.bukkit.entity.ItemTypeComparable;
+import org.skriptlang.skript.bukkit.entity.EntityItemTypeComparable;
 import org.skriptlang.skript.lang.comparator.Comparator;
 import org.skriptlang.skript.lang.comparator.Comparators;
 import org.skriptlang.skript.lang.comparator.Relation;
@@ -278,8 +277,8 @@ public class DefaultComparators {
 
 			if (entityData instanceof Item item)
 				return Relation.get(itemType.isOfType(item.getItemStack()));
-			if (entityData instanceof ItemTypeComparable itemTypeComparable)
-				return Relation.get(itemTypeComparable.isOfItemType(itemType));
+			if (entityData instanceof EntityItemTypeComparable entityItemTypeComparable)
+				return Relation.get(entityItemTypeComparable.isOfItemType(itemType));
 			for (ItemData data : itemType.getTypes()) {
 				assert data != null;
 				EntityData<?> entity = Aliases.getRelatedEntity(data);
