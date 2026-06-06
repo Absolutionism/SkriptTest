@@ -47,9 +47,10 @@ public class VillagerData extends EntityData<Villager> {
 	);
 
 	private static String[] getPatterns(String prefix) {
-		String first = "<age> " + prefix + "[plural:s]";
-		String second = "baby:" + prefix + " (kid[plural:s]|child[plural:ren])";
-		return new String[]{first, second};
+		return new String[]{
+			"<age> " + prefix + "[plural:s]",
+			"baby:" + prefix + " (kid[plural:s]|child[plural:ren])"
+		};
 	}
 
 	public static void register() {

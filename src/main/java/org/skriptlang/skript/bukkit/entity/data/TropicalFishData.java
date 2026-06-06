@@ -36,13 +36,16 @@ public class TropicalFishData extends EntityData<TropicalFish> {
 	);
 
 	private static String[] getPatterns(String prefix) {
-		String first = "[%-color%[-%-color%]] tropical fish[plural:es]";
-		String second = "fully %-color% tropical fish[plural:es]";
-		if (!prefix.isEmpty()) {
-			first = "[%-color%[-%-color%]] " + prefix + "[plural:s]";
-			second = "fully %-color% " + prefix + "[plural:s]";
+		if (prefix.isEmpty()) {
+			return new String[] {
+				"[%-color%[-%-color%]] tropical fish[plural:es]",
+				"fully %-color% tropical fish[plural:es]"
+			};
 		}
-		return new String[]{first, second};
+		return new String[]{
+			"[%-color%[-%-color%]] " + prefix + "[plural:s]",
+			"fully %-color% " + prefix + "[plural:s]"
+		};
 	}
 
 	public static void register() {

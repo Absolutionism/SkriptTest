@@ -9,6 +9,7 @@ import org.skriptlang.skript.bukkit.entity.EntityData.EntityDataPatterns;
 import org.skriptlang.skript.bukkit.entity.EntityData.PatternGroup;
 import org.skriptlang.skript.bukkit.entity.EntityDataInfo.Builder;
 import org.skriptlang.skript.docs.Origin;
+import org.skriptlang.skript.lang.util.GeneralNoun;
 import org.skriptlang.skript.registration.SyntaxInfo;
 import org.skriptlang.skript.util.Priority;
 
@@ -108,7 +109,7 @@ final class EntityDataInfoImpl<B extends Builder<B, Data, E>, Data extends Entit
 	}
 
 	@Override
-	public SequencedCollection<EntityNoun> names() {
+	public SequencedCollection<GeneralNoun> names() {
 		return dataPatterns.getNames();
 	}
 

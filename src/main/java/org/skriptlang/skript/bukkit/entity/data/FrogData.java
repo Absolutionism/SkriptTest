@@ -21,19 +21,16 @@ public class FrogData extends EntityData<Frog> {
 
 	private static final EntityDataPatterns<Variant> GROUPS = new EntityDataPatterns<>(
 		new PatternGroup<>(0, "frog:s @a", getPatterns("")),
-		new PatternGroup<>(1, "temperate frog:s @a", Variant.TEMPERATE, getPatterns("temperate")),
-		new PatternGroup<>(2, "warm frog:s @a", Variant.WARM, getPatterns("warm")),
-		new PatternGroup<>(3, "cold frog:s @a", Variant.COLD, getPatterns("cold"))
+		new PatternGroup<>(1, "temperate frog:s @a", Variant.TEMPERATE, getPatterns("temperate ")),
+		new PatternGroup<>(2, "warm frog:s @a", Variant.WARM, getPatterns("warm ")),
+		new PatternGroup<>(3, "cold frog:s @a", Variant.COLD, getPatterns("cold "))
 	);
 
 	private static String[] getPatterns(String prefix) {
-		String first = "<age> frog[plural:s]";
-		String second = "baby:frog (kid[plural:s]|child[plural:ren])";
-		if (!prefix.isEmpty()) {
-			first = "<age> " + prefix + " frog[plural:s]";
-			second = "baby:" + prefix + " frog (kid[plural:s]|child[plural:ren])";
-		}
-		return new String[]{first, second};
+		return new String[]{
+			"<age> " + prefix + "frog[plural:s]",
+			"baby:" + prefix + "frog (kid[plural:s]|child[plural:ren])"
+		};
 	}
 
 	public static void register() {

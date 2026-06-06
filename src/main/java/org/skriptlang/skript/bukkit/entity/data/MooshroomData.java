@@ -19,20 +19,16 @@ public class MooshroomData extends EntityData<MushroomCow> {
 
 	private static final EntityDataPatterns<Variant> GROUPS = new EntityDataPatterns<>(
 		new PatternGroup<>(0, "mooshroom:s @a", getPatterns("")),
-		new PatternGroup<>(1, "red mooshroom:s @a", Variant.RED, getPatterns("red")),
-		new PatternGroup<>(2, "brown mooshroom:s @a", Variant.BROWN, getPatterns("brown"))
+		new PatternGroup<>(1, "red mooshroom:s @a", Variant.RED, getPatterns("red ")),
+		new PatternGroup<>(2, "brown mooshroom:s @a", Variant.BROWN, getPatterns("brown "))
 	);
 
 	private static String[] getPatterns(String prefix) {
-		String first = "<age> (mooshroom[ cow]|mushroom cow)[plural:s]";
-		String second = "baby:mooshroom (kid[plural:s]|child[plural:ren])";
-		String third = "baby:(mooshroom|mushroom) cal(f|plural:ves)";
-		if (!prefix.isEmpty()) {
-			first = "<age> " + prefix + " (mooshroom[ cow]|mushroom cow)[plural:s]";
-			second = "baby:" + prefix + " mooshroom (kid[plural:s]|child[plural:ren])";
-			third = "baby:" + prefix + " (mooshroom|mushroom) cal(f|plural:ves)";
-		}
-		return new String[]{first, second, third};
+		return new String[]{
+			"<age> " + prefix + "(mooshroom[ cow]|mushroom cow)[plural:s]",
+			"baby:" + prefix + "mooshroom (kid[plural:s]|child[plural:ren])",
+			"baby:" + prefix + "(mooshroom|mushroom) cal(f|plural:ves)"
+		};
 	}
 
 	public static void register() {

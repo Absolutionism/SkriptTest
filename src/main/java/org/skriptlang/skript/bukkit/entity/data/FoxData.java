@@ -19,18 +19,17 @@ public class FoxData extends EntityData<Fox> {
 
 	private static final EntityDataPatterns<Type> GROUPS = new EntityDataPatterns<>(
 		new PatternGroup<>(0, "fox:es @a", getPatterns("")),
-		new PatternGroup<>(1, "red fox:es @a", Type.RED, getPatterns("red")),
-		new PatternGroup<>(2, "snow fox:es @a", Type.SNOW, getPatterns("snow"))
+		new PatternGroup<>(1, "red fox:es @a", Type.RED, getPatterns("red ")),
+		new PatternGroup<>(2, "snow fox:es @a", Type.SNOW, getPatterns("snow "))
 	);
 
 	private static String[] getPatterns(String prefix) {
-		String first = "<age> fox[plural:es]";
-		String second = "baby:fox (kid[plural:s]|child[plural:ren])";
-		if (!prefix.isEmpty()) {
-			first = "<age> " + prefix + " fox[plural:es]";
-			second = "baby:" + prefix + " fox (kid[plural:s]|child[plural:ren])";
-		}
-		return new String[]{first, second};
+		String first = "<age> " + prefix + "fox[plural:es]";
+		String second = "baby:" + prefix + "fox (kid[plural:s]|child[plural:ren])";
+		return new String[]{
+			"<age> " + prefix + "fox[plural:es]",
+			"baby:" + prefix + "fox (kid[plural:s]|child[plural:ren])"
+		};
 	}
 
 	public static void register() {

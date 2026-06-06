@@ -13,7 +13,7 @@ import org.bukkit.entity.Sheep;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.bukkit.entity.EntityData;
-import org.skriptlang.skript.bukkit.entity.EntityNoun;
+import org.skriptlang.skript.lang.util.GeneralNoun;
 
 import java.util.Arrays;
 
@@ -140,8 +140,8 @@ public class SheepData extends EntityData<Sheep> {
 				if (colors[i] instanceof SkriptColor skriptColor)
 					adjectives[i] = skriptColor.getAdjective();
 		}
-		EntityNoun name = getName();
-		EntityNoun age = getAgeNoun();
+		GeneralNoun name = getName();
+		GeneralNoun age = getAgeNoun();
 		StringBuilder builder = new StringBuilder();
 		builder.append(name.getArticleWithSpace(flags));
 		if (age != null)

@@ -19,21 +19,18 @@ public class ParrotData extends EntityData<Parrot> {
 
 	private static final EntityDataPatterns<Variant> GROUPS = new EntityDataPatterns<>(
 		new PatternGroup<>(0, "parrot:s @a", getPatterns("")),
-		new PatternGroup<>(1, "red parrot:s @a", Variant.RED, getPatterns("red")),
-		new PatternGroup<>(2, "blue parrot:s @a", Variant.BLUE, getPatterns("blue")),
-		new PatternGroup<>(3, "green parrot:s @a", Variant.GREEN, getPatterns("green")),
-		new PatternGroup<>(4, "cyan parrot:s @a", Variant.CYAN, getPatterns("cyan")),
-		new PatternGroup<>(5, "gray parrot:s @a", Variant.GRAY, getPatterns("gray"))
+		new PatternGroup<>(1, "red parrot:s @a", Variant.RED, getPatterns("red ")),
+		new PatternGroup<>(2, "blue parrot:s @a", Variant.BLUE, getPatterns("blue ")),
+		new PatternGroup<>(3, "green parrot:s @a", Variant.GREEN, getPatterns("green ")),
+		new PatternGroup<>(4, "cyan parrot:s @a", Variant.CYAN, getPatterns("cyan ")),
+		new PatternGroup<>(5, "gray parrot:s @a", Variant.GRAY, getPatterns("gray "))
 	);
 
 	private static String[] getPatterns(String prefix) {
-		String first = "<age> parrot[plural:s]";
-		String second = "baby:parrot (kid[plural:s]|child[plural:ren])";
-		if (!prefix.isEmpty()) {
-			first = "<age> " + prefix + " parrot[plural:s]";
-			second = "baby:" + prefix + " parrot (kid[plural:s]|child[plural:ren])";
-		}
-		return new String[]{first, second};
+		return new String[]{
+			"<age> " + prefix + "parrot[plural:s]",
+			"baby:" + prefix + "parrot (kid[plural:s]|child[plural:ren])"
+		};
 	}
 
 	public static void register() {

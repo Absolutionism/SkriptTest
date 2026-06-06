@@ -5,6 +5,7 @@ import ch.njol.skript.aliases.ItemType;
 /**
  * Indicates an {@link EntityData} class is comparable to an {@link ItemType}.
  */
+@FunctionalInterface
 public interface EntityItemTypeComparable {
 
 	/**

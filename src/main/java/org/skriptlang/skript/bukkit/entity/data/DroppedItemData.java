@@ -16,14 +16,14 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.bukkit.entity.EntityData;
-import org.skriptlang.skript.bukkit.entity.EntityNoun;
+import org.skriptlang.skript.lang.util.GeneralNoun;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
 
 public class DroppedItemData extends EntityData<Item> {
 
-	private final static EntityNoun ADJECTIVE = new EntityNoun("dropped");
+	private final static GeneralNoun ADJECTIVE = new GeneralNoun("dropped");
 
 	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.single("dropped item:s @a",
 		"dropped item[plural:s]", "unknown_plural:dropped %-itemtypes%", "dropped item entit(y|plural:ies)");

@@ -1,4 +1,4 @@
-package org.skriptlang.skript.bukkit.entity;
+package org.skriptlang.skript.lang.util;
 
 import ch.njol.skript.localization.Noun;
 import ch.njol.skript.localization.Noun.PluralPair;
@@ -9,14 +9,14 @@ import static ch.njol.skript.localization.Language.F_PLURAL;
  * A {@link Noun}-like class, non-dependent of {@link ch.njol.skript.localization.Language}.
  * Discerns the gender, single, and plurality of a string.
  */
-public class EntityNoun {
+public class GeneralNoun {
 
 	private final String original;
 	private int gender = 0;
 	private final String singular;
 	private final String plural;
 
-	public EntityNoun(String original) {
+	public GeneralNoun(String original) {
 		this.original = original;
 		String value = original;
 
@@ -67,11 +67,11 @@ public class EntityNoun {
 
 	/**
 	 * Gets this noun appended with article and {@code other}.
-	 * @param other The other {@link EntityNoun} to append to the string.
+	 * @param other The other {@link GeneralNoun} to append to the string.
 	 * @param flags The flags for determining plurality.
 	 * @return The noun.
 	 */
-	public String toString(EntityNoun other, int flags) {
+	public String toString(GeneralNoun other, int flags) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(getArticleWithSpace(flags));
 		builder.append(other.toString(flags));

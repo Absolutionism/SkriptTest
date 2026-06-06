@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.bukkit.entity.EntityData.EntityDataPatterns;
 import org.skriptlang.skript.bukkit.entity.EntityData.PatternGroup;
+import org.skriptlang.skript.lang.util.GeneralNoun;
 import org.skriptlang.skript.registration.SyntaxInfo;
 
 import java.util.Collection;
@@ -44,9 +45,9 @@ public sealed interface EntityDataInfo<Data extends EntityData<E>, E extends Ent
 	int defaultGroupIndex();
 
 	/**
-	 * @return The {@link EntityNoun} format of the 'name' node for each code name in the lang file.
+	 * @return The {@link GeneralNoun} format of the 'name' node for each code name in the lang file.
 	 */
-	SequencedCollection<EntityNoun> names();
+	SequencedCollection<GeneralNoun> names();
 
 	/**
 	 * @return The entity type this info correlates to.

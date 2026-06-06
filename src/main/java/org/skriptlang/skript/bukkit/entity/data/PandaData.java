@@ -19,7 +19,8 @@ public class PandaData extends EntityData<Panda> {
 	
 	private static final Gene[] GENES = Gene.values();
 
-	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.single("panda:s @a", "<age> [%-gene%[[-]%-gene%]] panda[plural:s]");
+	private static final EntityDataPatterns<?> GROUP =
+		EntityDataPatterns.single("panda:s @a", "<age> [%-gene%[[-]%-gene%]] panda[plural:s]");
 
 	public static void register() {
 		registerInfo(

@@ -38,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.bukkit.entity.EntityDataInfo.Builder;
 import org.skriptlang.skript.bukkit.entity.data.PigData;
 import org.skriptlang.skript.bukkit.entity.data.SimpleEntityData;
+import org.skriptlang.skript.lang.util.GeneralNoun;
 
 import java.io.NotSerializableException;
 import java.io.StreamCorruptedException;
@@ -85,8 +86,8 @@ public abstract class EntityData<E extends Entity>
 	}
 
 	public static final String AGE_PATTERN = "[baby:(baby|young)|adult:(adult|grown(-| )up)]";
-	public static final EntityNoun AGE_BABY = new EntityNoun("baby");
-	public static final EntityNoun AGE_ADULT = new EntityNoun("adult");
+	public static final GeneralNoun AGE_BABY = new GeneralNoun("baby");
+	public static final GeneralNoun AGE_ADULT = new GeneralNoun("adult");
 
 	// must be here to be initialized before 'new SimpleLiteral' is called in the register block below
 	private static final List<EntityDataInfo<EntityData<?>, ?>> INFOS = new ArrayList<>();
@@ -576,11 +577,11 @@ public abstract class EntityData<E extends Entity>
 		return toString(0);
 	}
 
-	protected EntityNoun getName() {
+	protected GeneralNoun getName() {
 		return info.dataPatterns().getName(groupIndex);
 	}
 
-	protected @Nullable EntityNoun getAgeNoun() {
+	protected @Nullable GeneralNoun getAgeNoun() {
 		if (baby.isTrue()) {
 			return AGE_BABY;
 		} else if (baby.isFalse()) {
@@ -590,7 +591,7 @@ public abstract class EntityData<E extends Entity>
 	}
 
 	public String toString(int flags) {
-		EntityNoun name = getName();
+		GeneralNoun name = getName();
 		if (baby.isTrue()) {
 			return AGE_BABY.toString(name, flags);
 		} else if (baby.isFalse()) {
@@ -921,7 +922,7 @@ public abstract class EntityData<E extends Entity>
 		private final Map<Integer, PatternGroup<Data>> groupMap = new HashMap<>();
 		private final Map<Data, PatternGroup<Data>> dataMap = new HashMap<>();
 		private PatternGroup<Data> genericGroup;
-		private final SequencedCollection<EntityNoun> names = new ArrayList<>();
+		private final SequencedCollection<GeneralNoun> names = new ArrayList<>();
 
 		@SafeVarargs
 		public EntityDataPatterns(PatternGroup<Data>... patternGroups) {
@@ -944,10 +945,10 @@ public abstract class EntityData<E extends Entity>
 		}
 
 		/**
-		 * Gets the {@link EntityNoun}s from all the {@link PatternGroup}s.
-		 * @return The {@link EntityNoun}s.
+		 * Gets the {@link GeneralNoun}s from all the {@link PatternGroup}s.
+		 * @return The {@link GeneralNoun}s.
 		 */
-		public SequencedCollection<EntityNoun> getNames() {
+		public SequencedCollection<GeneralNoun> getNames() {
 			return names;
 		}
 
@@ -1016,20 +1017,20 @@ public abstract class EntityData<E extends Entity>
 		}
 
 		/**
-		 * Gets the {@link EntityNoun} of the {@link PatternGroup} at the {@code index}.
-		 * @param index The index of {@link PatternGroup} to grab the {@link EntityNoun} from.
-		 * @return The {@link EntityNoun}.
+		 * Gets the {@link GeneralNoun} of the {@link PatternGroup} at the {@code index}.
+		 * @param index The index of {@link PatternGroup} to grab the {@link GeneralNoun} from.
+		 * @return The {@link GeneralNoun}.
 		 */
-		public EntityNoun getName(int index) {
+		public GeneralNoun getName(int index) {
 			return getPatternGroup(index).name();
 		}
 
 		/**
-		 * Gets the {@link EntityNoun} of the {@link PatternGroup} with {@code data}.
-		 * @param data The data of the {@link PatternGroup} to grab the {@link EntityNoun} from.
-		 * @return The {@link EntityNoun}.
+		 * Gets the {@link GeneralNoun} of the {@link PatternGroup} with {@code data}.
+		 * @param data The data of the {@link PatternGroup} to grab the {@link GeneralNoun} from.
+		 * @return The {@link GeneralNoun}.
 		 */
-		public EntityNoun getName(@Nullable Data data) {
+		public GeneralNoun getName(@Nullable Data data) {
 			return getPatternGroup(data).name();
 		}
 
@@ -1043,14 +1044,14 @@ public abstract class EntityData<E extends Entity>
 	 * @param patterns The patterns that could be used to refer to the entity/this {@link PatternGroup}.
 	 * @param <Data> The object for representing a state of the entity.
 	 */
-	public record PatternGroup<Data>(int index, EntityNoun name, @Nullable Data data, String... patterns) {
+	public record PatternGroup<Data>(int index, GeneralNoun name, @Nullable Data data, String... patterns) {
 
-		public PatternGroup(int index, EntityNoun name, String... patterns) {
+		public PatternGroup(int index, GeneralNoun name, String... patterns) {
 			this(index, name, null, patterns);
 		}
 
 		public PatternGroup(int index, String name, @Nullable Data data, String... patterns) {
-			this(index, new EntityNoun(name), data, patterns);
+			this(index, new GeneralNoun(name), data, patterns);
 		}
 
 		public PatternGroup(int index, String name, String... patterns) {

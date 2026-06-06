@@ -16,7 +16,7 @@ import org.bukkit.entity.FallingBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.bukkit.entity.EntityData;
-import org.skriptlang.skript.bukkit.entity.EntityNoun;
+import org.skriptlang.skript.lang.util.GeneralNoun;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 
 public class FallingBlockData extends EntityData<FallingBlock> {
 
-	private final static EntityNoun ADJECTIVE = new EntityNoun("falling");
+	private final static GeneralNoun ADJECTIVE = new GeneralNoun("falling");
 
 	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.single("falling block:s @a",
 		"falling block[plural:s]", "unknown_plural:falling %-itemtype% [block[s]]");

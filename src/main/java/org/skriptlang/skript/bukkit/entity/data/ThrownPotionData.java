@@ -17,7 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.bukkit.entity.EntityData;
-import org.skriptlang.skript.bukkit.entity.EntityNoun;
+import org.skriptlang.skript.lang.util.GeneralNoun;
 import org.skriptlang.skript.lang.converter.Converters;
 
 import java.util.Arrays;
@@ -38,7 +38,7 @@ public class ThrownPotionData extends EntityData<ThrownPotion> {
 		);
 	}
 
-	private static final EntityNoun ADJECTIVE = new EntityNoun("thrown");
+	private static final GeneralNoun ADJECTIVE = new GeneralNoun("thrown");
 
 	private static final boolean LINGERING_POTION_ENTITY_USED = !Skript.isRunningMinecraft(1, 14);
 	// LingeringPotion class deprecated and marked for removal
