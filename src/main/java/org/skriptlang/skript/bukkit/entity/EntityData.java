@@ -3,17 +3,13 @@ package org.skriptlang.skript.bukkit.entity;
 import ch.njol.skript.Skript;
 import ch.njol.skript.SkriptAPIException;
 import ch.njol.skript.bukkitutil.EntityUtils;
-import ch.njol.skript.classes.ClassInfo;
-import ch.njol.skript.classes.Parser;
 import ch.njol.skript.classes.Serializer;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.Literal;
-import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.SyntaxElement;
 import ch.njol.skript.localization.Noun;
-import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
@@ -38,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.bukkit.entity.EntityDataInfo.Builder;
 import org.skriptlang.skript.bukkit.entity.data.PigData;
 import org.skriptlang.skript.bukkit.entity.data.SimpleEntityData;
-import org.skriptlang.skript.lang.util.GeneralNoun;
+import org.skriptlang.skript.localization.GeneralNoun;
 
 import java.io.NotSerializableException;
 import java.io.StreamCorruptedException;
@@ -92,7 +88,7 @@ public abstract class EntityData<E extends Entity>
 	// must be here to be initialized before 'new SimpleLiteral' is called in the register block below
 	private static final List<EntityDataInfo<EntityData<?>, ?>> INFOS = new ArrayList<>();
 
-	private static final List<EntityData> ALL_ENTITY_DATAS = new ArrayList<>();
+	static final List<EntityData> ALL_ENTITY_DATAS = new ArrayList<>();
 
 	public static Serializer<EntityData> serializer = new Serializer<>() {
 		@Override
@@ -132,33 +128,6 @@ public abstract class EntityData<E extends Entity>
 	};
 
 	static void register() {
-		Classes.registerClass(new ClassInfo<>(EntityData.class, "entitydata")
-				.user("entity ?types?")
-				.name("Entity Type")
-				.description("The type of an <a href='#entity'>entity</a>, e.g. player, wolf, powered creeper, etc.")
-				.usage("<i>Detailed usage will be added eventually</i>")
-				.examples("victim is a cow",
-						"spawn a creeper")
-				.since("1.3")
-				.before("entitytype")
-				.supplier(ALL_ENTITY_DATAS::iterator)
-				.parser(new Parser<>() {
-					@Override
-					public String toString(EntityData entityData, int flags) {
-						return entityData.toString(flags);
-					}
-
-					@Override
-					public @Nullable EntityData parse(String string, ParseContext context) {
-						return EntityData.parse(string);
-					}
-
-					@Override
-					public String toVariableNameString(EntityData entityData) {
-						return "entitydata:" + entityData.toString();
-					}
-				}).serializer(serializer));
-
 		Variables.yggdrasil.registerFieldHandler(new FieldHandler() {
 			@Override
 			public boolean excessiveField(Object object, FieldContext field) throws StreamCorruptedException {
@@ -188,6 +157,7 @@ public abstract class EntityData<E extends Entity>
 	}
 
 	//<editor-fold desc="Static Methods" defaultstate="collapsed">
+	@Internal
 	public static void onRegistrationStop() {
 		INFOS.forEach(info -> {
 			if (SimpleEntityData.class.equals(info.type())) {
@@ -222,10 +192,12 @@ public abstract class EntityData<E extends Entity>
 	 * @throws SkriptAPIException if the class has not been registered.
 	 */
 	public static EntityDataInfo<?, ?> getInfo(Class<? extends EntityData<?>> entityDataClass) {
-		for (EntityDataInfo<?, ?> info : INFOS) {
-			if (info.type() == entityDataClass)
-				return info;
-		}
+		EntityDataInfo<?, ?> info = INFOS.stream()
+			.takeWhile(dataInfo -> dataInfo.type() == entityDataClass)
+			.findFirst()
+			.orElse(null);
+		if (info != null)
+			return info;
 		throw new SkriptAPIException("Unregistered EntityData class " + entityDataClass.getName());
 	}
 
@@ -250,8 +222,7 @@ public abstract class EntityData<E extends Entity>
 	 * @return The parsed entity data
 	 */
 	public static @Nullable EntityData<?> parse(String string) {
-		Iterator<EntityDataInfo<EntityData<?>, ?>> it = new ArrayList<>(INFOS).iterator();
-		return SkriptParser.parseStatic(Noun.stripIndefiniteArticle(string), it, null);
+		return SkriptParser.parseStatic(Noun.stripIndefiniteArticle(string), INFOS.iterator(), null);
 	}
 
 	/**
@@ -391,18 +362,40 @@ public abstract class EntityData<E extends Entity>
 		return getData(null, entity);
 	}
 
+	/**
+	 * Gets the string representation from the {@link EntityData} that handles the type of {@code entity}.
+	 * @param entity The {@link Entity} to get the string representation of.
+	 * @return The string representation.
+	 */
 	public static String toString(Entity entity) {
 		return fromEntity(entity).getSuperType().toString();
 	}
 
+	/**
+	 * Gets the string representation from the {@link EntityData} that handles the {@code entityclass}.
+	 * @param entityClass The {@link Entity} class to get the string representation of.
+	 * @return The string representation.
+	 */
 	public static String toString(Class<? extends Entity> entityClass) {
 		return fromClass(entityClass).getSuperType().toString();
 	}
 
+	/**
+	 * Gets the string representation from the {@link EntityData} that handles the type of {@code entity}.
+	 * @param entity The {@link Entity} to get the string representation of.
+	 * @param flags The flag to determine singular or plural.
+	 * @return The string representation.
+	 */
 	public static String toString(Entity entity, int flags) {
 		return fromEntity(entity).getSuperType().toString(flags);
 	}
 
+	/**
+	 * Gets the string representation from the {@link EntityData} that handles the {@code entityclass}.
+	 * @param entityClass The {@link Entity} class to get the string representation of.
+	 * @param flags The flag to determine singular or plural.
+	 * @return The string representation.
+	 */
 	public static String toString(Class<? extends Entity> entityClass, int flags) {
 		return fromClass(entityClass).getSuperType().toString(flags);
 	}
@@ -577,10 +570,16 @@ public abstract class EntityData<E extends Entity>
 		return toString(0);
 	}
 
+	/**
+	 * @return The name registered for this {@link EntityData}.
+	 */
 	protected GeneralNoun getName() {
 		return info.dataPatterns().getName(groupIndex);
 	}
 
+	/**
+	 * @return The age this {@link EntityData} represents.
+	 */
 	protected @Nullable GeneralNoun getAgeNoun() {
 		if (baby.isTrue()) {
 			return AGE_BABY;
@@ -590,6 +589,11 @@ public abstract class EntityData<E extends Entity>
 		return null;
 	}
 
+	/**
+	 * Gets the string representation of this {@link EntityData}.
+	 * @param flags The flag to determine singular or plural.
+	 * @return The string representation.
+	 */
 	public String toString(int flags) {
 		GeneralNoun name = getName();
 		if (baby.isTrue()) {

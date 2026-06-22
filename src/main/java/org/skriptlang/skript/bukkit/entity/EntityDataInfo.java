@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.bukkit.entity.EntityData.EntityDataPatterns;
 import org.skriptlang.skript.bukkit.entity.EntityData.PatternGroup;
-import org.skriptlang.skript.lang.util.GeneralNoun;
+import org.skriptlang.skript.localization.GeneralNoun;
 import org.skriptlang.skript.registration.SyntaxInfo;
 
 import java.util.Collection;

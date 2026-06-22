@@ -36,20 +36,18 @@ public class EntityModule extends HierarchicalAddonModule {
 
 	@Override
 	public void load(SkriptAddon addon) {
-		origin = origin(addon);
 		loadSelf(addon);
 	}
 
 	protected void loadSelf(SkriptAddon addon) {
 		EntityData.register();
+		EntityDataClassInfo entityDataClassInfo = new EntityDataClassInfo();
+		Classes.registerClass(entityDataClassInfo);
 		EntityType.register();
 		registerEntityDatas();
 		loadChildren(addon);
 		SimpleEntityData.register();
 
-		//noinspection rawtypes
-		ClassInfo<EntityData> entityDataClassInfo = Classes.getExactClassInfo(EntityData.class);
-		assert entityDataClassInfo != null;
 		entityDataClassInfo.defaultExpression(new SimpleLiteral<>(new SimpleEntityData(Entity.class), true));
 
 		ClassInfo<EntityType> entityTypeClassInfo = Classes.getExactClassInfo(EntityType.class);

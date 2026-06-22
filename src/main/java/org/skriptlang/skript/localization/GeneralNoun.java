@@ -1,4 +1,4 @@
-package org.skriptlang.skript.lang.util;
+package org.skriptlang.skript.localization;
 
 import ch.njol.skript.localization.Noun;
 import ch.njol.skript.localization.Noun.PluralPair;

@@ -16,7 +16,7 @@ import org.bukkit.entity.FallingBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.bukkit.entity.EntityData;
-import org.skriptlang.skript.lang.util.GeneralNoun;
+import org.skriptlang.skript.localization.GeneralNoun;
 
 import java.util.Arrays;
 import java.util.Iterator;

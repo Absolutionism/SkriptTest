@@ -17,7 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.skriptlang.skript.bukkit.entity.EntityData;
-import org.skriptlang.skript.lang.util.GeneralNoun;
+import org.skriptlang.skript.localization.GeneralNoun;
 import org.skriptlang.skript.lang.converter.Converters;
 
 import java.util.Arrays;
