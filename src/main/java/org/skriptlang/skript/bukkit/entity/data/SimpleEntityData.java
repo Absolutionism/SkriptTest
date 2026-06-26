@@ -383,14 +383,17 @@ public class SimpleEntityData extends EntityData<Entity> implements EntityItemTy
 
 	/**
 	 * Helper method for grabbing the pattern and codename of {@code name}.
-	 * @param name The name representation of an entity
+	 * @param name The name representation of an entity.
 	 * @return String[pattern, codename]
 	 */
 	private static String[] getEntityRegistrationData(String name) {
+		// Gets the plural version of the 'name'
 		String pluralName = Utils.toEnglishPlural(name);
 		String pluralEnding = "";
 		String shared = name;
 		boolean containsAll = true;
+		// Gets the part of the name that both singular and plural versions share
+		// i.e. singular = fox, plural = foxes, shareed = fox
 		for (int i = 0; i < name.length(); i++) {
 			String part = name.substring(0, name.length() - i);
 			if (pluralName.contains(part)) {
@@ -403,16 +406,27 @@ public class SimpleEntityData extends EntityData<Entity> implements EntityItemTy
 		String pattern = shared;
 		String codename = shared;
 		String closeBracket = "]";
+		// If the plural version does not contain the entirety of the original 'name'
+		// Then we place the singular and plural endings in a Group+Choice PatternElements
 		if (!containsAll) {
+			// i.e. singular = entity, plural = entities
+			// pattern = entit(y|plural:ies)
+			// codename = entit:y:ies
 			String singularEnding = name.substring(shared.length());
 			pattern += "(" + singularEnding + "|";
 			codename += ":" + singularEnding;
 			closeBracket = ")";
-		} else {
+		} else { // Otherwise place the plural ending in an OptionalPatternElement at the end
+			// i.e. singular = fox, plural = foxes
+			// pattern = fox[plural:es]
+			// codename = fox:es
 			pattern += "[";
 		}
 		pattern += "plural:" + pluralEnding + closeBracket;
 		codename += ":" + pluralEnding;
+		// Gets the article that should be appended to the end of the codename
+		// i.e. name = fox, @ = @a, codename = fox:es @a
+		// name = entity, @ = @an, codename = entit:y:ies @an
 		String a = Utils.a(name).split(" ")[0];
 		codename += " @" + a;
 		return new String[] {codename, pattern};
@@ -429,7 +443,13 @@ public class SimpleEntityData extends EntityData<Entity> implements EntityItemTy
 		this.simpleInfo = simpleInfo;
 		super.groupIndex = GROUPS.getIndex(simpleInfo);
 	}
-	
+
+	/**
+	 * Constructs a new {@link SimpleEntityData} using {@code entityClass} to find the closest {@link SimpleEntityDataInfo}
+	 * that best represents it.
+	 * @param entityClass The class of the desired {@link Entity}.
+	 * @throws IllegalStateException If the {@code entityClass} is not covered by {@link SimpleEntityData}.
+	 */
 	public SimpleEntityData(Class<? extends Entity> entityClass) {
 		assert entityClass != null && entityClass.isInterface() : entityClass;
 		SimpleEntityDataInfo closestInfo = null;

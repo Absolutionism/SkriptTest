@@ -39,6 +39,16 @@ final class EntityDataInfoImpl<B extends Builder<B, Data, E>, Data extends Entit
 
 	private final SyntaxInfo<Data> defaultInfo;
 
+	/**
+	 * Constructs a new {@link EntityDataInfo}
+	 * @param defaultInfo The {@link SyntaxInfo} that handles the origin, supplier, and priority
+	 * @param dataClass The {@link EntityData} class for {@code this}.
+	 * @param dataName The name registered for {@code dataClass}.
+	 * @param dataPatterns The {@link EntityDataPatterns} that {@code dataClass} handles for parsing and initializing.
+	 * @param defaultIndex The index for the default {@link PatternGroup}.
+	 * @param entityType The {@link EntityType} that {@code dataClass} is registered with.
+	 * @param entityClass The {@link Entity} class that {@code dataClass} is registered with.
+	 */
 	EntityDataInfoImpl(
 		SyntaxInfo<Data> defaultInfo,
 		Class<Data> dataClass,

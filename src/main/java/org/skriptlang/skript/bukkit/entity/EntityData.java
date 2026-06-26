@@ -12,7 +12,6 @@ import ch.njol.skript.lang.SyntaxElement;
 import ch.njol.skript.localization.Noun;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
-import ch.njol.util.coll.CollectionUtils;
 import ch.njol.util.coll.iterator.SingleItemIterator;
 import ch.njol.yggdrasil.FieldHandler;
 import ch.njol.yggdrasil.Fields;
@@ -27,7 +26,6 @@ import org.bukkit.RegionAccessor;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -226,10 +224,11 @@ public abstract class EntityData<E extends Entity>
 	}
 
 	/**
-	 * Prints errors.
+	 * Parses the provided {@code string} to an {@link EntityData}.
+	 * Using this method implies that {@code string} does not contain an indefinite article.
 	 *
-	 * @param string
-	 * @return The parsed entity data
+	 * @param string The pattern to parse.
+	 * @return The parsed entity data.
 	 */
 	public static @Nullable EntityData<?> parseWithoutIndefiniteArticle(String string) {
 		Iterator<EntityDataInfo<EntityData<?>, ?>> it = new ArrayList<>(INFOS).iterator();
@@ -247,16 +246,6 @@ public abstract class EntityData<E extends Entity>
 	@SuppressWarnings({"null", "unchecked"})
 	public static <E extends Entity> E[] getAll(EntityData<?>[] types, Class<E> type, World @Nullable [] worlds) {
 		assert types.length > 0;
-		if (type == Player.class) {
-			if (worlds == null)
-				return (E[]) Bukkit.getOnlinePlayers().toArray(new Player[0]);
-			List<Player> list = new ArrayList<>();
-			for (Player player : Bukkit.getOnlinePlayers()) {
-				if (CollectionUtils.contains(worlds, player.getWorld()))
-					list.add(player);
-			}
-			return (E[]) list.toArray(new Player[0]);
-		}
 		List<E> list = new ArrayList<>();
 		if (worlds == null)
 			worlds = Bukkit.getWorlds().toArray(new World[0]);

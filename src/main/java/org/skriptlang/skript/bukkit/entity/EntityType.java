@@ -11,6 +11,9 @@ import ch.njol.yggdrasil.YggdrasilSerializable;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Class that represents x amount of an {@link EntityData}
  */
@@ -44,15 +47,21 @@ public class EntityType
 				.serializer(new YggdrasilSerializer<>()));
 	}
 
+	private static final Pattern PARSE_PATTERN = Pattern.compile("(?i)((?<article>an?)|(?<amount>\\d+))? *(?<data>.+)");
+
 	public static @Nullable EntityType parse(String string) {
 		assert string != null && !string.isEmpty();
-		int amount = -1;
-		if (string.matches("\\d+ .+")) {
-			amount = Utils.parseInt(string.split(" ", 2)[0]);
-			string = string.split(" ", 2)[1];
-		} else if (string.matches("(?i)an? .+")) {
-			string = string.split(" ", 2)[1];
+		Matcher matcher = PARSE_PATTERN.matcher(string);
+		if (!matcher.matches()) {
+			// Should always match group 'data'
+			return null;
 		}
+		int amount = -1;
+		String amountGroup;
+		if ((amountGroup = matcher.group("amount")) != null) {
+			amount = Utils.parseInt(amountGroup);
+		}
+		string = matcher.group("data").trim();
 		EntityData<?> data = EntityData.parseWithoutIndefiniteArticle(string);
 		if (data == null)
 			return null;

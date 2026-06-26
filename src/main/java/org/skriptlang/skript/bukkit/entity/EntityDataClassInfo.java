@@ -15,7 +15,7 @@ public class EntityDataClassInfo extends ClassInfo<EntityData> {
 		this.user("entity ?types?")
 			.name("Entity Type")
 			.description("The type of an <a href='#entity'>entity</a>, e.g. player, wolf, powered creeper, etc.")
-			.usage("<i>Detailed usage will be added eventually</i>")
+			.usage("")
 			.examples("victim is a cow",
 					"spawn a creeper")
 			.since("1.3")

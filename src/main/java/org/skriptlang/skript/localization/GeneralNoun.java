@@ -5,6 +5,8 @@ import ch.njol.skript.localization.Noun.PluralPair;
 
 import static ch.njol.skript.localization.Language.F_PLURAL;
 
+// TODO: consider reworking to unify the lang-based noun stuff too. Perhaps this becomes a parent class to the existing Noun one.
+
 /**
  * A {@link Noun}-like class, non-dependent of {@link ch.njol.skript.localization.Language}.
  * Discerns the gender, single, and plurality of a string.

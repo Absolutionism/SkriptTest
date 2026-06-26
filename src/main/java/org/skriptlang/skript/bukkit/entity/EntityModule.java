@@ -46,6 +46,7 @@ public class EntityModule extends HierarchicalAddonModule {
 		EntityType.register();
 		registerEntityDatas();
 		loadChildren(addon);
+		// Must be registered after every other EntityData, due to the automatic registering of EntityTypes
 		SimpleEntityData.register();
 
 		entityDataClassInfo.defaultExpression(new SimpleLiteral<>(new SimpleEntityData(Entity.class), true));
