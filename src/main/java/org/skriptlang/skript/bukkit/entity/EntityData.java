@@ -29,6 +29,7 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.skriptlang.skript.bukkit.entity.EntityDataClassInfo.EntityDataSerializer;
 import org.skriptlang.skript.bukkit.entity.EntityDataInfo.Builder;
 import org.skriptlang.skript.bukkit.entity.data.PigData;
 import org.skriptlang.skript.bukkit.entity.data.SimpleEntityData;
@@ -49,6 +50,10 @@ import java.util.Map;
 import java.util.SequencedCollection;
 import java.util.function.Consumer;
 
+/**
+ * Class representing and handling {@link Entity} for comparison, changing data, matching data, and spawning with initial data.
+ * @param <E> The type of {@link Entity}.
+ */
 @SuppressWarnings("rawtypes")
 public abstract class EntityData<E extends Entity>
 	extends ch.njol.skript.entity.EntityData<E>
@@ -88,42 +93,7 @@ public abstract class EntityData<E extends Entity>
 
 	static final List<EntityData> ALL_ENTITY_DATAS = new ArrayList<>();
 
-	public static Serializer<EntityData> serializer = new Serializer<>() {
-		@Override
-		public Fields serialize(EntityData entityData) throws NotSerializableException {
-			Fields fields = entityData.serialize();
-			fields.putObject("codeName", entityData.info.dataName());
-			return fields;
-		}
-
-		@Override
-		public boolean canBeInstantiated() {
-			return false;
-		}
-
-		@Override
-		public void deserialize(EntityData entityData, Fields fields) {
-			assert false;
-		}
-
-		@Override
-		protected EntityData deserialize(Fields fields) throws StreamCorruptedException, NotSerializableException {
-			String codeName = fields.getAndRemoveObject("codeName", String.class);
-			if (codeName == null)
-				throw new StreamCorruptedException();
-			EntityDataInfo<?, ?> info = getInfo(codeName);
-			if (info == null)
-				throw new StreamCorruptedException("Invalid EntityData code name " + codeName);
-			EntityData<?> entityData = info.instance();
-			entityData.deserialize(fields);
-			return entityData;
-		}
-
-		@Override
-		public boolean mustSyncDeserialization() {
-			return false;
-		}
-	};
+	public static Serializer<EntityData> serializer = new EntityDataSerializer();
 
 	static void register() {
 		Variables.yggdrasil.registerFieldHandler(new FieldHandler() {
@@ -190,13 +160,10 @@ public abstract class EntityData<E extends Entity>
 	 * @throws SkriptAPIException if the class has not been registered.
 	 */
 	public static EntityDataInfo<?, ?> getInfo(Class<? extends EntityData<?>> entityDataClass) {
-		EntityDataInfo<?, ?> info = INFOS.stream()
-			.takeWhile(dataInfo -> dataInfo.type() == entityDataClass)
+		return INFOS.stream()
+			.filter(dataInfo -> dataInfo.type() == entityDataClass)
 			.findFirst()
-			.orElse(null);
-		if (info != null)
-			return info;
-		throw new SkriptAPIException("Unregistered EntityData class " + entityDataClass.getName());
+			.orElseThrow(() -> new SkriptAPIException("Unregistered EntityData class " + entityDataClass.getName()));
 	}
 
 	/**

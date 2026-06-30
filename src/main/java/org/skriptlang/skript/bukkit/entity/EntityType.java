@@ -57,8 +57,8 @@ public class EntityType
 			return null;
 		}
 		int amount = -1;
-		String amountGroup;
-		if ((amountGroup = matcher.group("amount")) != null) {
+		String amountGroup = matcher.group("amount");
+		if (amountGroup != null) {
 			amount = Utils.parseInt(amountGroup);
 		}
 		string = matcher.group("data").trim();
@@ -76,12 +76,17 @@ public class EntityType
 	 * Only used for deserialisation
 	 */
 	@SuppressWarnings({"unused", "null"})
-	private EntityType() {
+	public EntityType() {
 		super();
 		data = null;
 		amount = 1;
 	}
 
+	/**
+	 * Constructs a new {@link EntityType}.
+	 * @param data The corresponding {@link EntityData}.
+	 * @param amount The amount of {@code data}.
+	 */
 	public EntityType(EntityData<?> data, int amount) {
 		super();
 		assert data != null;
@@ -89,11 +94,21 @@ public class EntityType
 		this.amount = amount;
 	}
 
+	/**
+	 * Constructs a new {@link EntityType}.
+	 * @param other The other {@link EntityType} to copy from.
+	 */
 	private EntityType(EntityType other) {
 		amount = other.amount;
 		data = other.data;
 	}
 
+	/**
+	 * Whether {@code entity} is instance of {@code this}.
+	 * @param entity The {@link Entity} to check.
+	 * @return {@code true} if instance of, otherwise {@code false}.
+	 * @see EntityData#isInstance(Entity)
+	 */
 	public boolean isInstance(Entity entity) {
 		return data.isInstance(entity);
 	}
@@ -105,24 +120,45 @@ public class EntityType
 		return amount + " " + data.toString(Language.F_PLURAL);
 	}
 
+	/**
+	 * Returns the string representation of {@code this}.
+	 * @param flags The flags to determine singular or plurality.
+	 * @return The string representation.
+	 */
 	public String toString(int flags) {
 		if (getAmount() == 1)
 			return data.toString(flags);
 		return amount + " " + data.toString(flags | Language.F_PLURAL);
 	}
 
+	/**
+	 * @return The amount of {@code this} corresponds to with {@link #data}.
+	 */
 	public int getAmount() {
 		return amount == -1 ? 1 : amount;
 	}
 
+	/**
+	 * Sets the amount {@code this} corresponds to with {@link #data}.
+	 * @param amount The new amount.
+	 */
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
 
+	/**
+	 * @return The {@link EntityData} {@code this} corresponds to.
+	 */
 	public EntityData<?> getData() {
 		return data;
 	}
 
+	/**
+	 * Whether {@code other} has the same {@link EntityData}.
+	 * @param other The other {@link EntityType}.
+	 * @return {@code true} if the {@link EntityData}s are the same, otherwise {@code false}.
+	 * @see EntityData#equals(Object)
+	 */
 	public boolean sameType(EntityType other) {
 		return data.equals(other.data);
 	}

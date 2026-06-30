@@ -2,8 +2,13 @@ package org.skriptlang.skript.bukkit.entity;
 
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
+import ch.njol.skript.classes.Serializer;
 import ch.njol.skript.lang.ParseContext;
+import ch.njol.yggdrasil.Fields;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.NotSerializableException;
+import java.io.StreamCorruptedException;
 
 import static org.skriptlang.skript.bukkit.entity.EntityData.ALL_ENTITY_DATAS;
 
@@ -37,6 +42,45 @@ public class EntityDataClassInfo extends ClassInfo<EntityData> {
 					return "entitydata:" + entityData.toString();
 				}
 			}).serializer(EntityData.serializer);
+	}
+
+	public static class EntityDataSerializer extends Serializer<EntityData> {
+		//<editor-fold desc="serializer" defaultstate="collapsed">
+		@Override
+		public Fields serialize(EntityData entityData) throws NotSerializableException {
+			Fields fields = entityData.serialize();
+			fields.putObject("codeName", entityData.info.dataName());
+			return fields;
+		}
+
+		@Override
+		public boolean canBeInstantiated() {
+			return false;
+		}
+
+		@Override
+		public void deserialize(EntityData entityData, Fields fields) {
+			assert false;
+		}
+
+		@Override
+		protected EntityData deserialize(Fields fields) throws StreamCorruptedException, NotSerializableException {
+			String codeName = fields.getAndRemoveObject("codeName", String.class);
+			if (codeName == null)
+				throw new StreamCorruptedException();
+			EntityDataInfo<?, ?> info = EntityData.getInfo(codeName);
+			if (info == null)
+				throw new StreamCorruptedException("Invalid EntityData code name " + codeName);
+			EntityData<?> entityData = info.instance();
+			entityData.deserialize(fields);
+			return entityData;
+		}
+
+		@Override
+		public boolean mustSyncDeserialization() {
+			return false;
+		}
+		//</editor-fold>
 	}
 
 }

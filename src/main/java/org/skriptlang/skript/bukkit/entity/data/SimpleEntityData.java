@@ -32,12 +32,12 @@ public class SimpleEntityData extends EntityData<Entity> implements EntityItemTy
 
 	private static EntityDataPatterns<SimpleEntityDataInfo> GROUPS;
 
-	@Internal
 	private static void addGroup(PatternGroup<SimpleEntityDataInfo> group) {
 		PATTERN_GROUPS.add(group);
 	}
 
 	//<editor-fold desc="register" defaultstate="collapsed">
+	@Internal
 	public static void register() {
 		// Simple Entities
 

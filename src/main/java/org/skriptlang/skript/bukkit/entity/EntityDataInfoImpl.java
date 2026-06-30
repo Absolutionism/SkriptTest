@@ -14,6 +14,7 @@ import org.skriptlang.skript.registration.SyntaxInfo;
 import org.skriptlang.skript.util.Priority;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +86,7 @@ final class EntityDataInfoImpl<B extends Builder<B, Data, E>, Data extends Entit
 				patternCount++;
 			}
 		}
-		this.patterns = allPatterns;
+		this.patterns = Collections.unmodifiableSequencedCollection(allPatterns);
 	}
 
 	@Override

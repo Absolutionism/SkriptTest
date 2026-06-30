@@ -61,10 +61,10 @@ public class GeneralNoun {
 	 * @return The noun.
 	 */
 	public String toString(int flags) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(getArticleWithSpace(flags));
-		builder.append((flags & F_PLURAL) != 0 ? plural : singular);
-		return builder.toString();
+		return new StringBuilder()
+			.append(getArticleWithSpace(flags))
+			.append((flags & F_PLURAL) != 0 ? plural : singular)
+			.toString();
 	}
 
 	/**
@@ -74,12 +74,12 @@ public class GeneralNoun {
 	 * @return The noun.
 	 */
 	public String toString(GeneralNoun other, int flags) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(getArticleWithSpace(flags));
-		builder.append(other.toString(flags));
-		builder.append(" ");
-		builder.append((flags & F_PLURAL) != 0 ? plural : singular);
-		return builder.toString();
+		return new StringBuilder()
+			.append(getArticleWithSpace(flags))
+			.append(other.toString(flags))
+			.append(" ")
+			.append((flags & F_PLURAL) != 0 ? plural : singular)
+			.toString();
 	}
 
 	/**
