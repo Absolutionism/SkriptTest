@@ -1,11 +1,6 @@
 package org.skriptlang.skript.bukkit.entity;
 
-import ch.njol.skript.classes.ClassInfo;
-import ch.njol.skript.classes.Parser;
-import ch.njol.skript.classes.YggdrasilSerializer;
-import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.localization.Language;
-import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Utils;
 import ch.njol.yggdrasil.YggdrasilSerializable;
 import org.bukkit.entity.Entity;
@@ -21,34 +16,24 @@ public class EntityType
 	extends ch.njol.skript.entity.EntityType
 	implements Cloneable, YggdrasilSerializable {
 
-	static void register() {
-		Classes.registerClass(new ClassInfo<>(EntityType.class, "entitytype")
-				.name("Entity Type with Amount")
-				.description("An <a href='#entitydata'>entity type</a> with an amount, e.g. '2 zombies'.")
-				.usage("<number> <entity type>")
-				.examples("spawn 5 creepers behind the player")
-				.since("1.3")
-				.parser(new Parser<>() {
-					@Override
-					public @Nullable EntityType parse(String string, ParseContext context) {
-						return EntityType.parse(string);
-					}
-
-					@Override
-					public String toString(EntityType entityType, int flags) {
-						return entityType.toString(flags);
-					}
-
-					@Override
-					public String toVariableNameString(EntityType entityType) {
-						return "entitytype:" + entityType.toString();
-					}
-                })
-				.serializer(new YggdrasilSerializer<>()));
-	}
-
 	private static final Pattern PARSE_PATTERN = Pattern.compile("(?i)((?<article>an?)|(?<amount>\\d+))? *(?<data>.+)");
 
+	/**
+	 * Parses the provided {@code string} into a {@link EntityData} and stores in a new {@link EntityType}.
+	 * <p>
+	 *     The {@code string} allows formats of "number + entity" and "article + entity",
+	 *     but never "article + number + entity" or "number + article + entity".
+	 *     Allowed:
+	 *     		- 1 zombie, 3 pigs, 5 endermen
+	 *     		- a zombie, a pig, an endermen
+	 *     Not-Allowed:
+	 *     		- a 1 zombie, a 3 pigs, an 5 endermen
+	 *     		- 1 a zombie, 3 a pigs, 5 an endermen
+	 * </p>
+	 * @param string The {@link String} to parse.
+	 * @return {@link EntityType} containing the parsed {@link EntityData} and provided amount if present in {@code string}
+	 * 			or -1 if not present. Otherwise {@code null} if the parse failed.
+	 */
 	public static @Nullable EntityType parse(String string) {
 		assert string != null && !string.isEmpty();
 		Matcher matcher = PARSE_PATTERN.matcher(string);
@@ -58,9 +43,8 @@ public class EntityType
 		}
 		int amount = -1;
 		String amountGroup = matcher.group("amount");
-		if (amountGroup != null) {
+		if (amountGroup != null)
 			amount = Utils.parseInt(amountGroup);
-		}
 		string = matcher.group("data").trim();
 		EntityData<?> data = EntityData.parseWithoutIndefiniteArticle(string);
 		if (data == null)
