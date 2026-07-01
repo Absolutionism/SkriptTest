@@ -12,7 +12,6 @@ import ch.njol.skript.lang.SyntaxElement;
 import ch.njol.skript.localization.Noun;
 import ch.njol.skript.variables.Variables;
 import ch.njol.util.Kleenean;
-import ch.njol.util.coll.iterator.SingleItemIterator;
 import ch.njol.yggdrasil.FieldHandler;
 import ch.njol.yggdrasil.Fields;
 import ch.njol.yggdrasil.Fields.FieldContext;
@@ -33,6 +32,7 @@ import org.skriptlang.skript.bukkit.entity.EntityDataClassInfo.EntityDataSeriali
 import org.skriptlang.skript.bukkit.entity.EntityDataInfo.Builder;
 import org.skriptlang.skript.bukkit.entity.data.PigData;
 import org.skriptlang.skript.bukkit.entity.data.SimpleEntityData;
+import org.skriptlang.skript.bukkit.entity.data.SimpleEntityData.SimpleEntityDataInfo;
 import org.skriptlang.skript.localization.GeneralNoun;
 
 import java.io.NotSerializableException;
@@ -129,12 +129,13 @@ public abstract class EntityData<E extends Entity>
 	public static void onRegistrationStop() {
 		INFOS.forEach(info -> {
 			if (SimpleEntityData.class.equals(info.type())) {
-				ALL_ENTITY_DATAS.addAll(Arrays.stream(info.patterns().toArray(new String[0]))
-					.map(input -> SkriptParser.parseStatic(input, new SingleItemIterator<>(info), null))
-					.toList()
+				ALL_ENTITY_DATAS.addAll(
+					info.dataPatterns().getPatternGroups().stream().map(group ->
+						new SimpleEntityData((SimpleEntityDataInfo) group.data())
+					).toList()
 				);
 			} else {
-				ALL_ENTITY_DATAS.add(SkriptParser.parseStatic(info.dataName(), new SingleItemIterator<>(info), null));
+				ALL_ENTITY_DATAS.add(info.instance());
 			}
 		});
 	}

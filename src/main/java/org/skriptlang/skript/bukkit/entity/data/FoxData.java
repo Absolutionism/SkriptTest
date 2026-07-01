@@ -24,8 +24,6 @@ public class FoxData extends EntityData<Fox> {
 	);
 
 	private static String[] getPatterns(String prefix) {
-		String first = "<age> " + prefix + "fox[plural:es]";
-		String second = "baby:" + prefix + "fox (kid[plural:s]|child[plural:ren])";
 		return new String[]{
 			"<age> " + prefix + "fox[plural:es]",
 			"baby:" + prefix + "fox (kid[plural:s]|child[plural:ren])"

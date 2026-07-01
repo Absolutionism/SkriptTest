@@ -32,10 +32,6 @@ public class SimpleEntityData extends EntityData<Entity> implements EntityItemTy
 
 	private static EntityDataPatterns<SimpleEntityDataInfo> GROUPS;
 
-	private static void addGroup(PatternGroup<SimpleEntityDataInfo> group) {
-		PATTERN_GROUPS.add(group);
-	}
-
 	//<editor-fold desc="register" defaultstate="collapsed">
 	@Internal
 	public static void register() {
@@ -437,8 +433,8 @@ public class SimpleEntityData extends EntityData<Entity> implements EntityItemTy
 	public SimpleEntityData() {
 		this(Entity.class);
 	}
-	
-	private SimpleEntityData(SimpleEntityDataInfo simpleInfo) {
+
+	public SimpleEntityData(SimpleEntityDataInfo simpleInfo) {
 		assert simpleInfo != null;
 		this.simpleInfo = simpleInfo;
 		super.groupIndex = GROUPS.getIndex(simpleInfo);
