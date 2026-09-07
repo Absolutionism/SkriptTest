@@ -1,13 +1,13 @@
 package org.skriptlang.skript.bukkit.entity.data;
 
-import ch.njol.skript.Skript;
-import ch.njol.skript.bukkitutil.BukkitUtils;
-import ch.njol.skript.classes.ClassInfo;
+import ch.njol.skript.classes.registry.RegistryClassInfo;
+import ch.njol.skript.classes.registry.RegistryClassInfo;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.util.coll.CollectionUtils;
 import com.google.common.collect.Iterators;
+import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Chicken.Variant;
 import org.bukkit.entity.EntityType;
@@ -20,23 +20,13 @@ import java.util.Objects;
 public class ChickenData extends EntityData<Chicken> {
 
 	private static boolean VARIANTS_ENABLED;
-	private static Object[] VARIANTS;
+	private static Variant[] VARIANTS;
 
 	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.single("chicken:s @a",
 		"<age> [%-chickenvariant%] chicken[plural:s]", "baby:[%-chickenvariant%] chick[plural:s]");
 
 	public static void register() {
-		ClassInfo<?> chickenVariantClassInfo = BukkitUtils.getRegistryClassInfo(
-			"org.bukkit.entity.Chicken$Variant",
-			"CHICKEN_VARIANT",
-			"chickenvariant",
-			"chicken variants"
-		);
-		if (chickenVariantClassInfo == null) {
-			// Registers a dummy/placeholder class to ensure working operation on MC versions that do not have 'Chicken.Variant' (1.21.4-)
-			chickenVariantClassInfo = new ClassInfo<>(ChickenVariantDummy.class,  "chickenvariant");
-		}
-		Classes.registerClass(chickenVariantClassInfo
+		Classes.registerClass(new RegistryClassInfo<>(Variant.class, RegistryKey.CHICKEN_VARIANT, "chickenvariant", "chicken variants")
 			.user("chicken ?variants?")
 			.name("Chicken Variant")
 			.description("Represents the variant of a chicken entity.",
@@ -45,6 +35,7 @@ public class ChickenData extends EntityData<Chicken> {
 			.requiredPlugins("Minecraft 1.21.5+")
 			.documentationId("ChickenVariant")
 		);
+		VARIANTS = Iterators.toArray(chickenVariantInfo.getSupplier().get(), Variant.class);
 
 		registerInfo(
 			infoBuilder(ChickenData.class, "chicken")
@@ -54,37 +45,28 @@ public class ChickenData extends EntityData<Chicken> {
 				.supplier(ChickenData::new)
 				.build()
 		);
-
-		if (Skript.classExists("org.bukkit.entity.Chicken$Variant")) {
-			VARIANTS_ENABLED = true;
-			VARIANTS = Iterators.toArray(Classes.getExactClassInfo(Chicken.Variant.class).getSupplier().get(), Chicken.Variant.class);
-		} else {
-			VARIANTS_ENABLED = false;
-			VARIANTS = null;
-		}
 	}
 
-	private @Nullable Object variant = null;
+	private @Nullable Variant variant = null;
 
 	public ChickenData() {}
 
-	// TODO: When safe, 'variant' should have the type changed to 'Chicken.Variant' when 1.21.6 is minimum supported version
-	public ChickenData(@Nullable Object variant) {
+	public ChickenData(@Nullable Variant variant) {
 		this.variant = variant;
 	}
 
 	@Override
 	protected boolean init(Literal<?>[] exprs, int matchedGroup, int matchedPattern, ParseResult parseResult) {
-		if (VARIANTS_ENABLED && exprs[0] != null) {
+		if (exprs[0] != null) {
 			//noinspection unchecked
-			variant = ((Literal<Chicken.Variant>) exprs[0]).getSingle();
+			variant = ((Literal<Variant>) exprs[0]).getSingle();
 		}
 		return true;
 	}
 
 	@Override
 	protected boolean init(@Nullable Class<? extends Chicken> entityClass, @Nullable Chicken chicken) {
-		if (chicken != null && VARIANTS_ENABLED) {
+		if (chicken != null) {
 			variant = chicken.getVariant();
 		}
 		return true;
@@ -92,13 +74,11 @@ public class ChickenData extends EntityData<Chicken> {
 
 	@Override
 	public void set(Chicken chicken) {
-		if (VARIANTS_ENABLED) {
-			Variant variant = (Variant) this.variant;
-			if (variant == null)
-				variant = (Variant) CollectionUtils.getRandom(VARIANTS);
-			assert variant != null;
-			chicken.setVariant(variant);
-		}
+		Variant variant = this.variant;
+		if (variant == null)
+			variant = CollectionUtils.getRandom(VARIANTS);
+		assert variant != null;
+		chicken.setVariant(variant);
 	}
 
 	@Override
@@ -134,10 +114,5 @@ public class ChickenData extends EntityData<Chicken> {
 			return false;
 		return dataMatch(variant, other.variant);
 	}
-
-	/**
-	 * A dummy/placeholder class to ensure working operation on MC versions that do not have `Chicken.Variant`
-	 */
-	public static class ChickenVariantDummy {}
 
 }
