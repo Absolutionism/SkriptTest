@@ -1,7 +1,6 @@
 package org.skriptlang.skript.bukkit.entity.data;
 
 import ch.njol.skript.classes.registry.RegistryClassInfo;
-import ch.njol.skript.classes.registry.RegistryClassInfo;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.registrations.Classes;
@@ -10,7 +9,6 @@ import com.google.common.collect.Iterators;
 import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Cow.Variant;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,13 +18,14 @@ import java.util.Objects;
 
 public class CowData extends EntityData<Cow> {
 
-	private static Object[] VARIANTS;
+	private static Variant[] VARIANTS;
 
 	private static final EntityDataPatterns<?> GROUP = EntityDataPatterns.single("cow:s @a",
 		"<age> [%-cowvariant%] cow[plural:s]", "baby:[%-cowvariant%] cal(f|plural:ves)");
 
 	public static void register() {
-		Classes.registerClass(new RegistryClassInfo<>(Variant.class, RegistryKey.COW_VARIANT, "cowvariant", "cow variants")
+		var cowVariantInfo = new RegistryClassInfo<>(Variant.class, RegistryKey.COW_VARIANT, "cowvariant", "cow variants");
+		Classes.registerClass(cowVariantInfo
 			.user("cow ?variants?")
 			.name("Cow Variant")
 			.description("Represents the variant of a cow entity.",
@@ -41,7 +40,7 @@ public class CowData extends EntityData<Cow> {
 			infoBuilder(CowData.class,  "cow")
 				.dataPatterns(GROUP)
 				.entityType(EntityType.COW)
-				.entityClass(COW_CLASS)
+				.entityClass(Cow.class)
 				.supplier(CowData::new)
 				.build()
 		);
@@ -76,7 +75,7 @@ public class CowData extends EntityData<Cow> {
 	public void set(Cow cow) {
 		Variant variant = this.variant;
 		if (variant == null)
-			variant = (Variant) CollectionUtils.getRandom(VARIANTS);
+			variant = CollectionUtils.getRandom(VARIANTS);
 		assert variant != null;
 		cow.setVariant(variant);
 	}

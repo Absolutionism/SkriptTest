@@ -20,7 +20,6 @@ import java.util.Objects;
 
 public class PigData extends EntityData<Pig> {
 
-	private static boolean VARIANTS_ENABLED;
 	private static Variant[] VARIANTS;
 
 	private static final EntityDataPatterns<Kleenean> GROUPS = new EntityDataPatterns<>(

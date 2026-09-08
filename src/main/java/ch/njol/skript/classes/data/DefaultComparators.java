@@ -18,17 +18,15 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.skriptlang.skript.bukkit.potion.util.SkriptPotionEffect;
 import org.skriptlang.skript.bukkit.entity.EntityData;
 import org.skriptlang.skript.bukkit.entity.EntityItemTypeComparable;
+import org.skriptlang.skript.bukkit.potion.util.SkriptPotionEffect;
 import org.skriptlang.skript.lang.comparator.Comparator;
 import org.skriptlang.skript.lang.comparator.Comparators;
 import org.skriptlang.skript.lang.comparator.Relation;
@@ -274,8 +272,8 @@ public class DefaultComparators {
 
 			if (entityData instanceof Item item)
 				return Relation.get(itemType.isOfType(item.getItemStack()));
-			if (entityData instanceof EntityItemTypeComparable entityItemTypeComparable)
-				return Relation.get(entityItemTypeComparable.isOfItemType(itemType));
+			if (entityData instanceof EntityItemTypeComparable comparable)
+				return Relation.get(comparable.isOfItemType(itemType));
 			for (ItemData data : itemType.getTypes()) {
 				assert data != null;
 				EntityData<?> entity = Aliases.getRelatedEntity(data);

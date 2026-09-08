@@ -23,6 +23,14 @@ public class PandaData extends EntityData<Panda> {
 		EntityDataPatterns.single("panda:s @a", "<age> [%-gene%[[-]%-gene%]] panda[plural:s]");
 
 	public static void register() {
+		Classes.registerClass(new EnumClassInfo<>(Gene.class, "gene", "genes")
+			.user("(panda )?genes?")
+			.name("Gene")
+			.description("Represents a Panda's main or hidden gene. " +
+				"See <a href='https://minecraft.wiki/w/Panda#Genetics'>genetics</a> for more info.")
+			.since("2.4")
+			.requiredPlugins("Minecraft 1.14 or newer"));
+
 		registerInfo(
 			infoBuilder(PandaData.class, "panda")
 				.dataPatterns(GROUP)
@@ -31,14 +39,6 @@ public class PandaData extends EntityData<Panda> {
 				.supplier(PandaData::new)
 				.build()
 		);
-
-		Classes.registerClass(new EnumClassInfo<>(Gene.class, "gene", "genes")
-			.user("(panda )?genes?")
-			.name("Gene")
-			.description("Represents a Panda's main or hidden gene. " +
-				"See <a href='https://minecraft.wiki/w/Panda#Genetics'>genetics</a> for more info.")
-			.since("2.4")
-			.requiredPlugins("Minecraft 1.14 or newer"));
 	}
 
 	private @Nullable Gene mainGene = null;

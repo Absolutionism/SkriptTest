@@ -1,9 +1,6 @@
 package org.skriptlang.skript.bukkit.entity.data;
 
 import ch.njol.skript.classes.registry.RegistryClassInfo;
-import ch.njol.skript.bukkitutil.BukkitUtils;
-import ch.njol.skript.classes.ClassInfo;
-import ch.njol.skript.classes.registry.RegistryClassInfo;
 import ch.njol.skript.lang.Literal;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.registrations.Classes;
@@ -43,7 +40,7 @@ public class WolfData extends EntityData<Wolf> {
 
 	private static Variant[] VARIANTS;
 
-	static {
+	public static void register() {
 		var wolfVariantInfo = new RegistryClassInfo<>(Variant.class, RegistryKey.WOLF_VARIANT, "wolfvariant", "wolf variants");
 		Classes.registerClass(wolfVariantInfo
 			.user("wolf ?variants?")

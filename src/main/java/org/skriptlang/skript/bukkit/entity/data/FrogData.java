@@ -35,15 +35,8 @@ public class FrogData extends EntityData<Frog> {
 	}
 
 	public static void register() {
-		registerInfo(
-			infoBuilder(FrogData.class, "frog")
-				.dataPatterns(GROUPS)
-				.entityType(EntityType.FROG)
-				.entityClass(Frog.class)
-				.supplier(FrogData::new)
-				.build()
-		);
-		Classes.registerClass(new RegistryClassInfo<>(Variant.class, RegistryKey.FROG_VARIANT, "frogvariant", "frog variants")
+		var frogVariantInfo = new RegistryClassInfo<>(Variant.class, RegistryKey.FROG_VARIANT, "frogvariant", "frog variants");
+		Classes.registerClass(frogVariantInfo
 			.user("frog ?variants?")
 			.name("Frog Variant")
 			.description("Represents the variant of a frog entity.",
@@ -53,7 +46,14 @@ public class FrogData extends EntityData<Frog> {
 		);
 		VARIANTS = Iterators.toArray(frogVariantInfo.getSupplier().get(), Variant.class);
 
-		EntityData.register(FrogData.class, "frog", Frog.class, 0, PATTERNS.getPatterns());
+		registerInfo(
+			infoBuilder(FrogData.class, "frog")
+				.dataPatterns(GROUPS)
+				.entityType(EntityType.FROG)
+				.entityClass(Frog.class)
+				.supplier(FrogData::new)
+				.build()
+		);
 	}
 
 	private @Nullable Variant variant = null;

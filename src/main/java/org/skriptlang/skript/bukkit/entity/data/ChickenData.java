@@ -26,7 +26,8 @@ public class ChickenData extends EntityData<Chicken> {
 		"<age> [%-chickenvariant%] chicken[plural:s]", "baby:[%-chickenvariant%] chick[plural:s]");
 
 	public static void register() {
-		Classes.registerClass(new RegistryClassInfo<>(Variant.class, RegistryKey.CHICKEN_VARIANT, "chickenvariant", "chicken variants")
+		var chickenVariantInfo = new RegistryClassInfo<>(Variant.class, RegistryKey.CHICKEN_VARIANT, "chickenvariant", "chicken variants");
+		Classes.registerClass(chickenVariantInfo
 			.user("chicken ?variants?")
 			.name("Chicken Variant")
 			.description("Represents the variant of a chicken entity.",
